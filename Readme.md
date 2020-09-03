@@ -19,7 +19,7 @@ Some key features of the library include:
 
 ## Basic Demo
 
-![Hysteresis demo](docs/images/demo.gif)
+![Hysteresis demo](doc/images/demo.gif)
 
 
 ## Install
