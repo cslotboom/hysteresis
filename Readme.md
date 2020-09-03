@@ -19,7 +19,9 @@ Some key features of the library include:
 
 ## Basic Demo
 
-A basic demo of the hystresis object, showing the Cycle Indexes
+A basic demo of the hystresis object. 
+Hysteresis can split up a non-function into a number of cycles that are functions.
+
 ![Hysteresis demo 1](doc/images/demo.gif)
 
 

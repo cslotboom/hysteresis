@@ -1,3 +1,8 @@
+"""
+This example shows how to create a basic Hysteresis object.
+"""
+
+
 import numpy as np
 import hysteresis as hys
 

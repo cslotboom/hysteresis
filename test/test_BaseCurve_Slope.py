@@ -1,4 +1,4 @@
-import openseespytools.hysteresis as hys
+import hysteresis as hys
 import numpy as np
 
 def makeCurveBase(f):

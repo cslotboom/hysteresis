@@ -1,33 +1,21 @@
 # -*- coding: utf-8 -*-
+
 """
-Created on Sat Aug 31 15:13:13 2019
-@author: Christian
+In this example I will show some of the basic functionality of the hystresis
+mosule on a real hystresis.
+
 """
 import numpy as np
-import scipy
-from scipy.interpolate import interp1d
-from numpy import trapz
+import hysteresis as hys
 
-import matplotlib.pyplot as plt
-
-from openseespytools import data
-import openseespytools.hysteresis as hys
-
-import openseespy
-import time
-
-
-
-"""
-In this example I will show some of the basic functionality of our hystresis
-
-
-"""
 # =============================================================================
 # Load initial stuff
 # =============================================================================
 
-# We will load the hystresis test data, and 
+"""
+Here we load some test data.
+"""
+
 testHys = np.loadtxt('BackboneData.csv',delimiter=',')
 disp = np.loadtxt('Disp.out',delimiter=' ')
 force = np.loadtxt('RFrc.out',delimiter=' ')
@@ -107,13 +95,13 @@ curvexy = Cycle1.xy
 
 """
 We can also plot the cumulative area. This could be useful for finding 
-the total energy added to a system
-"""
-# We plot the cumulative area under the graph
-DamperHys.plotCumArea(xlim = [0,5], ylim = [0,1])
+the total energy added to a system.
 
-# The outputs from the plot object can be treated like any other matplotlib figure
-fig, ax = DamperHys.plotCumArea(True)
+"""
+DamperHys.plotCumArea(xlim = [0,5], ylim = [0,1])
+fig, ax = DamperHys.plotCumArea(True, labelCycles = 'all')
+
+DamperHys.plot(True, labelCycles = 'all')
 
 # =============================================================================
 # Test hysteresis, Ganey 2
