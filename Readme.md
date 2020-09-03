@@ -13,10 +13,30 @@ Some key features of the library include:
 ## Contents
 
 * [Demo](https://github.com/cslotboom/Hysteresis#demo)
-* [Installation](https://github.com/cslotboom/Hysteresis#installation)
+* [Instal](https://github.com/cslotboom/Hysteresis#instal)
 * [Features](https://github.com/cslotboom/Hysteresis#features)
-* [YouTube Tutorials](https://github.com/connorferster/handcalcs#youtube-tutorials)
+* [Tutorials](https://github.com/cslotboom/Hysteresis#tutorials)
 
 ## Basic Demo
 
 ![Hysteresis demo](docs/images/demo.gif)
+
+
+## Install
+
+Hysteresis is pip installable via:
+`pip install hystresis`
+
+
+
+## Features
+
+Using Hysteresis, it's possible to 
+
+
+
+
+![Hysteresis demo](docs/images/demo.gif)
+
+
+`handcalcs` is intended to be used with either Jupyter Notebook or Jupyter Lab as a _cell magic_.
