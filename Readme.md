@@ -1,3 +1,10 @@
+<h1 align = "Middle">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</h1>
+<h1 align = "Middle">~~~~====Currently in beta====~~~~</h1>
+<h1 align = "Middle">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</h1>
+Currently in beta testing. 
+This means the package is mostly stable, but my test suite isn't totally complete, and I don't have examples or documentation finished.
+
+
 <h1 align = "Left">Hysteresis: Tools for Non-functional curves.</h1>
 
 
@@ -29,6 +36,8 @@ Hysteresis can split up a non-function into a number of cycles that are function
 ## Install
 
 Hysteresis is pip installable via:
+
+(coming soon...)
 
 `pip install hysteresis`
 
