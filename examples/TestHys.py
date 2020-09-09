@@ -1,3 +1,5 @@
+
+
 # -*- coding: utf-8 -*-
 """
 Created on Sat Aug 31 15:13:13 2019
@@ -11,7 +13,7 @@ from numpy import trapz
 import matplotlib.pyplot as plt
 
 from openseespytools import data
-import openseespytools.hysteresis as hys
+import hysteresis as hys
 
 import openseespy
 import time
@@ -19,7 +21,6 @@ import time
 # =============================================================================
 # Load initial stuff
 # =============================================================================
-
 
 basePoints = np.linspace(0,10,1000)
 testx = np.sin(basePoints)
@@ -43,12 +44,6 @@ testHys2 = np.column_stack([disp[:,1], -force[:,1]])
 Wall_exp_xy = np.column_stack([Wall_exp[:,0], Wall_exp[:,1]/1000])
 Wall_anal_xy = np.column_stack([Wall_analysis_disp, -Wall_analysis_shear/1000])
 
-
-
-
-
-
-
 # =============================================================================
 # Circle Area test - Tested
 # =============================================================================
@@ -71,7 +66,7 @@ Tests a basic Circle to see if some propreties are correct
 # print(NetArea)
 
 # print(Circle.loadProtocol)
-# Vector1 = Circle.subvectors[0]
+# Vector1 = Circle.Cycles[0]
 
 
 
@@ -83,8 +78,6 @@ Tests a basic Circle to see if some propreties are correct
 """
 Gets the area under a series of graphs
 """
-
-
 
 # xdata = np.linspace(0,4,1001)
 # y1 = xdata + 2
@@ -110,8 +103,6 @@ Gets the area under a series of graphs
 # A2 = Curve2.getNetArea()
 # A3 = Curve3.getNetArea()
 
-
-
 # =============================================================================
 # Circle Plotting test - Tested
 # =============================================================================
@@ -120,27 +111,37 @@ Gets the area under a series of graphs
 This tests a Circle hysteresis can be plotted and if the resampled curves can be plotted.
 """
 
-# basePoints = np.linspace(0,1,1000)*2*np.pi
-# testCirclex = np.cos(basePoints)
-# testCircley = np.sin(basePoints)
-# Circlexy = np.column_stack((testCirclex, testCircley))
+basePoints = np.linspace(0,1,1000)*2*np.pi
+testCirclex = np.cos(basePoints)
+testCircley = np.sin(basePoints)
+Circlexy = np.column_stack((testCirclex, testCircley))
 
-# Circle = hys.Hysteresis(Circlexy)
+Circle = hys.Hysteresis(Circlexy)
 
-# Circle.plot(plotCycles=True)
-# Circle.plotArea(plotCycles=True)
-# Circle.plotSlope(plotCycles=True, ylim = [-10,10])
-# Circle.setPeaks()
-# fig, ax = Circle.plotCycles(plotCycles=True, plotPeaks=True)
-# # fig, ax = Circle.plotSubVector(0)
+Circle.plot(plotCycles=True)
+Circle.plotArea(plotCycles=True)
+Circle.plotSlope(plotCycles=True, ylim = [-10,10])
+Circle.setPeaks()
+fig, ax = Circle.plotCycles(plotCycles=True, plotPeaks=True)
+# fig, ax = Circle.plotSubVector(0)
 
-# Vector1 = Circle.Cycles[0]
-# Vector2 = hys.reSample(Vector1, 30)
-# Vector3 = hys.reSample(Circle, 10)
+Vector1 = Circle.Cycles[0]
+Vector2 = hys.reSample(Vector1, 30)
+Vector3 = hys.reSample(Circle, 10)
 
-# Vector1.plot()
-# Vector2.plot()
-# Vector3.plot(True)
+Vector1.plot()
+Vector2.plot()
+Vector3.plot(True)
+
+fig, ax = Circle.plot()
+xy = Vector3.xy
+plt.plot(xy[:,0], xy[:,1])
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+plt.minorticks_on()
+ax.grid(which='major', color='grey', linewidth=0.5, alpha = 0.8)
+ax.grid(b=True, which='minor', linewidth=0.5, alpha = 0.4)
+
 
 
 # =============================================================================
@@ -203,22 +204,21 @@ This tests a Circle hysteresis can be plotted and if the resampled curves can be
 
 # A = DamperHys.getNetArea()
 
-
-
-
-
 # =============================================================================
 # Resample Hys Example - Tested
 # =============================================================================
 
 
-# DamperHys = hys.Hysteresis(testHys2)
+DamperHys = hys.Hysteresis(testHys2)
 
-# # Resample hysteresis
-# downsampledHys = hys.reSample(DamperHys, 20)
-# downsampledHys.plot(plotCycles = True)
-# downsampledHys.plotCycles([2,3])
-# downsampledHys.plotArea()
+A = isinstance(DamperHys, hys.Hysteresis)
+# A = isinstance(1, int)
+
+# Resample hysteresis
+downsampledHys = hys.reSample(DamperHys, 20)
+downsampledHys.plot(plotCycles = True)
+downsampledHys.plotCycles([2,3])
+downsampledHys.plotArea()
 
 
 
@@ -338,12 +338,49 @@ This tests a Circle hysteresis can be plotted and if the resampled curves can be
 
 # trianglexy = np.column_stack((x, Ynoise))
 
+# # Base Curve
 # noiseyTriangles = hys.SimpleCycle(trianglexy, FindPeaks = True)
 # peak1 = noiseyTriangles.peakIndexes
-# noiseyTriangles.recalculatePeaks(peakWidth = 100)
-# peak2 = noiseyTriangles.peakIndexes
-# noiseyTriangles.plot(plotPeaks = True)
+# fig, ax = noiseyTriangles.plot(plotPeaks = True)
+# plt.title('Peaks unfiltered.')
+# ax.set_xlabel('Deformation (mm)')
+# ax.set_ylabel('Force (kN)')
+# plt.minorticks_on()
+# ax.grid(which='major', color='grey', linewidth=0.5, alpha = 0.8)
+# ax.grid(b=True, which='minor', linewidth=0.5, alpha = 0.4)
 
+
+# noiseyTriangles.recalculatePeaks(peakWidth = 50)
+# # noiseyTriangles.recalculatePeaks(peakDist = 80)
+# # peak2 = noiseyTriangles.peakIndexes
+# fig, ax = noiseyTriangles.plot(plotPeaks = True)
+# plt.title('Peaks filtered.')
+# ax.set_xlabel('Deformation (mm)')
+# ax.set_ylabel('Force (kN)')
+# plt.minorticks_on()
+# ax.grid(which='major', color='grey', linewidth=0.5, alpha = 0.8)
+# ax.grid(b=True, which='minor', linewidth=0.5, alpha = 0.4)
+
+
+# # 
+# fig, ax = noiseyTriangles.plotSubCycles(plotPeaks = True)
+# plt.title('Curve broken into roughly monotonic cycles.')
+# ax.set_xlabel('Deformation (mm)')
+# ax.set_ylabel('Force (kN)')
+# plt.minorticks_on()
+# ax.grid(which='major', color='grey', linewidth=0.5, alpha = 0.8)
+# ax.grid(b=True, which='minor', linewidth=0.5, alpha = 0.4)
+# ax.legend()
+
+
+# fig, ax = noiseyTriangles.plotCumArea(plotPeaks = True)
+# ax.set_xlabel('Deformation (mm)')
+# ax.set_ylabel('Energy (J)')
+# plt.minorticks_on()
+# ax.grid(which='major', color='grey', linewidth=0.5, alpha = 0.8)
+# ax.grid(b=True, which='minor', linewidth=0.5, alpha = 0.4)
+# ax.legend()
+# plt.title('Energy in curve.')
 
 # smallTriangles.plotSubCycles()
 
@@ -354,37 +391,33 @@ This tests a Circle hysteresis can be plotted and if the resampled curves can be
 # area = noiseyTriangles.getNetArea()
 # plt.plot(slope)
 
-
-# t2 = time.time()
-# # print(t2-t1)
+# print(t2-t1)
 
 
 # =============================================================================
 # SubCycle Test
 # =============================================================================
 
-x = np.linspace(0, 1, 1000)*10
-triangleSmall = scipy.signal.sawtooth(x*20,0.5)/7
-trianglexy = np.column_stack((x,triangleSmall))
+# x = np.linspace(0, 1, 1000)*10
+# triangleSmall = scipy.signal.sawtooth(x*20,0.5)/7
+# trianglexy = np.column_stack((x,triangleSmall))
 
-smallTriangles = hys.SimpleCycle(trianglexy, FindPeaks = True, setSlope=True)
-smallTriangles.plotSlope()
-smallTriangles.plot(plotPeaks=True)
-
-
-subCycle = smallTriangles.getSubCycle(1)
-subCycle.setSlope()
-fig, ax = subCycle.plotSlope()
-subCycle.setArea()
-subCycle.Area
+# smallTriangles = hys.SimpleCycle(trianglexy, FindPeaks = True, setSlope=True)
+# smallTriangles.plotSlope()
+# smallTriangles.plot(plotPeaks=True)
 
 
+# subCycle = smallTriangles.getSubCycle(1)
+# subCycle.setSlope()
+# fig, ax = subCycle.plotSlope()
+# subCycle.setArea()
+# subCycle.Area
 
 # =============================================================================
-# Resample Tests
+# Recalculate Tests
 # =============================================================================
 
-# np.random.seed(103)
+# np.random.seed(101)
 
 # x = np.linspace(0, 1, 1000)*10
 
@@ -398,15 +431,16 @@ subCycle.Area
 
 # xy = np.column_stack([x,Ynoise])
 
-# TestHys = hys.monotonicCycle(xy)
+# TestHys = hys.SimpleCycle(xy)
 
-# TestHys = hys.monotonicCycle(xy, FindPeaks = True)
-# TestHys.plot(Peaks=True)
+# TestHys = hys.SimpleCycle(xy, FindPeaks = True)
+# TestHys.plot(plotPeaks=True)
 
-# TestHys.recalculatePeaks(peakWidth = 50, peakDist = 10)
-# TestHys.plot(Peaks=True)
+# TestHys.recalculatePeaks(peakWidth = 50)
+# TestHys.plot(plotPeaks=True)
 
 
+# TestHys
 
 
 # =============================================================================

@@ -16,30 +16,49 @@ Some key features of the library include:
 * [Install](https://github.com/cslotboom/Hysteresis#install)
 * [Features](https://github.com/cslotboom/Hysteresis#features)
 * [Tutorials](https://github.com/cslotboom/Hysteresis#tutorials)
+* [Terminology/gottca](https://github.com/cslotboom/Hysteresis#Terminology)
 
 ## Basic Demo
 
 A basic demo of the hystresis object. 
 Hysteresis can split up a non-function into a number of cycles that are functions.
 
-![Hysteresis demo 1](doc/images/demo.gif)
+![Hysteresis demo 1](doc/images/feat/demo.gif)
 
 
 ## Install
 
 Hysteresis is pip installable via:
 
-`pip install hystresis`
+`pip install hysteresis`
 
 
 
 ## Features
 
-Using Hysteresis, it's possible to 
+Using Hysteresis, it's possible to:
 
-![Hysteresis demo 2](doc/images/noise.png)
+Find peaks
+![Hysteresis demo 1](doc/images/feat/demo2.gif)
 
-![Hysteresis demo 2](doc/images/downSample.png)
+Find cycles:
+![Hysteresis demo 2](doc/images/feat/demo3.png)
 
-![Hysteresis demo 2](doc/images/compare.png)
+Find energy in a hysteresis:
+![Hysteresis demo 3](doc/images/feat/CumulativeArea_base.png)
+
+Down sample a hysteresis:
+![Hysteresis demo 3](doc/images/feat/demo4.png)
+
+
+![Hysteresis demo 4](doc/images/feat/compare.png)
+
+
+## Terminology
+
+A SimpleCycle is Curve that is a function, that is, each x value is paired with a single y value.
+The term "Cycle" is a little nebulus, as it implies that we return to where we started.
+
+A MonotonicCurve is a Curve that only increases or decreases
+
 

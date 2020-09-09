@@ -7,6 +7,7 @@ mosule on a real hystresis.
 """
 import numpy as np
 import hysteresis as hys
+import matplotlib.pyplot as plt
 
 # =============================================================================
 # Load initial stuff
@@ -51,9 +52,15 @@ All outputs are matplotlib plots, so we can make changes after the plotting.
 Let's add some labels to our chart!
 """
 
-fig, ax = DamperHys.plot()
+fig, ax = DamperHys.plot(plotCycles=True)
+
 ax.set_xlabel('Actuator Displacement (mm)')
 ax.set_ylabel('Applied Force (kN)')
+ax.set_xlim(-3.5,3.5)
+ax.set_ylim(-6,6)
+plt.minorticks_on()
+ax.grid(which='major', color='grey', linewidth=0.5, alpha = 0.8)
+ax.grid(b=True, which='minor', linewidth=0.5, alpha = 0.4)
 
 
 """ 
@@ -71,7 +78,7 @@ Cycle.plot()
 DamperHys.plotCycles(plotCycles = True)
 
 
-# DamperHys.plotCycles([0,1,5,18,19], True, labelCycles = [0,1,5,18,19])
+DamperHys.plotCycles([0,1,5,18,19], True, labelCycles = [0,1,5,18,19])
 
 
 """
@@ -92,16 +99,23 @@ Cycle1 = DamperHys.Cycles[1]
 curvexy = Cycle1.xy
 
 
-
 """
 We can also plot the cumulative area. This could be useful for finding 
 the total energy added to a system.
 
 """
 DamperHys.plotCumArea(xlim = [0,5], ylim = [0,1])
-fig, ax = DamperHys.plotCumArea(True, labelCycles = 'all')
+fig, ax = DamperHys.plotCumArea(True, labelCycles = [0, 5, 10, 15, 20])
+# fig, ax = DamperHys.plotArea(True, labelCycles = [0, 5, 10, 15, 20])
 
-DamperHys.plot(True, labelCycles = 'all')
+
+ax.set_xlabel('Cumulative Deformation (mm)')
+ax.set_ylabel('Energy (kNm)')
+plt.minorticks_on()
+ax.grid(which='major', color='grey', linewidth=0.5, alpha = 0.8)
+ax.grid(b=True, which='minor', linewidth=0.5, alpha = 0.4)
+
+# DamperHys.plot(True, labelCycles = 'all')
 
 # =============================================================================
 # Test hysteresis, Ganey 2
