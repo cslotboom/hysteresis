@@ -29,6 +29,7 @@ Some key features of the library include:
 
 A basic demo of the hystresis object. 
 Hysteresis can split up a non-function into a number of cycles that are functions.
+This allows them to be analyzed more easily or compared with other hystereses.
 
 ![Hysteresis demo 1](doc/images/feat/demo.gif)
 
