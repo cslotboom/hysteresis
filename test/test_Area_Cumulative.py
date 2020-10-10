@@ -26,4 +26,4 @@ def test_cum_Disp():
     assert abs((cumDisp - LPcumDisp)) < 10**-8
 
     
-test_cum_Disp()
+# test_cum_Disp()

@@ -1,8 +1,3 @@
-"""
-This example shows how to create a basic Hysteresis object.
-"""
-
-
 import numpy as np
 import hysteresis.hys as hys
 
@@ -12,9 +7,10 @@ y = np.cos(t)*t
 
 xy = np.column_stack([x,y])
 
+
+
 myHys = hys.Hysteresis(xy)
 myHys.plot(plotCycles = True)
-
 
 
 
