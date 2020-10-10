@@ -10,8 +10,8 @@ from numpy import trapz
 
 import matplotlib.pyplot as plt
 
-from openseespytools import data
-import openseespytools.hysteresis as hys
+from hysteresis import data
+import hysteresis.hys as hys
 
 import openseespy
 import time

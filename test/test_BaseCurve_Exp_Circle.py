@@ -6,7 +6,7 @@ Created on Fri Aug 21 23:47:36 2020
 
 This tests if a simple cicle works
 """
-import hysteresis as hys
+import hysteresis.hys as hys
 import numpy as np
 import matplotlib.pyplot as plt
 

@@ -6,7 +6,7 @@ mosule on a real hystresis.
 
 """
 import numpy as np
-import hysteresis as hys
+import hysteresis.hys as hys
 import matplotlib.pyplot as plt
 
 # =============================================================================

@@ -9,7 +9,7 @@ This tests if a simple cicle works
 
 
 
-import openseespytools.hystersis as hys
+import hystersis.hys as hys
 import numpy as np
 
 

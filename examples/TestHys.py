@@ -13,7 +13,7 @@ from numpy import trapz
 import matplotlib.pyplot as plt
 
 from openseespytools import data
-import hysteresis as hys
+import hysteresis.hys as hys
 
 import openseespy
 import time

@@ -4,7 +4,7 @@ This example shows how to create a basic Hysteresis object.
 
 
 import numpy as np
-import hysteresis as hys
+import hysteresis.hys as hys
 
 t = np.linspace(0,4,1000)*np.pi
 x = np.sin(t)
