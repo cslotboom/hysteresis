@@ -38,8 +38,6 @@ This allows them to be analyzed more easily or compared with other hystereses.
 
 Hysteresis is pip installable via:
 
-(coming soon...)
-
 `pip install hysteresis`
 
 
