@@ -1,6 +1,4 @@
-<h1 align = "Middle">~~~~~~~~~~~~~~~~~~~~~~~~~</h1>
 <h1 align = "Middle">~~==Currently in beta==~~</h1>
-<h1 align = "Middle">~~~~~~~~~~~~~~~~~~~~~~~~~</h1>
 Currently in beta testing - comments welcome.
 Beta testing means the package is working and stable for the but my test suite isn't totally complete, and I don't my examples or documentation finished.
 
