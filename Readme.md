@@ -1,6 +1,6 @@
 <h1 align = "Middle">~~==Currently in beta==~~</h1>
 Currently in beta testing - comments welcome.
-Beta testing means the package is working and stable for the but my test suite isn't totally complete, and I don't my examples or documentation finished.
+Beta testing means the package is working and stable but my test suite isn't totally complete, and I don't my examples or documentation finished.
 
 
 <h1 align = "Left">Hysteresis: Tools for Non-functional curves.</h1>
