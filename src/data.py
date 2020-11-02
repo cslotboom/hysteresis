@@ -209,6 +209,7 @@ def GetCycleIndicies(VectorX, peakDist = 2, peakWidth = None,
     # We find the intermediate peak values
     # We use height = 0 to select only positive or negative peaks.
     MaxIndexes,_ = find_peaks(VectorX, height = (None, None), distance = peakDist, 
+    # MaxIndexes,_ = find_peaks(VectorX, height = (0, None), distance = peakDist, 
                             width = peakWidth, prominence = peakProminence)
     
     MinIndexes,_ = find_peaks(-VectorX, height = (None, None), distance = peakDist, 
@@ -241,16 +242,20 @@ def GetCycleIndicies(VectorX, peakDist = 2, peakWidth = None,
     L1 = len(MinIndexes)
     L2 = len(MaxIndexes)
     
+    if abs(L1 - L2) > 1:
+        raise Exception('There are', L1, 'minimums which is more than one than ', L2, ' maximums. There are likely repeated peaks.')
+        
+    
     # We check the order, starting with the minimum number of possibilities
     # if there are no minimus, order doesn't matter
     # If the first index is a minimum, order = 1, otherwise order = 2
-    if L1 == 0 and L2 == 0:
+    if L1 == 0 and L2 == 0: # Edge case 1: Curve is monotonic - order doesn't matter
         order = 1
-    elif L1 == 0:
+    elif L1 == 0: # Edge case 2: There are no intermediate min points and one intermediate max
         order = 2
-    elif L2 == 0:
+    elif L2 == 0: # Edge case 3: There are no intermediate maxi points and one intermediate min
         order = 1
-    elif MinIndexes[0] < MaxIndexes[0]:
+    elif MinIndexes[0] < MaxIndexes[0]: 
         order = 1
     else:
         order = 2

@@ -28,6 +28,7 @@ TODO:
 """
 TODO:
     Seperate functions from base classes
+    What functions? I thik this is done.
 """
 
 """
@@ -35,6 +36,16 @@ TODO:
     Allow for custom headings:
     Perhaps a style object?
 """
+
+
+"""
+TODO:
+    Add current peak/cycle sampling parameters to part of the base class.\
+    This allows for us to create new hysteresis objects with the propreties of 
+    the old ones.
+    
+"""
+
 
 
 def defaultSlopeFunction(xy):
@@ -450,7 +461,7 @@ class Hysteresis(CurveBase):
         ----------
             
         distance : number, optional
-            Required minimal horizontal distance (>= 1) in samples between
+            The minimum minimal numbr of indexese (>= 1) in samples between
             neighbouring peaks. Smaller peaks are removed first until the condition
             is fulfilled for all remaining peaks.
         prominence : number or ndarray or sequence, optional
@@ -807,7 +818,7 @@ def reSampledx(Curve, Targetdx):
     return Output
 
 # =============================================================================
-# 
+# Tools for creating a load protocol
 # =============================================================================
 
 def getReturnCycle(cycleStart, cycleReturn):
@@ -1005,3 +1016,73 @@ def CompareHys(Hys1, Hys2):
 
     return netdiff, CycleDiffs
     
+
+
+
+# =============================================================================
+# Remove None-negative values
+# =============================================================================
+
+def _RemoveNeg(x, y, direction):
+    
+    difference = np.append(0, np.diff(x))
+    
+    condition = np.where(0 <= difference*direction)
+    
+    xOut = x[condition]
+    yOut = y[condition]
+    
+    xy = np.column_stack([xOut, yOut])
+    
+    return xy
+
+
+
+def removeNegative(Curve):
+    
+    """
+    Removes intermitent negative values in a simple curve.
+    """
+    
+    
+    # Get sample parameters, then pass those to the new curve.
+    
+    # if the curve is a SimpleCycle
+    if isinstance(Curve, SimpleCycle):
+    
+        x = Curve.xy[:,0]
+        y = Curve.xy[:,1]
+        direction = Curve.direction
+        Output = SimpleCycle(_RemoveNeg(x, y, direction))    
+       
+    # if the curve is a hysteresis, we recursively create a series of Cycles
+    elif isinstance(Curve, Hysteresis):
+        outputCycles = [None]*Curve.NCycles
+        for ii, Cycle in enumerate(Curve.Cycles):
+            outputCycles[ii] = removeNegative(Cycle)
+        Output = concatenateHys(*outputCycles)    # If Curve
+
+    # if the curve is a Monotonic Cycle
+    elif isinstance(Curve, MonotonicCurve):
+    
+        x = Curve.xy[:,0]
+        y = Curve.xy[:,1]
+        direction = Curve.direction
+        
+        print('Monotonic curves should have no reversals...')
+        Output = MonotonicCurve(_RemoveNeg(x, y, direction))  
+    
+    # if it is a np array
+    elif isinstance(Curve, np.ndarray):
+        x = Curve[:,0]
+        y = Curve[:,1]
+        
+        # TODO: Create a standardized get direction function
+        if x[0] <= x[-1]:
+            direction = 1
+        else:
+            direction = -1
+        
+        Output = _RemoveNeg(x, y, direction)
+
+    return  Output
