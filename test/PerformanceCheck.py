@@ -7,12 +7,8 @@ Created on Fri Aug 21 23:47:36 2020
 This tests if a simple cicle works
 """
 
-
-
-import hystersis.hys as hys
+import hysteresis.hys as hys
 import numpy as np
-
-
 import time
 
 basePoints = np.linspace(0,1,1000)*2*np.pi
@@ -28,19 +24,12 @@ for ii in range(NStep):
 
 t2 = time.time()
 
-
-
 t3 = time.time()
 for ii in range(NStep):
-    Circle = hys.Hystersis(Circlexy)
+    Circle = hys.Hysteresis(Circlexy)
 
 t4 = time.time()
 
 dt1 = t2- t1
 dt2 = t4- t3
 print(dt1, dt2, dt2 - dt1)
-
-
-        
-
-
