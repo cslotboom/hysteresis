@@ -11,8 +11,10 @@ xy = np.column_stack([x,y])
 
 myHys = hys.Hysteresis(xy)
 myHys.plot(plotCycles = True)
+samllHys = hys.reSample(myHys, 10)
+samllHys.plot()
 
-
+out = hys.CompareHys(samllHys,myHys)
 
 
 
