@@ -174,7 +174,8 @@ def defaultShowCycles(self, x, y, plotCycles, plotPeaks, labelCycles = [], Cycle
         line2  = plt.plot(markerX, markerY, "x")        
 
         # If the cycles need to be labeled,
-        if labelCycles is 'all':
+        # if labelCycles is 'all':
+        if labelCycles == 'all':
             # skip the first and last cycles
             labelIndexes = np.arange(0,len(markerIndexes))
             labelX = x[reversalIndexes]
@@ -992,6 +993,10 @@ def CompareCycle(Curve1, Curve2):
     
     xy1 = Curve1.xy
     xy2 = Curve2.xy
+    
+    xy1 = reSample(xy1, 10)
+    xy2 = reSample(xy2, 10)
+    
     
     diff = defaultSampleFunction(xy1, xy2)
 
