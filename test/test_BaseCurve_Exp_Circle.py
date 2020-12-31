@@ -56,8 +56,8 @@ def test_Circle_Subvector_Plot(monkeypatch):
     
     Circle = MakeCircle()
     Vector1 = Circle.Cycles[0]
-    Vector2 = hys.reSample(Vector1, 30)
-    Vector3 = hys.reSample(Circle, 10)
+    Vector2 = hys.resample(Vector1, 30)
+    Vector3 = hys.resample(Circle, 10)
     
     Vector1.plot()
     Vector2.plot()

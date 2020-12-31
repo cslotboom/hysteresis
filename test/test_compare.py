@@ -13,10 +13,10 @@ def test_comapre_basic():
     
     myHys = hys.Hysteresis(xy)
     myHys.plot(plotCycles = True)
-    smallHys = hys.reSample(myHys, 10)
+    smallHys = hys.resample(myHys, 10)
     # samllHys.plot()
     
-    out = hys.CompareHys(smallHys,myHys)
+    out = hys.compareHys(smallHys,myHys)
     
     assert out[0] == 0
 
