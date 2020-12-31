@@ -11,7 +11,7 @@ from numpy import trapz
 import matplotlib.pyplot as plt
 
 from hysteresis import data
-import hysteresis.hys as hys
+import hysteresis as hys
 
 import openseespy
 import time
@@ -112,18 +112,18 @@ AnalHys.recalculateCycles(peakProminence = 0.0045)
 
 
 # =============================================================================
-# Resample
+# resample
 # =============================================================================
 
 
 # Now we can resample and compare the curves!
-AnalHysDx = hys.reSample(AnalHys, 10)
-ExpHysDx = hys.reSample(ExpHys, 10)
+AnalHysDx = hys.resample(AnalHys, 10)
+ExpHysDx = hys.resample(ExpHys, 10)
 AnalHysDx.plotLoadProtocol(comparisonProtocol = ExpHysDx.loadProtocol)
 AnalHysDx.plot(True)
 ExpHysDx.plot(True)
 
-Diff, Diffs = hys.CompareHys(AnalHysDx, ExpHysDx)
+Diff, Diffs = hys.compareHys(AnalHysDx, ExpHysDx)
 
 # We can plot the difference over each cycle
 fig, ax = plt.subplots()

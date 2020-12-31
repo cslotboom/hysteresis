@@ -13,7 +13,7 @@ from numpy import trapz
 import matplotlib.pyplot as plt
 
 from openseespytools import data
-import hysteresis.hys as hys
+import hysteresis as hys
 
 import openseespy
 import time
@@ -126,8 +126,8 @@ fig, ax = Circle.plotCycles(plotCycles=True, plotPeaks=True)
 # fig, ax = Circle.plotSubVector(0)
 
 Vector1 = Circle.Cycles[0]
-Vector2 = hys.reSample(Vector1, 30)
-Vector3 = hys.reSample(Circle, 10)
+Vector2 = hys.resample(Vector1, 30)
+Vector3 = hys.resample(Circle, 10)
 
 Vector1.plot()
 Vector2.plot()
@@ -215,7 +215,7 @@ A = isinstance(DamperHys, hys.Hysteresis)
 # A = isinstance(1, int)
 
 # Resample hysteresis
-downsampledHys = hys.reSample(DamperHys, 20)
+downsampledHys = hys.resample(DamperHys, 20)
 downsampledHys.plot(plotCycles = True)
 downsampledHys.plotCycles([2,3])
 downsampledHys.plotArea()
@@ -233,7 +233,7 @@ downsampledHys.plotArea()
 # T2 = output.xy
 
 # # Resample Hys
-# downsampledHys = hys.reSampledx(DamperHys, 0.01)
+# downsampledHys = hys.resampledx(DamperHys, 0.01)
 # downsampledHys.plot(plotCycles = True)
 # xy = downsampledHys.xy
 
@@ -247,11 +247,11 @@ downsampledHys.plotArea()
 # Cycle.setPeaks()
 # Cycle.setSubCycles()
 # subcycle = Cycle.SubCycles[0]
-# resampleSubCycle = hys.reSampledx(subcycle, 0.00001)
+# resampleSubCycle = hys.resampledx(subcycle, 0.00001)
 # resampleSubCycle.plot()
 
 # # Resample np.Array
-# resampleNP = hys.reSampledx(resampleSubCycle.xy, 0.0001)
+# resampleNP = hys.resampledx(resampleSubCycle.xy, 0.0001)
 
 
 # downsampledHys.plotCycles([2,3])
