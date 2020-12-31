@@ -1,5 +1,5 @@
 import numpy as np
-import hysteresis.hys as hys
+import hysteresis as hys
 
 
 def test_comapre_basic():

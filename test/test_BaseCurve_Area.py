@@ -1,5 +1,5 @@
 
-import hysteresis.hys as hys
+import hysteresis as hys
 import numpy as np
 
 
