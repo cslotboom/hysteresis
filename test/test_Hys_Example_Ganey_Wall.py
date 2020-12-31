@@ -4,7 +4,7 @@ Created on Fri Aug 21 23:47:36 2020
 
 @author: Christian
 """
-import hysteresis.hys as hys
+import hysteresis as hys
 import numpy as np
 import matplotlib.pyplot as plt
         
@@ -79,10 +79,10 @@ def test_compare(monkeypatch):
     AnalHys.recalculateCycles(peakProminence = 0.0045)
     ExpHys.recalculateCycles(peakProminence = 0.035*4.1/100/2)
     
-    AnalHys = hys.reSample(AnalHys, 10)
-    ExpHys = hys.reSample(ExpHys, 10)
+    AnalHys = hys.resample(AnalHys, 10)
+    ExpHys = hys.resample(ExpHys, 10)
     
-    Diff, Diffs = hys.CompareHys(AnalHys, ExpHys)
+    Diff, Diffs = hys.compareHys(AnalHys, ExpHys)
     
     test1 = abs(Diff - 6.800144) < 0.00001
     

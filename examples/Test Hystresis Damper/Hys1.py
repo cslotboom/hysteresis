@@ -6,7 +6,7 @@ Created on Fri Sep  4 22:19:58 2020
 """
 
 import numpy as np
-import hysteresis.hys as hys
+import hysteresis as hys
 import matplotlib.pyplot as plt
 
 # load the .csv Data

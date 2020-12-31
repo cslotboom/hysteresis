@@ -4,7 +4,7 @@ Created on Fri Aug 21 23:47:36 2020
 
 @author: Christian
 """
-import hysteresis.hys as hys
+import hysteresis as hys
 import numpy as np
 import matplotlib.pyplot as plt
         
@@ -18,7 +18,7 @@ def test_DownSampled_Plotting(monkeypatch):
     monkeypatch.setattr(plt, 'show', lambda: None)
     DamperHys = hys.Hysteresis(testHys2)
     
-    downsampledHys = hys.reSample(DamperHys, 20)
+    downsampledHys = hys.resample(DamperHys, 20)
     downsampledHys.plot(plotCycles = True)
     plt.close()
     downsampledHys.plotCycles([2,3])

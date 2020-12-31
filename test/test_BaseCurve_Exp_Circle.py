@@ -6,7 +6,7 @@ Created on Fri Aug 21 23:47:36 2020
 
 This tests if a simple cicle works
 """
-import hysteresis.hys as hys
+import hysteresis as hys
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -56,8 +56,8 @@ def test_Circle_Subvector_Plot(monkeypatch):
     
     Circle = MakeCircle()
     Vector1 = Circle.Cycles[0]
-    Vector2 = hys.reSample(Vector1, 30)
-    Vector3 = hys.reSample(Circle, 10)
+    Vector2 = hys.resample(Vector1, 30)
+    Vector3 = hys.resample(Circle, 10)
     
     Vector1.plot()
     Vector2.plot()

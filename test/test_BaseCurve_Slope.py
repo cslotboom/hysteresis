@@ -1,4 +1,4 @@
-import hysteresis.hys as hys
+import hysteresis.baseClass as hys
 import numpy as np
 
 def makeCurveBase(f):
