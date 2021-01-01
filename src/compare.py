@@ -8,7 +8,33 @@ from .resample import resample
 # Compare
 # =============================================================================
 
-def compareCycle(Curve1, Curve2, sampleFunction = defaultSampleFunction):
+def compareCycle(Curve1, Curve2, Nsample = 10,
+                 sampleFunction = defaultSampleFunction):
+    """
+    Compares two Curve objects by resampling them using linear interplation,
+    then comparing the distance between both cycles in a comon domain.
+
+    Parameters
+    ----------
+    Curve1 : Curve
+        The first curve, must be non-Hysteresis.
+    Curve2 : Curve
+        The second curve, must be non-Hysteresis.
+    Nsample : int
+        The number of samples that the comparison curves will have.
+    sampleFunction : function, optional
+        The sample function to be used to compare the curves. 
+        The default function is "defaultSampleFunction".
+
+    Returns
+    -------
+    diff : float
+        The net difference between each curve.
+
+    """
+    
+    # TODO: consider storing the sample funciton within the class itself.
+    
     
     if Curve1.Npoints != Curve1.Npoints:
         raise Exception("Curves don't have a similar number of points.")
@@ -16,8 +42,8 @@ def compareCycle(Curve1, Curve2, sampleFunction = defaultSampleFunction):
     xy1 = Curve1.xy
     xy2 = Curve2.xy
     
-    xy1 = resample(xy1, 10)
-    xy2 = resample(xy2, 10)
+    xy1 = resample(xy1, Nsample)
+    xy2 = resample(xy2, Nsample)
     
     
     diff = sampleFunction(xy1, xy2)
@@ -25,6 +51,28 @@ def compareCycle(Curve1, Curve2, sampleFunction = defaultSampleFunction):
     return diff
 
 def compareHys(Hys1, Hys2, combineDiff = defaultCombineDiff):
+    """
+    
+
+    Parameters
+    ----------
+    Hys1 : Hysteresis Object
+        The first Hysteresis object.
+    Hys2 : Hysteresis Object
+        The second Hysteresis object.
+    combineDiff : function, optional
+        The function used to combine the differences for each cycle into a 
+        single value. The default is defaultCombineDiff.
+
+
+    Returns
+    -------
+    netdiff : float
+        The average difference between both curves for the entire object.
+    CycleDiffs : array
+        The average difference between both curves for each cycle.
+
+    """
     
     if Hys1.NCycles != Hys2.NCycles:
         raise Exception("Hysteresis don't have a similar number of Cycles.")    

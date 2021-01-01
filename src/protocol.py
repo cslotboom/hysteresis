@@ -6,19 +6,49 @@ from .baseFuncs import concatenateHys, getReturnCycle
     
 def exandHysTrace(hysteresis, loadProtocolNcycles, skipStart = 0, 
                   skipEnd = 0, FinalCyclePos = True):
-    
     """
-    Exands the trace of a hystresis.
-    Each Cycle is a
-    
+    This function expands the trace of a hysteresis, where the trace has only
+    one reversal point.
+    For example, if for a cycle N = 2, we go from:
+        + -----> +
+        + <----- +
+    To:
+        + -----> +
+        + <----- +
+        + -----> +
+        + <----- +
+
+        
     We do all of the hysteresis cycles, but not necessarily all of the 
-    load protocol cycles
+    load protocol cycles.
     
     
-    !!!: the final cycle is added back if we skip failure!
-    
-    CycleList
+    Parameters
+    ----------
+    hysteresis : Hystresis
+        The input hysteresis to be expanded.
+    loadProtocolNcycles : list
+        The number of cycles for each reversal point.
+        [N1, N2, N3, ... , N4]
+    skipStart : int, optional
+        Skip this many cycles at the start. The default is 0, which skips no steps.
+    skipEnd : int, optional
+        Skip this many cycles at the end. The default is 0, which skips no steps.
+    FinalCyclePos : TYPE, optional
+        If the final cycle (the failure cycle) doesn't have a revesal point,
+        Then this is set to true. The default is True.
+
+
+
+    Returns
+    -------
+    Hysteresis
+        The output hysteresis with the expanded load protocol.
+
     """
+    
+    # !!!: the final cycle is added back if we skip failure!
+
 
     # TODO: Consider making a copy, this may be unsafe.
     Cycles = hysteresis.Cycles
@@ -101,6 +131,28 @@ def exandHysTrace(hysteresis, loadProtocolNcycles, skipStart = 0,
     return concatenateHys(*xyList)
 
 def createProtocol(MonotonicProtocol, loadProtocolNcycles, Nsteps=0):
+    """
+    Creates a reverse cyclic load protocol using a monotonic load protocol.
+    
+
+    Parameters
+    ----------
+    MonotonicProtocol : list
+        The load protocol amplitude values.
+    loadProtocolNcycles : list
+        The number of cycles for each reversal point.
+        [N1, N2, N3, ... , N4]
+    Nsteps : TYPE, optional
+        This variable doesn't do anything right now, but I must have had a good reason to
+        add it so it stays. The default is 0.
+
+
+    Returns
+    -------
+    outputProtocol : array
+        A np array of the input load protocol.
+
+    """
     
     Ncycle = np.sum(loadProtocolNcycles*2)
     

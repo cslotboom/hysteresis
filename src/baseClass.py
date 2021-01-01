@@ -47,6 +47,12 @@ TODO:
 """
 
 
+"""
+TODO: Make Plot functions Lamda function, then specialize for slope, area, etc.
+TODO: Make the limits part of the hysteresis object, so they don't need
+to continually be passed to each funciton.
+"""
+
 
 # =============================================================================
 # Curve objects
@@ -54,7 +60,10 @@ TODO:
 
 class CurveBase:
     """
-    Stuff that every curve should have, like plot
+    The curve base object information that every curve type should have access
+    to. This uncludes plotting functionality, slope functions, area functions,
+    and displacement functions.
+    
     """
     
     def __init__(self, XYData, AreaFunction = defaultAreaFunction, 
@@ -74,9 +83,21 @@ class CurveBase:
     def __len__(self):
         return len(self.xy[:,0])
 
-    # def __mul__(self,x):
-    #     print(x)
+    # def __truediv__(self, x):
+    #     return self.xy[:,1] / x
 
+    # def __rtruediv__(self, x):
+    #     return x / self.xy[:,1]
+    
+    # def __mul__(self, x):
+    #     return self.xy[:,1]*x
+
+    # def __add__(self, x):
+    #     return self.xy[:,1] + x
+    
+    # def __sub__(self, x):
+    #     return self.xy[:,1] - x
+        
     def setArea(self):
         self.Area = self.AreaFunction(self.xy)
         return self.Area
@@ -122,7 +143,9 @@ class CurveBase:
         self.Slope  = self.slopefunction(xy)
     
     def setPeaks(self, peakDist = 2, peakWidth = None, peakProminence = None):
-        "Finds the max and min indexes"
+        """
+        Finds the indexes of max and min points
+        """
         
         y = self.xy[:,1]
         peakIndexes = data.GetCycleIndicies(y, peakDist, peakWidth, peakProminence)        
@@ -139,9 +162,8 @@ class CurveBase:
     def plot(self, plotCycles = False, plotPeaks = False, 
              xlim = [], ylim = [], labelCycles = []):
         """
-        TODO: Make Lamda function, then specialize for slope, area, etc.
-        """
-        
+        Plots the base curve
+        """        
         x = self.xy[:,0]
         y = self.xy[:,1]
                     
@@ -152,7 +174,10 @@ class CurveBase:
 
     def plotVsIndex(self, plotCycles = False, plotPeaks = False, 
                     xlim = [], ylim = [], labelCycles = []):
-          
+        """
+        Plots the base curve against index (as opposed to X values)
+        """          
+        
         x = np.arange(0,len(self.xy[:,0]))
         y = self.xy[:,0]
                     
@@ -162,6 +187,9 @@ class CurveBase:
         return fig, ax
 
     def plotLoadProtocol(self, xlim = [], ylim = [], comparisonProtocol = []):
+        """
+        Plots the load protcol of the curve.
+        """           
         plotCycles = False
         plotPeaks = False
         labelCycles = []
@@ -210,7 +238,26 @@ class CurveBase:
                
         return fig, ax   
 
+
+
+
+# TODO:
+    # Make the Hysteresis object take in the optional arguements as well. This
+    # Curretnly will not work for non-basic funcitons.
+    
+    # This can potentially be fixed by having the user overwrite the default 
+    # function
+
 class Hysteresis(CurveBase):
+    """
+    Hysteresis objects are those that have at least one reversal point in 
+    the x direction of the data.
+    
+    The hysteresis object has a number of functions that help find the reversal
+    points in the x data of the curve.
+    
+    """
+    
     
     def __init__(self, XYData, setCycles = True, setArea = True, setSlope =True):
         CurveBase.__init__(self, XYData)
@@ -220,7 +267,7 @@ class Hysteresis(CurveBase):
             self.setReversalIndexes()
             self.setCycles()
         
-        #TODO: Evaluate how long this takes, then potentiall ymake optional
+        #TODO: Evaluate how long this takes, then potentially ymake optional
         if setArea ==True:
             self.setArea()
         if setSlope ==True:
@@ -228,9 +275,14 @@ class Hysteresis(CurveBase):
             
     def setReversalIndexes(self, peakDist = 2, peakWidth = None, 
                            peakProminence = None):
+        """ Finds the location of the reversal points
+        """
         x = self.xy[:,0]
         self.reversalIndexes = data.GetCycleIndicies(x, peakDist, peakWidth, peakProminence)
         self.loadProtocol = x[self.reversalIndexes]
+        
+        
+        
     
     def setCycles(self):
         xy = self.xy
@@ -246,13 +298,16 @@ class Hysteresis(CurveBase):
         self.NCycles = len(Cycles)
     
     def getCycles(self, Indicies):
+        """ Returns a list of cycles given a list of indicies"""
         Cycles = [self.Cycles[index] for index in Indicies]
         return Cycles      
     
     def getCycle(self, Index):
+        """ Returns a list of cycles given a input index"""
         return self.Cycles[Index]
 
     def setCycleNetAreas(self):
+        """ Calculates the net area under each cycle."""
         areas = np.zeros(self.NCycles)
         for ii, vector in enumerate(self.Cycles):
             # Skip the last point to avoid counting it twice!
@@ -261,15 +316,17 @@ class Hysteresis(CurveBase):
         self.CycleAreas = areas
 
     def setNetArea(self):
+        """ Sets the net area of the whole Hysteresis """
         self.NetArea = np.sum(self.area)
 
-    def plotCycle(self, Index, plotPeaks = False, xlim = [], ylim = []):       
+    def plotCycle(self, Index, plotPeaks = False, xlim = [], ylim = []):
+        """ Plots a specific cycle."""
         Cycle = self.Cycles[Index]
         return Cycle.plot(plotPeaks = plotPeaks, xlim = xlim, ylim = ylim)
 
     def plotCycles(self, Cycles = [], plotCycles = False, plotPeaks = False, 
                    xlim = [], ylim = [], labelCycles = []):
-        
+        """ Plots several cycles on the same figure """
         xyHys = self.xy
         Vectors = self.Cycles
         fig, ax = initializeFig(xlim, ylim)

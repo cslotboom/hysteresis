@@ -8,26 +8,30 @@ from .baseFuncs import concatenateHys, _LinInterpolate, _getNsamples
            
 def resample(Curve, Nsamples):
     """
-    Creates a new Hysteresis or Monotonic Curve object that has a different 
-    number of sample points between the start and end of each Cycle object. 
-    
-    Linear interpolation is used for intermediate points
+    Creates a new Curve object that has a different number of sample points 
+    between the start and end of each Cycle object.   
+    The number of points is specified by the user, and intermediate points will
+    be evenly spaced between the cycles start and end points.
+    Linear interpolation is used to find the y value of intermediate points.
+    In the case of a Hysteresis, every SimpleCycle Curve will be resampled with
+    an amount of points equal to Nsamples.
 
     Parameters
     ----------
     Curve : Hysteresis, Monotonic Cycle, or numpy array
         The curve to be resampled
-
     Nsamples : 
-        The number of samples
+        The number of samples for the new curve.
         
     Returns
     -------
-    TYPE
-        An object of the input type.
+    Curve :
+        An object of the input type with a number of points equal to Nsamples
 
     """  
         
+    # We recursively resample by calling the function again for sub-cycle objects
+    
     # if the curve is a SimpleCycle
     if isinstance(Curve, SimpleCycle):
     
@@ -60,20 +64,32 @@ def resample(Curve, Nsamples):
    
 def resampleDx(Curve, Targetdx):
     """
+    Creates a new Curve object that has a different number of sample points 
+    between the start and end of each Cycle object.
+    For each curve, a number of points will be chosen based on some target
+    displacement value in the x direction. If the value overshoots, 
+    the last point will instead be used.
+    For example, if the start = 2.5, end = 7.5 and dx = 2, points will be 
+    placed at 2.5, 4.5, 6.5, 7.5 
+    
+    Linear interpolation is used to find the y value of intermediate points.
+    In the case of a Hysteresis, every SimpleCycle Curve will be resampled with
+    an amount of points equal to Nsamples.
 
     Parameters
     ----------
-    Curve : TYPE
-        DESCRIPTION.
-    Targetdx : TYPE
-        DESCRIPTION.
+    Curve : Hysteresis, Monotonic Cycle, or numpy array
+        The curve to be resampled.
 
+    Targetdx : float
+        The target distance to use for sample points.
+        
     Returns
     -------
-    Output : TYPE
-        DESCRIPTION.
+    Curve :
+        An object of the input type, with points approximately at Targetdx.
 
-    """
+    """  
 
     if isinstance(Curve, SimpleCycle):
         x = Curve.xy[:,0]

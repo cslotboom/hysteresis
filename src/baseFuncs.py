@@ -7,37 +7,16 @@ from .baseClass import Hysteresis, SimpleCycle, MonotonicCurve
 # This is kind of unorganized right now...
 
 
-# =============================================================================
-# 
-# =============================================================================
+# Todo:
+    # make a concatenate to Cycle object.
 
-def _LinInterpolate(x,y, Nsamples):
-    f = interp1d(x, y)
-    
-    outputx = np.linspace(x[0],x[-1], Nsamples)
-    outputy = f(outputx)
-    outputxy = np.column_stack((outputx, outputy))    
-    return outputxy
-
-
-def _getNsamples(Targetdx, dxNet):
-    if Targetdx >= abs(dxNet/2):
-        print('Targetdx is larger than dxNet/2, no intermediate points made for the target dx = ' +str(dxNet))
-        Nsamples = 2
-    else:
-        Nsamples = int(round(abs(dxNet/Targetdx))) + 1
-    return Nsamples
 
 def concatenateHys(*argv):
     """
-    This function creates a hystesis from a series of monotonic curves, or xy 
-    curves   
-    
-    # TODO: enhance hysteresis functionality
-    I would expect that the new curve has all the propreties of the old curves.
-    Here that won't be the case, which is akward.
-    
+    This function creates a new hystesis from the xy data of a series of 
+    monotonic curves, or xy curves.
 
+    
     Parameters
     ----------
     *argv : SimpleCycle objects, or XY data
@@ -47,10 +26,14 @@ def concatenateHys(*argv):
     Returns
     -------
     hysteresis : Hysteresis Object
-        DESCRIPTION.
+        The ouput hysteresis object which is a combination of all of the input
+        curves
 
     """
     
+    # # TODO: enhance hysteresis functionality
+    # I would expect that the new curve has all the propreties of the old curves.
+    # Here that won't be the case, which is akward.   
     
     
     xyList = [None]*len(argv)   
@@ -74,6 +57,35 @@ def concatenateHys(*argv):
     hysteresis = Hysteresis(xy)
     
     return hysteresis
+
+
+# =============================================================================
+# resample functions
+# =============================================================================
+
+def _LinInterpolate(x,y, Nsamples):
+    """
+    A linear interpolation function that takes a target input curve to a 
+    target sample curve. The sample curve goes between x0 and xN with Nsamples.
+    """
+    
+    f = interp1d(x, y)
+    
+    outputx = np.linspace(x[0],x[-1], Nsamples)
+    outputy = f(outputx)
+    outputxy = np.column_stack((outputx, outputy))    
+    return outputxy
+
+
+def _getNsamples(Targetdx, dxNet):
+    if Targetdx >= abs(dxNet/2):
+        print('Targetdx is larger than dxNet/2, no intermediate points made for the target dx = ' +str(dxNet))
+        Nsamples = 2
+    else:
+        Nsamples = int(round(abs(dxNet/Targetdx))) + 1
+    return Nsamples
+
+
 
 # =============================================================================
 # 

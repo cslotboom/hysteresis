@@ -18,22 +18,18 @@ def defaultSlopeFunction(xy):
     
     The slope is equal to the left difference for the end, and
     right difference for the start.
-    
-    
-    TODO: Try to replace with numpy.gradient
-    
-    
+       
     Parameters
     ----------
     xy : Array
         The input xy data in dimension [Ndata, 2] .
         
-        
     Returns
     -------
-        slope of each x point.
+    The slope of the input cuve at each x point.
 
     """
+    # TODO: Try to replace with numpy.gradient
 
     npoint = len(xy[:,0])
     if 3 < npoint:
@@ -98,22 +94,11 @@ def defaultAreaFunction(xy):
     
     return np.concatenate([[AreaStart], AreaCenter, [AreaEnd]])
 
-def initializeFig(xlim, ylim):
-
-
-    fig, ax = plt.subplots()
-
-    if len(xlim) != 0 :
-        ax.set_xlim(xlim[0], xlim[1])
-
-    if len(ylim) != 0 :
-        ax.set_ylim(ylim[0], ylim[1])
-               
-    return fig, ax
-
 def defaultSampleFunction(xy1, xy2):
-    
-    # The average euler sum for each point
+    """
+    Returns the average error for each sample point in the two array of x/t points,
+    xy1 and xy2.
+    """
     
     x1 = xy1[:,0]
     x2 = xy2[:,0]
@@ -126,6 +111,10 @@ def defaultSampleFunction(xy1, xy2):
 
 
 def defaultCombineDiff(diffs):
+    
+    """
+    Returns the average difference for each cycle
+    """
     
     # The average difference for each curve
     diffNet = np.sum(diffs)/len(diffs)

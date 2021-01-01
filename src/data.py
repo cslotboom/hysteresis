@@ -8,7 +8,10 @@ import matplotlib.pyplot as plt
 from scipy.signal import find_peaks
 from scipy.interpolate import interp1d
 
-
+"""
+TODO
+    Consider removing Sample Data - I don't think this us used anymore
+"""
 
 
 def SampleData(ExperimentX, ExperimentY, AnalysisX, AnalysisY, Nsample = 10, 
@@ -135,10 +138,7 @@ def SampleMonotonicData(ExperimentX, ExperimentY, AnalysisX, AnalysisY,
 
 def GetCycleSubVector(VectorX, VectorY, Index1, Index2, Nsample):
     """
-    
-    #TODO consider renaming to interpolate subvector! Right now this samples
-    the vector by default
-    
+      
     
     This function takes a input x y curve, then returns a linearlized curve
     between two indicies
@@ -166,6 +166,8 @@ def GetCycleSubVector(VectorX, VectorY, Index1, Index2, Nsample):
         The y points of the sample curve.
 
     """
+    #TODO consider renaming to interpolate subvector! Right now this samples
+    # the vector by default    
     
     x1 = VectorX[Index1]
     x2 = VectorX[Index2]
@@ -299,6 +301,22 @@ def GetCycleIndicies(VectorX, peakDist = 2, peakWidth = None,
 
 
 def LinearInterpolation(x1, x2, y1, y2, x):
+    """
+    A default linear interpolation functions for the value x between two points
+    p1 = (x1,y1) and p2 = (x2,y2). 
+
+    Parameters
+    ----------
+    x : float
+        The input x value
+
+    Returns
+    -------
+    y : float
+        the output y value.
+
+    """
+    
     dx = (x2 - x1)
     if dx == 0:
         y = y1

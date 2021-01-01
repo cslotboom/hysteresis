@@ -3,7 +3,18 @@ import matplotlib.pyplot as plt
 
 
 def initializeFig(xlim, ylim):
+    """
+    A default function that initializes a figure based on a set of incoming
+    x and y limits
 
+    Parameters
+    ----------
+    xlim : list
+        The x limits in [xmin, xmax].
+    ylim : list
+        The y limits in [xmin, xmax].
+
+    """
 
     fig, ax = plt.subplots()
 
@@ -16,7 +27,30 @@ def initializeFig(xlim, ylim):
     return fig, ax
 
 def defaultShowCycles(self, x, y, plotCycles, plotPeaks, labelCycles = [], Cycles = []):
-    """Plots the location of the peaks and CycleReversals"""
+    """
+    A function that plots the location of the reversal points and peaks for a
+    curve object.
+
+    Parameters
+    ----------
+    x : array
+        The input x values as an numpy array.
+    y : array
+        The input y values as an numpy array.
+    plotCycles : bool
+        A switch that specifics if cycle reversal points should be plotted.
+    plotPeaks : bool
+        A switch that specifics if peak values should be plotted.
+    labelCycles : list or 'all', optional
+        A list of the cycles to be labled. 
+        A value of 'all' can also be specified, in which case all cucles will be plotted.
+        The default is [], which labels no cycles
+    Cycles : kist, optional
+        A list of the cycles to be plotted. If not specified, all values will 
+        be plotted. The default is [], which plots all cycles.
+
+    """
+    
     
     # Plot cycles as x only
     if plotPeaks == True:
@@ -75,7 +109,27 @@ def defaultShowCycles(self, x, y, plotCycles, plotPeaks, labelCycles = [], Cycle
             # Annotate = plt.annotate(int(ii), xy=(ReversalX[ii], ReversalY[ii]))
 
 def defaultPlotFunction(self, x, y, plotCycles, plotPeaks, xlim = [], ylim = [], labelCycles = []):
-    #TODO: right now it is not possible to have overlap between functions using this method
+    """
+    Parameters
+    ----------
+    x : array
+        The input x values as an numpy array.
+    y : array
+        The input y values as an numpy array.
+    plotCycles : bool
+        A switch that specifics if cycle reversal points should be plotted.
+    plotPeaks : bool
+        A switch that specifics if peak values should be plotted.
+    labelCycles : list or 'all', optional
+        A list of the cycles to be labled. 
+        A value of 'all' can also be specified, in which case all cucles will be plotted.
+        The default is [], which labels no cycles
+    Cycles : kist, optional
+        A list of the cycles to be plotted. If not specified, all values will 
+        be plotted. The default is [], which plots all cycles.
+    """
+
+
     fig, ax = initializeFig(xlim, ylim)
           
     line1 = plt.plot(x, y)
