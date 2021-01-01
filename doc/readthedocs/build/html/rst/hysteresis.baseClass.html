@@ -1,0 +1,467 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>hysteresis.baseClass module &mdash; Hysteresis 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="hysteresis.baseFuncs module" href="hysteresis.baseFuncs.html" />
+    <link rel="prev" title="Hysteresis Documentation" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> Hysteresis
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">hysteresis.baseClass module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hysteresis.baseFuncs.html">hysteresis.baseFuncs module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hysteresis.compare.html">hysteresis.compare module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hysteresis.data.html">hysteresis.data module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hysteresis.defaultDataFuncs.html">hysteresis.defaultDataFuncs module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hysteresis.defaultPlotFuncs.html">hysteresis.defaultPlotFuncs module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hysteresis.protocol.html">hysteresis.protocol module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hysteresis.resample.html">hysteresis.resample module</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Hysteresis</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>hysteresis.baseClass module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/rst/hysteresis.baseClass.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-hysteresis.baseClass">
+<span id="hysteresis-baseclass-module"></span><h1>hysteresis.baseClass module<a class="headerlink" href="#module-hysteresis.baseClass" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="hysteresis.baseClass.CurveBase">
+<em class="property">class </em><code class="sig-prename descclassname">hysteresis.baseClass.</code><code class="sig-name descname">CurveBase</code><span class="sig-paren">(</span><em class="sig-param">XYData</em>, <em class="sig-param">AreaFunction=&lt;function defaultAreaFunction&gt;</em>, <em class="sig-param">slopefunction=&lt;function defaultSlopeFunction&gt;</em>, <em class="sig-param">plotfunction=&lt;function defaultPlotFunction&gt;</em>, <em class="sig-param">xunit=''</em>, <em class="sig-param">yunit=''</em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.CurveBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The curve base object information that every curve type should have access
+to. This uncludes plotting functionality, slope functions, area functions,
+and displacement functions.</p>
+<dl class="py method">
+<dt id="hysteresis.baseClass.CurveBase.getCumArea">
+<code class="sig-name descname">getCumArea</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.CurveBase.getCumArea" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.CurveBase.getCumDisp">
+<code class="sig-name descname">getCumDisp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.CurveBase.getCumDisp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.CurveBase.getNetArea">
+<code class="sig-name descname">getNetArea</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">StartIndex</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">EndIndex</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.CurveBase.getNetArea" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the area between two indexes in the xy curve. The default
+setting is to return the area for the whole cuve.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.CurveBase.getNetCumDisp">
+<code class="sig-name descname">getNetCumDisp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">StartIndex</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">EndIndex</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.CurveBase.getNetCumDisp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.CurveBase.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">plotCycles</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">plotPeaks</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">xlim</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">ylim</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">labelCycles</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.CurveBase.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the base curve</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.CurveBase.plotArea">
+<code class="sig-name descname">plotArea</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">plotCycles</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">plotPeaks</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">xlim</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">ylim</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">labelCycles</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.CurveBase.plotArea" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.CurveBase.plotCumArea">
+<code class="sig-name descname">plotCumArea</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">plotCycles</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">plotPeaks</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">xlim</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">ylim</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">labelCycles</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.CurveBase.plotCumArea" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.CurveBase.plotLoadProtocol">
+<code class="sig-name descname">plotLoadProtocol</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">xlim</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">ylim</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">comparisonProtocol</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.CurveBase.plotLoadProtocol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the load protcol of the curve.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.CurveBase.plotSlope">
+<code class="sig-name descname">plotSlope</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">plotCycles</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">plotPeaks</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">xlim</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">ylim</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">labelCycles</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.CurveBase.plotSlope" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.CurveBase.plotVsIndex">
+<code class="sig-name descname">plotVsIndex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">plotCycles</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">plotPeaks</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">xlim</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">ylim</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">labelCycles</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.CurveBase.plotVsIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the base curve against index (as opposed to X values)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.CurveBase.setArea">
+<code class="sig-name descname">setArea</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.CurveBase.setArea" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.CurveBase.setPeaks">
+<code class="sig-name descname">setPeaks</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">peakDist</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">peakWidth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">peakProminence</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.CurveBase.setPeaks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the indexes of max and min points</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.CurveBase.setSlope">
+<code class="sig-name descname">setSlope</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.CurveBase.setSlope" title="Permalink to this definition">¶</a></dt>
+<dd><p>The user can pass in a custom function that calculates the slope.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="hysteresis.baseClass.Hysteresis">
+<em class="property">class </em><code class="sig-prename descclassname">hysteresis.baseClass.</code><code class="sig-name descname">Hysteresis</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">XYData</span></em>, <em class="sig-param"><span class="n">setCycles</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">setArea</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">setSlope</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.Hysteresis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#hysteresis.baseClass.CurveBase" title="hysteresis.baseClass.CurveBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">hysteresis.baseClass.CurveBase</span></code></a></p>
+<p>Hysteresis objects are those that have at least one reversal point in
+the x direction of the data.</p>
+<p>The hysteresis object has a number of functions that help find the reversal
+points in the x data of the curve.</p>
+<dl class="py method">
+<dt id="hysteresis.baseClass.Hysteresis.RemoveCycles">
+<code class="sig-name descname">RemoveCycles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.Hysteresis.RemoveCycles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.Hysteresis.getCycle">
+<code class="sig-name descname">getCycle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Index</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.Hysteresis.getCycle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of cycles given a input index</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.Hysteresis.getCycles">
+<code class="sig-name descname">getCycles</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Indicies</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.Hysteresis.getCycles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of cycles given a list of indicies</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.Hysteresis.plotCycle">
+<code class="sig-name descname">plotCycle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Index</span></em>, <em class="sig-param"><span class="n">plotPeaks</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">xlim</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">ylim</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.Hysteresis.plotCycle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots a specific cycle.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.Hysteresis.plotCycles">
+<code class="sig-name descname">plotCycles</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Cycles</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">plotCycles</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">plotPeaks</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">xlim</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">ylim</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">labelCycles</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.Hysteresis.plotCycles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots several cycles on the same figure</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.Hysteresis.recalculateCycles">
+<code class="sig-name descname">recalculateCycles</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">peakDist</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">peakWidth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">peakProminence</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.Hysteresis.recalculateCycles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Peaks are calculated using scipy’s find_peaks function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distance</strong> (<em>number</em><em>, </em><em>optional</em>) – The minimum minimal numbr of indexese (&gt;= 1) in samples between
+neighbouring peaks. Smaller peaks are removed first until the condition
+is fulfilled for all remaining peaks.</p></li>
+<li><p><strong>prominence</strong> (<em>number</em><em> or </em><em>ndarray</em><em> or </em><em>sequence</em><em>, </em><em>optional</em>) – Required prominence of peaks. Either a number, <code class="docutils literal notranslate"><span class="pre">None</span></code>, an array
+matching <cite>x</cite> or a 2-element sequence of the former. The first
+element is always interpreted as the  minimal and the second, if
+supplied, as the maximal required prominence.</p></li>
+<li><p><strong>width</strong> (<em>number</em><em> or </em><em>ndarray</em><em> or </em><em>sequence</em><em>, </em><em>optional</em>) – Required width of peaks in samples. Either a number, <code class="docutils literal notranslate"><span class="pre">None</span></code>, an array
+matching <cite>x</cite> or a 2-element sequence of the former. The first
+element is always interpreted as the  minimal and the second, if
+supplied, as the maximal required width.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.Hysteresis.setCycleNetAreas">
+<code class="sig-name descname">setCycleNetAreas</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.Hysteresis.setCycleNetAreas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the net area under each cycle.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.Hysteresis.setCycles">
+<code class="sig-name descname">setCycles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.Hysteresis.setCycles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.Hysteresis.setNetArea">
+<code class="sig-name descname">setNetArea</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.Hysteresis.setNetArea" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the net area of the whole Hysteresis</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.Hysteresis.setReversalIndexes">
+<code class="sig-name descname">setReversalIndexes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">peakDist</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">peakWidth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">peakProminence</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.Hysteresis.setReversalIndexes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the location of the reversal points</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="hysteresis.baseClass.MonotonicCurve">
+<em class="property">class </em><code class="sig-prename descclassname">hysteresis.baseClass.</code><code class="sig-name descname">MonotonicCurve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">XYData</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.MonotonicCurve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#hysteresis.baseClass.CurveBase" title="hysteresis.baseClass.CurveBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">hysteresis.baseClass.CurveBase</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="hysteresis.baseClass.SimpleCycle">
+<em class="property">class </em><code class="sig-prename descclassname">hysteresis.baseClass.</code><code class="sig-name descname">SimpleCycle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">XYData</span></em>, <em class="sig-param"><span class="n">FindPeaks</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">setSlope</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">setArea</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">peakDist</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">peakWidth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">peakProminence</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.SimpleCycle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#hysteresis.baseClass.CurveBase" title="hysteresis.baseClass.CurveBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">hysteresis.baseClass.CurveBase</span></code></a></p>
+<p>A curve that doesn’t change direction on the X axis, but can change
+Y direction.</p>
+<dl class="py method">
+<dt id="hysteresis.baseClass.SimpleCycle.getSubCycle">
+<code class="sig-name descname">getSubCycle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Index</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.SimpleCycle.getSubCycle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.SimpleCycle.getSubCycles">
+<code class="sig-name descname">getSubCycles</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Indicies</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.SimpleCycle.getSubCycles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.SimpleCycle.plotSubCycles">
+<code class="sig-name descname">plotSubCycles</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">SubCyclesIndicies</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">plotCycles</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">plotPeaks</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">xlim</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">ylim</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.SimpleCycle.plotSubCycles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.SimpleCycle.recalculatePeaks">
+<code class="sig-name descname">recalculatePeaks</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">peakDist</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">peakWidth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">peakProminence</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.SimpleCycle.recalculatePeaks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Peaks are calculated using scipy’s find_peaks function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distance</strong> (<em>number</em><em>, </em><em>optional</em>) – Required minimal horizontal distance (&gt;= 1) in samples between
+neighbouring peaks. Smaller peaks are removed first until the condition
+is fulfilled for all remaining peaks.</p></li>
+<li><p><strong>prominence</strong> (<em>number</em><em> or </em><em>ndarray</em><em> or </em><em>sequence</em><em>, </em><em>optional</em>) – Required prominence of peaks. Either a number, <code class="docutils literal notranslate"><span class="pre">None</span></code>, an array
+matching <cite>x</cite> or a 2-element sequence of the former. The first
+element is always interpreted as the  minimal and the second, if
+supplied, as the maximal required prominence.</p></li>
+<li><p><strong>width</strong> (<em>number</em><em> or </em><em>ndarray</em><em> or </em><em>sequence</em><em>, </em><em>optional</em>) – Required width of peaks in samples. Either a number, <code class="docutils literal notranslate"><span class="pre">None</span></code>, an array
+matching <cite>x</cite> or a 2-element sequence of the former. The first
+element is always interpreted as the  minimal and the second, if
+supplied, as the maximal required width.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.SimpleCycle.setSubCycles">
+<code class="sig-name descname">setSubCycles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.SimpleCycle.setSubCycles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Peaks must be set before subcyles can be set.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.SimpleCycle.setSubCyclesArea">
+<code class="sig-name descname">setSubCyclesArea</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.SimpleCycle.setSubCyclesArea" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the net area for all SubCycles</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="hysteresis.baseClass.SimpleCycle.setSubCyclesSlope">
+<code class="sig-name descname">setSubCyclesSlope</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.baseClass.SimpleCycle.setSubCyclesSlope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the net area for all MonotonicCurves</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="hysteresis.baseFuncs.html" class="btn btn-neutral float-right" title="hysteresis.baseFuncs module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../index.html" class="btn btn-neutral float-left" title="Hysteresis Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, CSlotboom
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

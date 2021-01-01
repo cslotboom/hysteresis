@@ -12,17 +12,18 @@
 #
 import os
 import sys
-sys.path.insert(0, r'C:\Users\Christian\Documents\GitHub\Hysteresis\src')
+#sys.path.insert(0, r'C:\Users\Christian\Documents\GitHub\Hysteresis\src')
+sys.path.insert(0, os.path.abspath('..'))
 
 
 # -- Project information -----------------------------------------------------
 
 project = 'Hysteresis'
-copyright = '2020, Cslotboom'
-author = 'Cslotboom'
+copyright = '2020, CSlotboom'
+author = 'CSlotboom'
 
 # The full version, including alpha/beta/rc tags
-release = '0.3'
+release = '1.0.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -30,7 +31,8 @@ release = '0.3'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage', 'sphinx.ext.napoleon', 'sphinx.ext.autosummary']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage', 'sphinx.ext.napoleon', 'sphinx.ext.autosummary'
+]
 autosummary_generate = True  # Turn on sphinx.ext.autosummary
 
 # Add any paths that contain templates here, relative to this directory.
@@ -56,8 +58,6 @@ html_theme_options = {
     'navigation_depth': 4,
     'prev_next_buttons_location': 'bottom',
 }
-
-
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".

@@ -1,0 +1,286 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>hysteresis.protocol module &mdash; Hysteresis 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="hysteresis.resample module" href="hysteresis.resample.html" />
+    <link rel="prev" title="hysteresis.defaultPlotFuncs module" href="hysteresis.defaultPlotFuncs.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> Hysteresis
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="hysteresis.baseClass.html">hysteresis.baseClass module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hysteresis.baseFuncs.html">hysteresis.baseFuncs module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hysteresis.compare.html">hysteresis.compare module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hysteresis.data.html">hysteresis.data module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hysteresis.defaultDataFuncs.html">hysteresis.defaultDataFuncs module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hysteresis.defaultPlotFuncs.html">hysteresis.defaultPlotFuncs module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">hysteresis.protocol module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hysteresis.resample.html">hysteresis.resample module</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Hysteresis</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>hysteresis.protocol module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/rst/hysteresis.protocol.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-hysteresis.protocol">
+<span id="hysteresis-protocol-module"></span><h1>hysteresis.protocol module<a class="headerlink" href="#module-hysteresis.protocol" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="hysteresis.protocol.createProtocol">
+<code class="sig-prename descclassname">hysteresis.protocol.</code><code class="sig-name descname">createProtocol</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">MonotonicProtocol</span></em>, <em class="sig-param"><span class="n">loadProtocolNcycles</span></em>, <em class="sig-param"><span class="n">Nsteps</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.protocol.createProtocol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a reverse cyclic load protocol using a monotonic load protocol.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>MonotonicProtocol</strong> (<em>list</em>) – The load protocol amplitude values.</p></li>
+<li><p><strong>loadProtocolNcycles</strong> (<em>list</em>) – The number of cycles for each reversal point.
+[N1, N2, N3, … , N4]</p></li>
+<li><p><strong>Nsteps</strong> (<em>TYPE</em><em>, </em><em>optional</em>) – This variable doesn’t do anything right now, but I must have had a good reason to
+add it so it stays. The default is 0.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>outputProtocol</strong> – A np array of the input load protocol.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="hysteresis.protocol.exandHysTrace">
+<code class="sig-prename descclassname">hysteresis.protocol.</code><code class="sig-name descname">exandHysTrace</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">hysteresis</span></em>, <em class="sig-param"><span class="n">loadProtocolNcycles</span></em>, <em class="sig-param"><span class="n">skipStart</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">skipEnd</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">FinalCyclePos</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.protocol.exandHysTrace" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function expands the trace of a hysteresis, where the trace has only
+one reversal point.
+For example, if for a cycle N = 2, we go from:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>—–&gt; +</p></li>
+<li><p>&lt;—– +</p></li>
+</ul>
+</div></blockquote>
+<dl class="simple">
+<dt>To:</dt><dd><ul class="simple">
+<li><p>—–&gt; +</p></li>
+<li><p>&lt;—– +</p></li>
+<li><p>—–&gt; +</p></li>
+<li><p>&lt;—– +</p></li>
+</ul>
+</dd>
+</dl>
+<p>We do all of the hysteresis cycles, but not necessarily all of the
+load protocol cycles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hysteresis</strong> (<em>Hystresis</em>) – The input hysteresis to be expanded.</p></li>
+<li><p><strong>loadProtocolNcycles</strong> (<em>list</em>) – The number of cycles for each reversal point.
+[N1, N2, N3, … , N4]</p></li>
+<li><p><strong>skipStart</strong> (<em>int</em><em>, </em><em>optional</em>) – Skip this many cycles at the start. The default is 0, which skips no steps.</p></li>
+<li><p><strong>skipEnd</strong> (<em>int</em><em>, </em><em>optional</em>) – Skip this many cycles at the end. The default is 0, which skips no steps.</p></li>
+<li><p><strong>FinalCyclePos</strong> (<em>TYPE</em><em>, </em><em>optional</em>) – If the final cycle (the failure cycle) doesn’t have a revesal point,
+Then this is set to true. The default is True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The output hysteresis with the expanded load protocol.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="hysteresis.baseClass.html#hysteresis.baseClass.Hysteresis" title="hysteresis.baseClass.Hysteresis">Hysteresis</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="hysteresis.resample.html" class="btn btn-neutral float-right" title="hysteresis.resample module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="hysteresis.defaultPlotFuncs.html" class="btn btn-neutral float-left" title="hysteresis.defaultPlotFuncs module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, CSlotboom
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

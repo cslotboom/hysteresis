@@ -1,0 +1,7 @@
+scripts.compare module
+======================
+
+.. automodule:: scripts.compare
+   :members:
+   :undoc-members:
+   :show-inheritance:

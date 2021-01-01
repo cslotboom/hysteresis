@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Hysteresis Documentation &mdash; Hysteresis 0.3 documentation</title>
+  <title>Hysteresis Documentation &mdash; Hysteresis 1.0.0 documentation</title>
   
 
   
@@ -29,13 +29,13 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="hysteresis.baseClass module" href="rst/hysteresis.baseClass.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -80,15 +80,18 @@
               
             
             
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">Hysteresis Documentation</a><ul>
-<li><a class="reference internal" href="#developed-by">Developed by</a></li>
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.baseClass.html">hysteresis.baseClass module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.baseFuncs.html">hysteresis.baseFuncs module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.compare.html">hysteresis.compare module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.data.html">hysteresis.data module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.defaultDataFuncs.html">hysteresis.defaultDataFuncs module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.defaultPlotFuncs.html">hysteresis.defaultPlotFuncs module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.protocol.html">hysteresis.protocol module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.resample.html">hysteresis.resample module</a></li>
 </ul>
-</li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
-</ul>
-</div>
+
             
           
         </div>
@@ -162,7 +165,7 @@
 <p>A simple script is shown below:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># import numpy and hysteresis</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">hysteresis.hys</span> <span class="k">as</span> <span class="nn">hys</span>
+<span class="kn">import</span> <span class="nn">hysteresis</span> <span class="k">as</span> <span class="nn">hys</span>
 
 <span class="c1"># Create a simple non-functional curve</span>
 <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
@@ -176,6 +179,17 @@
 </pre></div>
 </div>
 <div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.baseClass.html">hysteresis.baseClass module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.baseFuncs.html">hysteresis.baseFuncs module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.compare.html">hysteresis.compare module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.data.html">hysteresis.data module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.defaultDataFuncs.html">hysteresis.defaultDataFuncs module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.defaultPlotFuncs.html">hysteresis.defaultPlotFuncs module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.protocol.html">hysteresis.protocol module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.resample.html">hysteresis.resample module</a></li>
+</ul>
 </div>
 <div class="section" id="developed-by">
 <h2>Developed by<a class="headerlink" href="#developed-by" title="Permalink to this headline">¶</a></h2>
@@ -201,13 +215,20 @@
           </div>
           <footer>
   
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="rst/hysteresis.baseClass.html" class="btn btn-neutral float-right" title="hysteresis.baseClass module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 2020, Cslotboom
+        &copy; Copyright 2020, CSlotboom
 
     </p>
   </div>

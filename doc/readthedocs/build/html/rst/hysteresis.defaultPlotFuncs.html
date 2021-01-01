@@ -1,0 +1,276 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>hysteresis.defaultPlotFuncs module &mdash; Hysteresis 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="hysteresis.protocol module" href="hysteresis.protocol.html" />
+    <link rel="prev" title="hysteresis.defaultDataFuncs module" href="hysteresis.defaultDataFuncs.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> Hysteresis
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="hysteresis.baseClass.html">hysteresis.baseClass module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hysteresis.baseFuncs.html">hysteresis.baseFuncs module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hysteresis.compare.html">hysteresis.compare module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hysteresis.data.html">hysteresis.data module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hysteresis.defaultDataFuncs.html">hysteresis.defaultDataFuncs module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">hysteresis.defaultPlotFuncs module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hysteresis.protocol.html">hysteresis.protocol module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hysteresis.resample.html">hysteresis.resample module</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Hysteresis</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>hysteresis.defaultPlotFuncs module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/rst/hysteresis.defaultPlotFuncs.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-hysteresis.defaultPlotFuncs">
+<span id="hysteresis-defaultplotfuncs-module"></span><h1>hysteresis.defaultPlotFuncs module<a class="headerlink" href="#module-hysteresis.defaultPlotFuncs" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="hysteresis.defaultPlotFuncs.defaultPlotFunction">
+<code class="sig-prename descclassname">hysteresis.defaultPlotFuncs.</code><code class="sig-name descname">defaultPlotFunction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">plotCycles</span></em>, <em class="sig-param"><span class="n">plotPeaks</span></em>, <em class="sig-param"><span class="n">xlim</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">ylim</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">labelCycles</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.defaultPlotFuncs.defaultPlotFunction" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array</em>) – The input x values as an numpy array.</p></li>
+<li><p><strong>y</strong> (<em>array</em>) – The input y values as an numpy array.</p></li>
+<li><p><strong>plotCycles</strong> (<em>bool</em>) – A switch that specifics if cycle reversal points should be plotted.</p></li>
+<li><p><strong>plotPeaks</strong> (<em>bool</em>) – A switch that specifics if peak values should be plotted.</p></li>
+<li><p><strong>labelCycles</strong> (<em>list</em><em> or </em><em>'all'</em><em>, </em><em>optional</em>) – A list of the cycles to be labled.
+A value of ‘all’ can also be specified, in which case all cucles will be plotted.
+The default is [], which labels no cycles</p></li>
+<li><p><strong>Cycles</strong> (<em>kist</em><em>, </em><em>optional</em>) – A list of the cycles to be plotted. If not specified, all values will
+be plotted. The default is [], which plots all cycles.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="hysteresis.defaultPlotFuncs.defaultShowCycles">
+<code class="sig-prename descclassname">hysteresis.defaultPlotFuncs.</code><code class="sig-name descname">defaultShowCycles</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">plotCycles</span></em>, <em class="sig-param"><span class="n">plotPeaks</span></em>, <em class="sig-param"><span class="n">labelCycles</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">Cycles</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.defaultPlotFuncs.defaultShowCycles" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function that plots the location of the reversal points and peaks for a
+curve object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array</em>) – The input x values as an numpy array.</p></li>
+<li><p><strong>y</strong> (<em>array</em>) – The input y values as an numpy array.</p></li>
+<li><p><strong>plotCycles</strong> (<em>bool</em>) – A switch that specifics if cycle reversal points should be plotted.</p></li>
+<li><p><strong>plotPeaks</strong> (<em>bool</em>) – A switch that specifics if peak values should be plotted.</p></li>
+<li><p><strong>labelCycles</strong> (<em>list</em><em> or </em><em>'all'</em><em>, </em><em>optional</em>) – A list of the cycles to be labled.
+A value of ‘all’ can also be specified, in which case all cucles will be plotted.
+The default is [], which labels no cycles</p></li>
+<li><p><strong>Cycles</strong> (<em>kist</em><em>, </em><em>optional</em>) – A list of the cycles to be plotted. If not specified, all values will
+be plotted. The default is [], which plots all cycles.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="hysteresis.defaultPlotFuncs.initializeFig">
+<code class="sig-prename descclassname">hysteresis.defaultPlotFuncs.</code><code class="sig-name descname">initializeFig</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">xlim</span></em>, <em class="sig-param"><span class="n">ylim</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hysteresis.defaultPlotFuncs.initializeFig" title="Permalink to this definition">¶</a></dt>
+<dd><p>A default function that initializes a figure based on a set of incoming
+x and y limits</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xlim</strong> (<em>list</em>) – The x limits in [xmin, xmax].</p></li>
+<li><p><strong>ylim</strong> (<em>list</em>) – The y limits in [xmin, xmax].</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="hysteresis.protocol.html" class="btn btn-neutral float-right" title="hysteresis.protocol module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="hysteresis.defaultDataFuncs.html" class="btn btn-neutral float-left" title="hysteresis.defaultDataFuncs module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, CSlotboom
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
