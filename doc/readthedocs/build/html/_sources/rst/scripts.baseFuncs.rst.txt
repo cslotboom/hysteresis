@@ -1,0 +1,7 @@
+scripts.baseFuncs module
+========================
+
+.. automodule:: scripts.baseFuncs
+   :members:
+   :undoc-members:
+   :show-inheritance:

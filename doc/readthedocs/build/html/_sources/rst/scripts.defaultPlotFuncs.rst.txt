@@ -1,0 +1,7 @@
+scripts.defaultPlotFuncs module
+===============================
+
+.. automodule:: scripts.defaultPlotFuncs
+   :members:
+   :undoc-members:
+   :show-inheritance:

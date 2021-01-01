@@ -1,0 +1,7 @@
+scripts.resample module
+=======================
+
+.. automodule:: scripts.resample
+   :members:
+   :undoc-members:
+   :show-inheritance:
