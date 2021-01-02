@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 
 def defaultSlopeFunction(xy):
     """
-    The standard slope function. The slope is indefined for reversal indexes.
+    The standard slope function. The slope is undefined for reversal indexes.
     
     For middle points, a centeral finite difference scheme is used, which is 
     O(h**2) accurate for constant steps h.
@@ -96,9 +96,24 @@ def defaultAreaFunction(xy):
 
 def defaultSampleFunction(xy1, xy2):
     """
-    Returns the average error for each sample point in the two array of x/t points,
+    The sample function compares how similar two curves are. 
+    If they are exactly the same it will return a value of zero.
+    The default function returns the average error between each sample point in two arrays of x/y points,
     xy1 and xy2.
+    
+    Parameters
+    ----------
+    xy1 : array
+        The first input 2D x/y array of points.
+    xy2 : array
+        The second input 2D x/y array of points.
+
+    Returns
+    -------
+    float
+        The average "distance" between each point on the curve. The output quantity is unitless.
     """
+
     
     x1 = xy1[:,0]
     x2 = xy2[:,0]
@@ -111,9 +126,21 @@ def defaultSampleFunction(xy1, xy2):
 
 
 def defaultCombineDiff(diffs):
-    
     """
-    Returns the average difference for each cycle
+    This function chooses how to combine the differences between the curves for each cycle.
+    The default function returns the average difference for each cycle for a input list of differences
+    
+
+    Parameters
+    ----------
+    diffs : array
+        The list of net differences for each input sample curve.
+
+    Returns
+    -------
+    diffNet : float
+        The total difference according too the function.
+
     """
     
     # The average difference for each curve

@@ -9,13 +9,13 @@ Hysteresis is a library of tools for non-functional curves, with a emphasis on f
 
 Install using:
 
-::
+.. code :: python
 
 	pip install hysteresis
 
 A simple script is shown below:
 
-::
+.. code :: python
 
 	# import numpy and hysteresis
 	import numpy as np
@@ -33,17 +33,15 @@ A simple script is shown below:
 
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 3
+   :numbered:
    
-   rst/hysteresis.baseClass
-   rst/hysteresis.baseFuncs
-   rst/hysteresis.compare
-   rst/hysteresis.data
-   rst/hysteresis.defaultDataFuncs
-   rst/hysteresis.defaultPlotFuncs
-   rst/hysteresis.protocol
-   rst/hysteresis.resample
+   rst/baseClass
+   rst/basicFunctions
+   rst/defaultFunctions
+   rst/protocol
+   rst/climate
+   rst/examples
 
 =============
  Developed by
