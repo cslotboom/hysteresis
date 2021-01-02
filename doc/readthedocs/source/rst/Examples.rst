@@ -1,10 +1,9 @@
-hysteresis Examples
-===================
+Examples
+========
 
 See Github for examples. Coming soon on website!
 
-.. toctree::
-   :maxdepth: 4
+
 
 
 
