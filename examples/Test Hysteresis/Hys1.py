@@ -7,7 +7,7 @@ Created on Fri Sep  4 22:19:58 2020
 
 
 import numpy as np
-import hysteresis.hys as hys
+import hysteresis as hys
 import time
 import matplotlib.pyplot as plt
 
@@ -36,7 +36,7 @@ hysTrace = hys.Hysteresis(xyData)
 hysProt = hysTrace.loadProtocol
 cycles = hysTrace.Cycles
 
-FullHys = hys.exandHysTrace(hysTrace, LoadProtocol[:,2], skipStart = 1, skipFailure = True)
+FullHys = hys.exandHysTrace(hysTrace, LoadProtocol[:,2], skipStart = 1, FinalCyclePos= False)
 FullHys.plot(True)
 # FullHys.plotLoadProtocol(comparisonProtocol = LoadProtocol[:,1])
 
