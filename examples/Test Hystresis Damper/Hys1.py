@@ -17,17 +17,21 @@ xyData       = np.loadtxt(InputName,         delimiter=',')
 LoadProtocol = np.loadtxt(LPName,  delimiter=',',skiprows = 1)
 Energy       = np.loadtxt(EnergyName,  delimiter=',')
 
-# some small adjustments
-xyData = xyData[:-21,:]
-xyData[-1,0] = xyData[-1,0] + 0.6
+# some small adjustments to account for the elastic portion of the curve that was skipped.
+xyData          = xyData[:-21,:]
+xyData[-1,0]    = xyData[-1,0] + 0.6
 
 # Create the trace Hysteresis
 hysTrace = hys.Hysteresis(xyData)
 hysTrace.plotLoadProtocol()
 fig, ax = hysTrace.plot(True)
 
+
+# ExpandLoops = [3, ]
+
 # Expand the hysteresis 
-FullHys = hys.exandHysTrace(hysTrace, LoadProtocol[:,2], skipStart = 1, skipEnd = 2)
+# FullHys = hys.exandHysTrace(hysTrace, LoadProtocol[:,2], skipStart = 1, skipEnd = 0)
+FullHys = hys.exandHysTrace(hysTrace, np.array([3,3,3,3,3,3,3]), skipStart = 1, skipEnd = 0)
 FullHys.plot()
  
 # Plot the load Protocol

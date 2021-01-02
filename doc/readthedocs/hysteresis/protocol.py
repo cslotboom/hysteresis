@@ -1,39 +1,83 @@
 import numpy as np
 
-# from .baseClass import Hysteresis, SimpleCycle, MonotonicCurve
-from .baseFuncs import concatenateHys, getReturnCycle
+from .baseClass import SimpleCycle
+from .baseFuncs import concatenateHys
+    # We do all of the hysteresis cycles, but not necessarily all of the 
+    # load protocol cycles.
 
-def exandHysTrace(hysteresis, loadProtocolNcycles, skipStart = 0, 
-                  skipEnd = 0, FinalCyclePos = True):
+
+def getReturnCycle(cycleStart, cycleReturn):
     """
-    This function expands the trace of a hysteresis, where the trace has only
-    one reversal point.
-    For example, if for a cycle N = 2, we go from:
-       | . -----> .
-       | . <----- .
-    To:
-       | . -----> .
-       | . <----- .
-       | . -----> .
-       | . <----- .
+    This function finds the return cycle that closes a hystresis Full cycle
 
-        
-    We do all of the hysteresis cycles, but not necessarily all of the 
-    load protocol cycles.
+    """
     
+    
+    xy1 = cycleStart.xy
+    # Get the and the max value
+    x1 = cycleStart.xy
+    x1max = x1[0,0]
+    
+    xy2 = cycleReturn.xy
+    x2 = xy2[:,0]
+    TransitonIndex = np.argmax(x2 < x1max)
+    TransitonIndex = np.argmin(x2 < x1max)
+    
+    xyOut = np.zeros([TransitonIndex + 1, 2])
+    xyOut[:TransitonIndex,:] = xy2[:TransitonIndex,:]
+    xyOut[-1,:] = xy1[0,:]
+    
+    return SimpleCycle(xyOut)
+
+
+
+
+def exandHysTrace(hysteresis, loadProtocolNcycles, skipStart = 1, 
+                  skipEnd = 1):
+    """
+    
+    The first cycle is assumed to be in the right direction.
+    
+    
+    This function expands the trace of a hysteresis, where the trace has only
+    one cycle per displacement in the load protocol.
+    For example, if for a cycle N = 2, we go from:
+       | . <-- .
+       | . -----> .
+       | . <----- .
+       |     .--> .
+    To:
+       |     .<-- .
+       | . -----> .
+       | . <----- .
+       | . -----> .
+       | . <----- .
+       |     .--> .
+       
+    We assume that the trace has a start cycle, and a end cycle. These start
+    and end cycles are not expanded. The final/failure cycle can occur in the 
+    expansion or return direction. To ensure they are not expanded, the user
+    must skip the final cycles.
+    
+    
+   
+    Where cycles don't form a closed loop, the loop will be artificially closed
+    by finding the closet point to the end of the cycle
+   
     
     Parameters
     ----------
     hysteresis : Hystresis
         The input hysteresis to be expanded.
     loadProtocolNcycles : list
-        The number of cycles for each reversal point.
-        [N1, N2, N3, ... , N4]
+        The number of cycles for each reversal point. Has N/2 - 1 values in it.
+        Each value of the list is the number of repeats in the output hysteresis.
+        [n1, n2, n3, ... , n4]
     skipStart : int, optional
         Skip this many cycles at the start. The default is 0, which skips no steps.
     skipEnd : int, optional
-        Skip this many cycles at the end. The default is 0, which skips no steps.
-    FinalCyclePos : TYPE, optional
+        Skip this many cycles at the end. The default is 1, which skips no steps.
+    FinalCyclePos : Bool, optional
         If the final cycle (the failure cycle) doesn't have a revesal point,
         Then this is set to true. The default is True.
 
@@ -48,84 +92,69 @@ def exandHysTrace(hysteresis, loadProtocolNcycles, skipStart = 0,
     
     # !!!: the final cycle is added back if we skip failure!
 
-
     # TODO: Consider making a copy, this may be unsafe.
+    # Get the cycles to be expanded
     Cycles = hysteresis.Cycles
-    NcyclesHys = len(Cycles)
+    # NcyclesHys = len(Cycles)
     
-    # The start steps to be skipped.
-    if skipStart != 0:
-        loadProtocolNcycles = loadProtocolNcycles[skipStart:]
+    # Skip the requested start and end cycles.
+    toExpand = Cycles[skipStart:]
+    if skipEnd != 0 :
+        toExpand = toExpand[:-skipEnd]
     
-    # The end steps to be skipped.
-    if skipEnd != 0:
-        loadProtocolNcycles = loadProtocolNcycles[:-skipEnd]  
+    # # Skip the requested start and end cycles.
+    # loadProtocolNcycles = loadProtocolNcycles[skipStart:-skipEnd]
     
+    # Find the number of cycles that can be expanded
+    # NcyclesList = len(loadProtocolNcycles)
+    NExpand = len(toExpand)
+    NExpandIn = len(loadProtocolNcycles)
     
-    NcyclesList = len(loadProtocolNcycles)
+    Check = NExpand - 2*NExpandIn
     
-    # We multiply by two because for each full cycle there are two half cycles.    
-    xyList = [None]*int(np.sum(loadProtocolNcycles*2))
-    
-    # If specified, we don't expand the trace failure cycle.
-    if FinalCyclePos == True:
-        Check = (NcyclesHys - 1) - (2*NcyclesList)
-        xyList = [None]*int(np.sum(loadProtocolNcycles*2) + 1)
-        # Cycles
-        # loadProtocolNcycles[:-1]
-
     if Check != 0:
-        print(NcyclesHys,  2*NcyclesList)
-        raise Exception('Input Hysteresis is not compatible with the cycle list.'
-                        ' The number of full cycles must be equal to half the' 
-                        ' number of Simple cycles, or half the number of cycles')
+        print(NExpand,  2*NExpandIn)
+        raise Exception('The number of entries in the load protocl does not match the '
+                        'number half Cycles cycles to be expanded.')
+        
+        
+    # Get the lenth of the output array
+    xyList = [None]*int(np.sum(loadProtocolNcycles*2) + skipStart + skipEnd)
+
+
+    # Create the output list of cycles to concatenate to a new Hysterersis.
+    # nn corresponds to the original list, mm corresponds to the output list
+    nn = 0
+    mm = 0
+    # The first cycles are unchanged
+    xyList[:skipStart] = Cycles[:skipStart]
     
-
-    
-    nn = 0    
-    for ii, Ncycles in enumerate(loadProtocolNcycles):
-        CyclePosEnter = Cycles[2*ii] 
-        CycleNeg = Cycles[2*ii + 1]
-
-        # print('Group ' + str(ii))
-        # print(CyclePosEnter.xy[0,0],CyclePosEnter.xy[-1,0])
-        # print(CycleNeg.xy[0,0],CycleNeg.xy[-1,0])
-
-        if ii + 1 == NcyclesList:
-            a=1
-            pass
-        # For every cycle except the final cycle, interpolate from the transiton cycle.
-        # if int(ii + 1) != NcyclesList:
-        CyclePosExit = Cycles[2*ii + 2]
+    nn += skipStart
+    mm += skipStart
+    # All other cycles are expanded
+    for Ncycles in loadProtocolNcycles:
+        # Get the negative, positive, and positive exit cycles
+        CycleNeg = Cycles[nn]
+        CyclePosExit = Cycles[nn + 1]
         CyclePos = getReturnCycle(CycleNeg, CyclePosExit)
-        
-        
-        # The start cycle, This is alwyas added
-        xyList[nn]      =   CyclePosEnter
-        nn += 1
-        
-        # The middle cycles
-        # This is only needed if  Ncycles >2
-        for jj in range(int(Ncycles) - 1):
-            xyList[nn]      =   CycleNeg
-            xyList[nn + 1]  =   CyclePos
-            nn += 2        
-        
-        
-        # The exit cycle This is alwyas added
-        xyList[nn]      =   CycleNeg
-        nn += 1
 
-    # add the final Cycle
-    if FinalCyclePos == True:
-        # Cycles
-        xyList[nn] = Cycles[-1]           
-        nn += 1
+        # get the secondary cycles
+        for ii in range(Ncycles):
+            # The first cycle is always a Negative standard cycle
+            xyList[mm] = CycleNeg
+            
+            # The second cycle my be a exit cycle. It it isn't, it's a truncated
+            # positive cycle
+            if ii != Ncycles - 1:
+                xyList[mm + 1] = CyclePos
+            else:
+                xyList[mm + 1] = CyclePosExit
+            mm += 2
         
-    # add the end Cycles we have skipped
-    # if skipFailure == True:
-    #     xyList.append(Cycles[-2])
-    #     xyList.append(Cycles[-1])
+        nn += 2
+    
+    if skipEnd != 0 :
+        xyList[-skipEnd:] = Cycles[-skipEnd:]
 
     return concatenateHys(*xyList)
 

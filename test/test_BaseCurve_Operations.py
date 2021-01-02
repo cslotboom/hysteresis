@@ -20,13 +20,16 @@ def function2(x):
 def function3(x):
     return 3 + (np.e)**x  
     
+def test_len():
     
+    curve = makeCurveBase(function2)
     
-curve = makeCurveBase(function2)
-
-length = len(curve)
-A = curve / 2
-A = 2 / curve
+    length = len(curve)
+    
+    assert length == 1001
+    
+# A = curve / 2
+# A = 2 / curve
     
 # def test_Curve1_Area():
 #     Curve = makeCurveBase(function1)

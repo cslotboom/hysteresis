@@ -87,33 +87,7 @@ def _getNsamples(Targetdx, dxNet):
 
 
 
-# =============================================================================
-# 
-# =============================================================================
 
-
-def getReturnCycle(cycleStart, cycleReturn):
-    """
-    This function finds the return cycle that closes a hystresis Full cycle
-
-    """
-    
-    
-    xy1 = cycleStart.xy
-    # Get the and the max value
-    x1 = cycleStart.xy
-    x1max = x1[0,0]
-    
-    xy2 = cycleReturn.xy
-    x2 = xy2[:,0]
-    TransitonIndex = np.argmax(x2 < x1max)
-    TransitonIndex = np.argmin(x2 < x1max)
-    
-    xyOut = np.zeros([TransitonIndex + 1, 2])
-    xyOut[:TransitonIndex,:] = xy2[:TransitonIndex,:]
-    xyOut[-1,:] = xy1[0,:]
-    
-    return SimpleCycle(xyOut)
 
 
 

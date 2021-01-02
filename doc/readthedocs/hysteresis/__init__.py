@@ -10,7 +10,7 @@
 
 
 from .baseClass import Hysteresis, SimpleCycle, MonotonicCurve
-from .baseFuncs import concatenateHys, getReturnCycle, removeNegative
+from .baseFuncs import concatenateHys, removeNegative
 from .resample import resample, resampleDx
 
 from .compare import compareCycle, compareHys
