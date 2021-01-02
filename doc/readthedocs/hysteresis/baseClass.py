@@ -60,20 +60,45 @@ to continually be passed to each funciton.
 
 class CurveBase:
     """
-    The curve base object information that every curve type should have access
-    to. This uncludes plotting functionality, slope functions, area functions,
+    
+    The curve base object represents a generic xy curve with no limitations.
+    
+    All other curves inherit from the CurveBase class. It has access to methods
+    all other curves should have access to.
+    This uncludes plotting functionality, slope functions, area functions, 
     and displacement functions.
     
     """
     
-    def __init__(self, XYData, AreaFunction = defaultAreaFunction, 
-                 slopefunction = defaultSlopeFunction, 
-                 plotfunction = defaultPlotFunction, xunit = '', yunit = ''):
+    def __init__(self, XYData, fArea = defaultAreaFunction, 
+                 fslope = defaultSlopeFunction, 
+                 fplot = defaultPlotFunction, xunit = '', yunit = ''):
+        """
+        
+        Parameters
+        ----------
+        XYData : array
+            The input array of XY date for the curve.
+        AreaFunction : function, optional
+            The function to be used to calcualte area. 
+            The default is defaultAreaFunction.
+        slopefunction : function, optional
+            The function to be used to calcualte slope. 
+            The default is defaultAreaFunction.
+        plotfunction : function, optional
+            The function to be used to plot the curve. 
+            The default is defaultPlotFunction.
+        xunit : str, optional
+            The units on the x axis. The default is ''.
+        yunit : str, optional
+            The units on the y axis. The default is ''.
+
+        """
         self.xy = XYData
         self.Npoints = len(XYData[:,0])
-        self.AreaFunction = defaultAreaFunction
-        self.slopefunction = defaultSlopeFunction
-        self.plotfunction = defaultPlotFunction
+        self.AreaFunction = fArea
+        self.slopefunction = fslope
+        self.plotfunction = fplot
         
         self.colorDict = {0:'C0', 1:'C1', 2:'C3'}
         
@@ -99,15 +124,20 @@ class CurveBase:
     #     return self.xy[:,1] - x
         
     def setArea(self):
+        """ Finds the area under each point of the curve using the area function"""
         self.Area = self.AreaFunction(self.xy)
         return self.Area
     
     def getCumDisp(self):
+        """ Gets the absolute value of cumulative displacement of the curve at each x value.
+        """
         dx = np.diff(self.xy[:,0])
         return np.append(0, np.cumsum(np.abs(dx)))
     
     def getNetCumDisp(self, StartIndex = 0, EndIndex = 0):
-        
+        """ Gets the total cumulative displacement between the start and start and end 
+        indexes. By default the whole curve us used.
+        """
         x = self.xy[:,0]
         dx = np.append(0, np.diff(self.xy[:,0]))
         
@@ -117,12 +147,14 @@ class CurveBase:
         return np.sum(np.abs(dx[StartIndex:EndIndex]))
     
     def getCumArea(self):
+        """ Gets the cumulative area under the curve for the entire curve
+        """
         Area = self.Area
         return np.cumsum(Area)
     
     def getNetArea(self, StartIndex = 0, EndIndex = 0):
         """
-        Returns the area between two indexes in the xy curve. The default 
+        Returns the net area between two indexes in the xy curve. The default 
         setting is to return the area for the whole cuve.
 
         """
@@ -135,6 +167,7 @@ class CurveBase:
            
     def setSlope(self):
         """
+        Calcuates the slope of the curve at each point.
         The user can pass in a custom function that calculates the slope.
         """
         
@@ -144,7 +177,7 @@ class CurveBase:
     
     def setPeaks(self, peakDist = 2, peakWidth = None, peakProminence = None):
         """
-        Finds the indexes of max and min points
+        Finds the indexes of max and min points, then stores them.
         """
         
         y = self.xy[:,1]
@@ -256,6 +289,9 @@ class Hysteresis(CurveBase):
     The hysteresis object has a number of functions that help find the reversal
     points in the x data of the curve.
     
+    The hysteresis object also stores each each half-cycle (where there is no
+    change in direction) as a SimpleCycle object.
+    
     """
     
     
@@ -281,10 +317,10 @@ class Hysteresis(CurveBase):
         self.reversalIndexes = data.GetCycleIndicies(x, peakDist, peakWidth, peakProminence)
         self.loadProtocol = x[self.reversalIndexes]
         
-        
-        
-    
+           
     def setCycles(self):
+        """ Stores all simple cycle objects in the Hysteresis
+        """
         xy = self.xy
         indices = self.reversalIndexes
         NIndex = len(indices) - 1

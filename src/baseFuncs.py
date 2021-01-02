@@ -13,7 +13,7 @@ from .baseClass import Hysteresis, SimpleCycle, MonotonicCurve
 
 def concatenateHys(*argv):
     """
-    This function creates a new hystesis from the xy data of a series of 
+    This function creates a new hysteresis from the xy data of a series of 
     monotonic curves, or xy curves.
 
     

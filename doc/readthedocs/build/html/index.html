@@ -35,7 +35,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="hysteresis.baseClass module" href="rst/hysteresis.baseClass.html" /> 
+    <link rel="next" title="1. Base Classes" href="rst/baseClass.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -80,16 +80,44 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.baseClass.html">hysteresis.baseClass module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.baseFuncs.html">hysteresis.baseFuncs module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.compare.html">hysteresis.compare module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.data.html">hysteresis.data module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.defaultDataFuncs.html">hysteresis.defaultDataFuncs module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.defaultPlotFuncs.html">hysteresis.defaultPlotFuncs module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.protocol.html">hysteresis.protocol module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.resample.html">hysteresis.resample module</a></li>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="rst/baseClass.html">1. Base Classes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst/baseClass-CurveBase.html">1.1. CurveBase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst/baseClass-Hysteresis.html">1.2. Hysteresis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst/baseClass-SimpleCycle.html">1.3. SimpleCycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst/baseClass-MonotonicCurve.html">1.4. MonotonicCurve</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rst/basicFunctions.html">2. Basic Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst/basicFunctions-concatenateHys.html">2.1. concatenateHys</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst/basicFunctions-resample.html">2.2. resample</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst/basicFunctions-resampleDx.html">2.3. resampleDx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst/basicFunctions-removeNegative.html">2.4. removeNegative</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst/basicFunctions-compareHys.html">2.5. compareHys</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst/basicFunctions-compareCycle.html">2.6. compareCycle</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rst/defaultFunctions.html">3. Default Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst/defaultFunctions-data.html">3.1. Default Data Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="rst/defaultFunctions-data-defaultSlopeFunction.html">3.1.1. Slope Function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rst/defaultFunctions-data-defaultAreaFunction.html">3.1.2. Area Function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rst/defaultFunctions-data-defaultSampleFunction.html">3.1.3. Curve Sample Function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rst/defaultFunctions-data-defaultCombineDiff.html">3.1.4. Difference Function</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="rst/defaultFunctions-plot.html">3.2. Default Plot Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="rst/defaultFunctions-plot-initializeFig.html">3.2.1. Initialize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rst/defaultFunctions-plot-defaultLabelFunction.html">3.2.2. Show Cycles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rst/defaultFunctions-plot-defaultPlotFunction.html">3.2.3. Plot</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rst/protocol.html">4. Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst/climate.html">5. Climate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst/examples.html">6. hysteresis Examples</a><ul class="simple">
+</ul>
+</li>
 </ul>
 
             
@@ -159,11 +187,11 @@
 <h1>Hysteresis Documentation<a class="headerlink" href="#hysteresis-documentation" title="Permalink to this headline">¶</a></h1>
 <p>Hysteresis is a library of tools for non-functional curves, with a emphasis on force-deformation hysteresis curves.</p>
 <p>Install using:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">hysteresis</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">hysteresis</span>
 </pre></div>
 </div>
 <p>A simple script is shown below:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># import numpy and hysteresis</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># import numpy and hysteresis</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">hysteresis</span> <span class="k">as</span> <span class="nn">hys</span>
 
@@ -179,16 +207,15 @@
 </pre></div>
 </div>
 <div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.baseClass.html">hysteresis.baseClass module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.baseFuncs.html">hysteresis.baseFuncs module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.compare.html">hysteresis.compare module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.data.html">hysteresis.data module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.defaultDataFuncs.html">hysteresis.defaultDataFuncs module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.defaultPlotFuncs.html">hysteresis.defaultPlotFuncs module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.protocol.html">hysteresis.protocol module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rst/hysteresis.resample.html">hysteresis.resample module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst/baseClass.html">1. Base Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst/basicFunctions.html">2. Basic Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst/defaultFunctions.html">3. Default Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst/protocol.html">4. Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst/climate.html">5. Climate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst/examples.html">6. hysteresis Examples</a><ul class="simple">
+</ul>
+</li>
 </ul>
 </div>
 <div class="section" id="developed-by">
@@ -217,7 +244,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="rst/hysteresis.baseClass.html" class="btn btn-neutral float-right" title="hysteresis.baseClass module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="rst/baseClass.html" class="btn btn-neutral float-right" title="1. Base Classes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>

@@ -1,7 +1,0 @@
-scripts.baseClass module
-========================
-
-.. automodule:: scripts.baseClass
-   :members:
-   :undoc-members:
-   :show-inheritance:

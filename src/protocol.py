@@ -3,20 +3,19 @@ import numpy as np
 # from .baseClass import Hysteresis, SimpleCycle, MonotonicCurve
 from .baseFuncs import concatenateHys, getReturnCycle
 
-    
 def exandHysTrace(hysteresis, loadProtocolNcycles, skipStart = 0, 
                   skipEnd = 0, FinalCyclePos = True):
     """
     This function expands the trace of a hysteresis, where the trace has only
     one reversal point.
     For example, if for a cycle N = 2, we go from:
-        + -----> +
-        + <----- +
+       | . -----> .
+       | . <----- .
     To:
-        + -----> +
-        + <----- +
-        + -----> +
-        + <----- +
+       | . -----> .
+       | . <----- .
+       | . -----> .
+       | . <----- .
 
         
     We do all of the hysteresis cycles, but not necessarily all of the 

@@ -7,6 +7,7 @@ from .resample import resample
 # =============================================================================
 # Compare
 # =============================================================================
+# TODO: consider storing the sample function within the class itself.
 
 def compareCycle(Curve1, Curve2, Nsample = 10,
                  sampleFunction = defaultSampleFunction):
@@ -33,7 +34,6 @@ def compareCycle(Curve1, Curve2, Nsample = 10,
 
     """
     
-    # TODO: consider storing the sample funciton within the class itself.
     
     
     if Curve1.Npoints != Curve1.Npoints:

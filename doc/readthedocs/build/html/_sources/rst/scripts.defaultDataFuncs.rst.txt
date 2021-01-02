@@ -1,7 +1,0 @@
-scripts.defaultDataFuncs module
-===============================
-
-.. automodule:: scripts.defaultDataFuncs
-   :members:
-   :undoc-members:
-   :show-inheritance:
