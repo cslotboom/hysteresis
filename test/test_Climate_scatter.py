@@ -25,36 +25,52 @@ data =  np.array([[-0.724, -0.834], [-0.680, -1.239], [-0.479, -1.032],
 Npoints = len(data)
 t = np.arange(0, Npoints)/Npoints
 
+climateHys = hys.SeasonalCurve(data, 12, 1,0)
 
-def f(x, a, b):
-    return a*x + b
+fig, ax = climateHys.initFig()
+climateHys.plotScatter()
+climateHys.plotFittedCurve()
 
-def g(t, b, c, Cx):
-    return b*np.cos(2*np.pi*t + c) + Cx
+fig, ax = climateHys.initFig()
+climateHys.plotTemp()
+climateHys.plotDTemp()
+# Curve.plotFittedCurve()
 
-def geth(n = 1, m = 1):
+Tcoefs = climateHys.tempCoef
+dTcoefs = climateHys.dTempCoef
 
-    def h(t, a, b,c,d, Cy):
-        return a*np.cos(2*np.pi*t + b)**n + c*np.sin(2*np.pi*t + d)**m + Cy
+climateHys.printT()
+climateHys.printDT()
+
+# def f(x, a, b):
+#     return a*x + b
+
+# def g(t, b, c, Cx):
+#     return b*np.cos(2*np.pi*t + c) + Cx
+
+# def geth(n = 1, m = 1):
+
+#     def h(t, a, b,c,d, Cy):
+#         return a*np.cos(2*np.pi*t + b)**n + c*np.sin(2*np.pi*t + d)**m + Cy
     
-    return(h)
+#     return(h)
 
-h = geth()
+# h = geth()
 
-out = curve_fit(f, data[:,0], data[:,1])
-out2 = curve_fit(g, t, data[:,0])
-out3 = curve_fit(h, t, data[:,1])
+# out = curve_fit(f, data[:,0], data[:,1])
+# out2 = curve_fit(g, t, data[:,0])
+# out3 = curve_fit(h, t, data[:,1])
 
-fig, ax = plt.subplots()
+# fig, ax = plt.subplots()
+# # plt.plot(data[:,0], data[:,1], '.', linewidth = 0)
+# # plt.plot(data[:,0], f(data[:,0], *out[0]))
+# # plt.plot(g(t, *out2[0]), data[:,1])
+# plt.plot(t, g(t, *out2[0]))
+# plt.plot(t, h(t, *out3[0]))
+
+# fig, ax = plt.subplots()
 # plt.plot(data[:,0], data[:,1], '.', linewidth = 0)
-# plt.plot(data[:,0], f(data[:,0], *out[0]))
-# plt.plot(g(t, *out2[0]), data[:,1])
-plt.plot(t, g(t, *out2[0]))
-plt.plot(t, h(t, *out3[0]))
-
-fig, ax = plt.subplots()
-plt.plot(data[:,0], data[:,1], '.', linewidth = 0)
-plt.plot(g(t, *out2[0]), h(t, *out3[0]))
-# smallTriangles.setArea()
-# Anet = smallTriangles.getNetArea()
-# 0.004982994450842999
+# plt.plot(g(t, *out2[0]), h(t, *out3[0]))
+# # smallTriangles.setArea()
+# # Anet = smallTriangles.getNetArea()
+# # 0.004982994450842999

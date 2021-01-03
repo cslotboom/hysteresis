@@ -271,7 +271,8 @@ class CurveBase:
                
         return fig, ax   
 
-
+    def initFig(self, xlim = [], ylim = []):
+        return initializeFig(xlim, ylim)
 
 
 # TODO:
