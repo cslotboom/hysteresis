@@ -1,7 +1,4 @@
-<h1 align = "Middle">~~==Currently in beta==~~</h1>
-Currently in beta testing - comments welcome.
-Beta testing means the package is working and stable but my test suite isn't totally complete, and I don't my examples or documentation finished.
-
+Release 1 coming soon! Currently currently in beta testing - comments welcome.
 
 <h1 align = "Left">Hysteresis: Tools for Non-functional curves.</h1>
 
@@ -14,6 +11,8 @@ Some key features of the library include:
 * Numerically finding the slope or area of a curve.
 * Resampling curves.
 * Comparing Hysteresis made with simialar load protocols.
+
+A overview of the functions currently availible can be found here: https://hysteresis.readthedocs.io/en/latest/
 
 ## Contents
 
