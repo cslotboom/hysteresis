@@ -27,7 +27,7 @@ A simple script is shown below:
 	y = np.cos(t)*t
 	xy = np.column_stack([x,y])
 
-	# Create a hysteresis object and 
+	# Create a hysteresis object and plot it
 	myHys = hys.Hysteresis(xy)
 	myHys.plot(plotCycles = True)
 
