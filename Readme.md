@@ -3,16 +3,18 @@ Release 1 coming soon! Currently currently in beta testing - comments welcome.
 <h1 align = "Left">Hysteresis: Tools for Non-functional curves.</h1>
 
 
-Hysteresis is a library of tools for non-functional curves, with a emphasis on force-deformation hysteresis curves.
-While functions only have one direction, non functional curves change direction, making analyzing them difficult.
-Some key features of the library include:
+Hysteresis is a library of tools for non-functional curves, with an emphasis on force-deformation hysteresis curves.
+While functions only have one direction, non-functional curves change direction and each x is mapped to more than one y. 
+Hysteresis breaks up these curves into a number of functions that can be easily analyzed. Some key features of the library include:
 
 * Finding peaks or reversal points in data.
 * Numerically finding the slope or area of a curve.
 * Resampling curves.
 * Comparing Hysteresis made with simialar load protocols.
 
-A overview of the functions currently availible can be found here: https://hysteresis.readthedocs.io/en/latest/
+A overview of the functions currently availible to users can be found here: https://hysteresis.readthedocs.io/en/latest/
+
+Some selected examples can be found here: https://github.com/cslotboom/hysteresis/tree/master/examples
 
 ## Contents
 
