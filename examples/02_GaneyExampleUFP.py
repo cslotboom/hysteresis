@@ -2,7 +2,7 @@
 
 """
 In this example I will show some of the basic functionality of the hystresis
-mosule on a real hystresis.
+module on a real hystresis.
 
 """
 import numpy as np
@@ -42,7 +42,8 @@ xy = DamperHys.xy
 """
 We can then show some of the outputs. Lets use some of the basic plotting 
 features to visualize our data. Here we use the plot command to create a plot
-of our data.
+of our data. The plot command is similar to matplotlib's plot comand - it
+doesn't make a figure
 """
 
 DamperHys.plot()
@@ -52,7 +53,9 @@ All outputs are matplotlib plots, so we can make changes after the plotting.
 Let's add some labels to our chart!
 """
 
-fig, ax = DamperHys.plot(plotCycles=True)
+fig, ax = DamperHys.initFig()
+DamperHys.plot(plotCycles=True)
+DamperHys.plot()
 
 ax.set_xlabel('Actuator Displacement (mm)')
 ax.set_ylabel('Applied Force (kN)')
@@ -72,12 +75,10 @@ good job of finding reversal points! You might have to play around with the
 input settings.
 """
 reversalIndexes = DamperHys.reversalIndexes
-
+fig, ax = DamperHys.initFig()
 Cycle = DamperHys.getCycle(1)
 Cycle.plot()
 DamperHys.plotCycles(plotCycles = True)
-
-
 DamperHys.plotCycles([0,1,5,18,19], True, labelCycles = [0,1,5,18,19])
 
 
@@ -104,8 +105,9 @@ We can also plot the cumulative area. This could be useful for finding
 the total energy added to a system.
 
 """
-DamperHys.plotCumArea(xlim = [0,5], ylim = [0,1])
-fig, ax = DamperHys.plotCumArea(True, labelCycles = [0, 5, 10, 15, 20])
+fig, ax = DamperHys.initFig()
+# DamperHys.plotCumArea()
+DamperHys.plotCumArea(True, labelCycles = [0, 5, 10, 15, 20])
 # fig, ax = DamperHys.plotArea(True, labelCycles = [0, 5, 10, 15, 20])
 
 

@@ -23,8 +23,10 @@ xyData[-1,0]    = xyData[-1,0] + 0.6
 
 # Create the trace Hysteresis
 hysTrace = hys.Hysteresis(xyData)
+fig, ax  = hysTrace.initFig()
 hysTrace.plotLoadProtocol()
-fig, ax = hysTrace.plot(True)
+fig, ax  = hysTrace.initFig()
+hysTrace.plot(True)
 
 
 # ExpandLoops = [3, ]
@@ -32,9 +34,11 @@ fig, ax = hysTrace.plot(True)
 # Expand the hysteresis 
 # FullHys = hys.exandHysTrace(hysTrace, LoadProtocol[:,2], skipStart = 1, skipEnd = 0)
 FullHys = hys.exandHysTrace(hysTrace, np.array([3,3,3,3,3,3,3]), skipStart = 1, skipEnd = 0)
+fig, ax = hysTrace.initFig()
 FullHys.plot()
  
 # Plot the load Protocol
+fig, ax = hysTrace.initFig()
 FullHys.plotLoadProtocol()
 hysProt = FullHys.loadProtocol
 

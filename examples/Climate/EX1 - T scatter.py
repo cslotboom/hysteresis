@@ -18,6 +18,9 @@ data =  np.array([[-0.724, -0.834], [-0.680, -1.239], [-0.479, -1.032],
                   [-0.380, 0.002],  [-0.429, -0.131], [-0.655, -0.421]])
 
 
+# np.random.shuffle(data)
+
+
 # Make the seasonal Hysteresis data
 climateHys = hys.SeasonalCurve(data, 12, n = 1, m = 1)
 
