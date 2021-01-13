@@ -20,8 +20,10 @@ def test_expandHysTrace():
     expand = hys.exandHysTrace(curve, [2])
     
     assert len(expand.Cycles) == 6
-    
-    
+
+
+
+
 # curve = makeCurveBase()
 # curve.plot()
 # curve.plotLoadProtocol()

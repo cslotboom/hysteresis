@@ -5,6 +5,7 @@ Created on Fri Aug 21 23:47:36 2020
 @author: Christian
 """
 import hysteresis as hys
+from hysteresis.protocol import getReturnCycle
 import numpy as np
 import matplotlib.pyplot as plt
         
@@ -20,7 +21,7 @@ def test_getReturnCycle():
     
     TestCycle1 = hys.SimpleCycle(np.column_stack([x1,y1]))
     TestCycle2 = hys.SimpleCycle(np.column_stack([x2,y2]))
-    TestCycle3 = hys.getReturnCycle(TestCycle1, TestCycle2)
+    TestCycle3 = getReturnCycle(TestCycle1, TestCycle2)
     
     xySolution = np.zeros([76,2])
     xySolution[:75, :] = TestCycle2.xy[:75, :]
