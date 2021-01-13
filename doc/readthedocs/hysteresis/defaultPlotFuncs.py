@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def initializeFig(xlim, ylim):
+def initializeFig(xlim = [], ylim= []):
     """
     A default function that initializes a figure based on a set of incoming
     x and y limits
@@ -89,7 +89,7 @@ def defaultShowCycles(self, x, y, plotCycles, plotPeaks, labelCycles = [], Cycle
 
         # If the cycles need to be labeled,
         # if labelCycles is 'all':
-        if labelCycles == 'all':
+        if str(labelCycles) == 'all':
             # skip the first and last cycles
             labelIndexes = np.arange(0,len(markerIndexes))
             labelX = x[reversalIndexes]
@@ -108,7 +108,7 @@ def defaultShowCycles(self, x, y, plotCycles, plotPeaks, labelCycles = [], Cycle
             # Annotate = plt.annotate(int(Cycle), xy=(ReversalX[ii], ReversalY[ii]), xytext=(-1, 5), textcoords = 'offset points', fontsize=12)
             # Annotate = plt.annotate(int(ii), xy=(ReversalX[ii], ReversalY[ii]))
 
-def defaultPlotFunction(self, x, y, plotCycles, plotPeaks, xlim = [], ylim = [], labelCycles = []):
+def defaultPlotFunction(self, x, y, plotCycles, plotPeaks, labelCycles = []):
     """
     Parameters
     ----------
@@ -130,13 +130,13 @@ def defaultPlotFunction(self, x, y, plotCycles, plotPeaks, xlim = [], ylim = [],
     """
 
 
-    fig, ax = initializeFig(xlim, ylim)
+    # fig, ax = initializeFig(xlim, ylim)
           
     line1 = plt.plot(x, y)
        
     defaultShowCycles(self, x, y, plotCycles, plotPeaks, labelCycles)
 
-    return fig, ax
+    
 
 
 
