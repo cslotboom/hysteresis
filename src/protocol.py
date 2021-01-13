@@ -158,7 +158,22 @@ def exandHysTrace(hysteresis, loadProtocolNcycles, skipStart = 1,
 
     return concatenateHys(*xyList)
 
-def createProtocol(MonotonicProtocol, loadProtocolNcycles, Nsteps=0):
+def _checkNcycles(MonotonicProtocol, loadProtocolNcycles):
+    
+    if isinstance(loadProtocolNcycles, int):
+        return np.ones_like(MonotonicProtocol, int) * loadProtocolNcycles
+    
+    elif isinstance(loadProtocolNcycles, list) or isinstance(loadProtocolNcycles, np.ndarray):
+        return np.array(loadProtocolNcycles, int)
+        
+    else:
+        raise Exception('The input loadProtocolNcycles must be a integer, list, or numpy array')
+
+def _getCyclePoints(P1, P2, Nsteps):
+    np.linspace(P1, P1)
+
+
+def createProtocol(MonotonicProtocol, loadProtocolNcycles):
     """
     Creates a reverse cyclic load protocol using a monotonic load protocol.
     
@@ -167,13 +182,12 @@ def createProtocol(MonotonicProtocol, loadProtocolNcycles, Nsteps=0):
     ----------
     MonotonicProtocol : list
         The load protocol amplitude values.
-    loadProtocolNcycles : list
+    loadProtocolNcycles : list, or int
         The number of cycles for each reversal point.
+        if an integer all cycles will be expanded by the input integer.
+        
+        If it's a list, each monotonic cycle 'x' will be expanded by Nx
         [N1, N2, N3, ... , N4]
-    Nsteps : TYPE, optional
-        This variable doesn't do anything right now, but I must have had a good reason to
-        add it so it stays. The default is 0.
-
 
     Returns
     -------
@@ -182,10 +196,22 @@ def createProtocol(MonotonicProtocol, loadProtocolNcycles, Nsteps=0):
 
     """
     
-    Ncycle = np.sum(loadProtocolNcycles*2)
+    """
+    Nsteps : int, optional
+        The number of steps in the between each input point. Must be two or greater.
+        The default is 2.    
+    """
+    
+    # Check the number of expansions to use per cycle
+    loadProtocolNcycles = _checkNcycles(MonotonicProtocol, loadProtocolNcycles)
+    
+    Ncycle = np.sum(loadProtocolNcycles)
     
     if len(MonotonicProtocol) != len(loadProtocolNcycles):
         raise Exception("The number of cycles isn't specified for each cycle in the monotonic load Protocol.")
+    
+    # The total number of points is equal to the number of cycles
+    # Npoints = (Ncycle*2  + 1) * (Nsteps - 1)
     
     outputProtocol = np.zeros(Ncycle*2 + 1)
     nn = 1

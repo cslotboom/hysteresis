@@ -192,18 +192,17 @@ class CurveBase:
             self.minIndexes = peakIndexes[1::2]
             self.maxIndexes = peakIndexes[0::2]    
     
-    def plot(self, plotCycles = False, plotPeaks = False, 
-             xlim = [], ylim = [], labelCycles = []):
+      
+    
+    def plot(self, plotCycles = False, plotPeaks = False, labelCycles = []):
         """
         Plots the base curve
         """        
         x = self.xy[:,0]
         y = self.xy[:,1]
                     
-        fig, ax = self.plotfunction(self, x ,y, plotCycles, plotPeaks, 
-                                    xlim, ylim, labelCycles)
+        self.plotfunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
                 
-        return fig, ax
 
     def plotVsIndex(self, plotCycles = False, plotPeaks = False, 
                     xlim = [], ylim = [], labelCycles = []):
@@ -214,10 +213,8 @@ class CurveBase:
         x = np.arange(0,len(self.xy[:,0]))
         y = self.xy[:,0]
                     
-        fig, ax = self.plotfunction(self, x ,y, plotCycles, plotPeaks, 
-                                    xlim, ylim, labelCycles)
-                
-        return fig, ax
+        self.plotfunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
+
 
     def plotLoadProtocol(self, xlim = [], ylim = [], comparisonProtocol = []):
         """
@@ -229,13 +226,10 @@ class CurveBase:
         y = self.loadProtocol
         x = np.arange(0,len(y))
                     
-        fig, ax = self.plotfunction(self, x ,y, plotCycles, plotPeaks, 
-                                    xlim, ylim, labelCycles)
+        self.plotfunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
         
         if len(comparisonProtocol) != 0:
-            plt.plot(comparisonProtocol)
-        return fig, ax
-    
+            plt.plot(comparisonProtocol)    
     
     def plotSlope(self,  plotCycles = False, plotPeaks = False, 
                   xlim = [], ylim = [], labelCycles = []):
@@ -243,36 +237,27 @@ class CurveBase:
         x = self.xy[:,0]
         y = self.Slope
 
-        fig, ax = self.plotfunction(self, x ,y, plotCycles, plotPeaks, 
-                                    xlim, ylim, labelCycles)
-        
-        return fig, ax
-        
-    def plotArea(self,  plotCycles = False, plotPeaks = False, 
-                 xlim = [], ylim = [], labelCycles = []):
+        self.plotfunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
+                
+    def plotArea(self,  plotCycles = False, plotPeaks = False, labelCycles = []):
         
         x = self.xy[:,0]
         y = self.Area
 
-        fig, ax = self.plotfunction(self, x ,y, plotCycles, plotPeaks, 
-                                    xlim, ylim, labelCycles)  
-               
-        return fig, ax        
+        self.plotfunction(self, x ,y, plotCycles, plotPeaks, labelCycles)  
+                     
     
-    def plotCumArea(self,  plotCycles = False, plotPeaks = False, 
-                    xlim = [], ylim = [], labelCycles = []):
+    def plotCumArea(self,  plotCycles = False, plotPeaks = False, labelCycles = []):
         
         # We get the cumulative displacement and area
         x = self.getCumDisp()
         y = self.getCumArea()
 
-        fig, ax = self.plotfunction(self, x ,y, plotCycles, plotPeaks, 
-                                    xlim, ylim, labelCycles)  
-               
-        return fig, ax   
+        self.plotfunction(self, x ,y, plotCycles, plotPeaks, labelCycles)  
+             
 
-    def initFig(self, xlim = [], ylim = []):
-        return initializeFig(xlim, ylim)
+    def initFig(self, xlims = [], ylims = []):
+        return initializeFig(xlims, ylims)
 
 
 # TODO:
@@ -356,17 +341,17 @@ class Hysteresis(CurveBase):
         """ Sets the net area of the whole Hysteresis """
         self.NetArea = np.sum(self.area)
 
-    def plotCycle(self, Index, plotPeaks = False, xlim = [], ylim = []):
+    def plotCycle(self, Index, plotPeaks = False):
         """ Plots a specific cycle."""
         Cycle = self.Cycles[Index]
-        return Cycle.plot(plotPeaks = plotPeaks, xlim = xlim, ylim = ylim)
+        return Cycle.plot(plotPeaks = plotPeaks)
 
     def plotCycles(self, Cycles = [], plotCycles = False, plotPeaks = False, 
-                   xlim = [], ylim = [], labelCycles = []):
+                    labelCycles = []):
         """ Plots several cycles on the same figure """
         xyHys = self.xy
         Vectors = self.Cycles
-        fig, ax = initializeFig(xlim, ylim)
+        # fig, ax = initializeFig(xlim, ylim)
         
         defaultShowCycles(self, xyHys[:,0], xyHys[:,1], plotCycles, plotPeaks, labelCycles, Cycles)
         
@@ -388,7 +373,7 @@ class Hysteresis(CurveBase):
                     # plt.plot(vector.xy[:,0], vector.xy[:,1], c=c)
                     plt.plot(vector.xy[:,0], vector.xy[:,1])
             
-        return fig, ax    
+        # return fig, ax    
     
        
     def recalculateCycles(self, peakDist = 2, peakWidth = None, peakProminence = None):
@@ -511,12 +496,10 @@ class SimpleCycle(CurveBase):
     def getSubCycle(self, Index):
         return self.SubCycles[Index]
      
-    def plotSubCycles(self, SubCyclesIndicies = [], plotCycles = False, plotPeaks = False, 
-                   xlim = [], ylim = []):
+    def plotSubCycles(self, SubCyclesIndicies = [], plotCycles = False, plotPeaks = False):
         
         xyMono = self.xy
         Vectors = self.SubCycles
-        fig, ax = initializeFig(xlim, ylim)
         
         defaultShowCycles(self, xyMono[:,0], xyMono[:,1], plotCycles, plotPeaks)
         
@@ -532,7 +515,6 @@ class SimpleCycle(CurveBase):
                     c = colorDict[ii%2]
                     plt.plot(vector.xy[:,0], vector.xy[:,1], c = c)
             
-        return fig, ax    
             
     def recalculatePeaks(self, peakDist = 2, peakWidth = None, peakProminence = None):
         """
