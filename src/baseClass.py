@@ -5,8 +5,6 @@ from scipy.interpolate import interp1d
 from hysteresis import data
 
 
-from .defaultDataFuncs import defaultAreaFunction, defaultSlopeFunction
-from .defaultPlotFuncs import initializeFig, defaultPlotFunction, defaultShowCycles
 import hysteresis.env as env
 import matplotlib.pyplot as plt
 
@@ -100,6 +98,10 @@ class CurveBase:
         self.AreaFunction = env.environment.fArea
         self.slopefunction = env.environment.fslope
         self.plotfunction = env.environment.fplot
+        
+        self.initializeFig = env.environment.finit
+        self.plotfunction = env.environment.fplot
+        self.showCycles = env.environment.fcycles
         
         self.colorDict = {0:'C0', 1:'C1', 2:'C3'}
         
@@ -252,7 +254,7 @@ class CurveBase:
         self.plotfunction(self, x ,y, plotCycles, plotPeaks, labelCycles)  
              
     def initFig(self, xlims = [], ylims = []):
-        return initializeFig(xlims, ylims)
+        return self.initializeFig(xlims, ylims)
 
 
 # TODO:
@@ -347,7 +349,7 @@ class Hysteresis(CurveBase):
         Vectors = self.Cycles
         # fig, ax = initializeFig(xlim, ylim)
         
-        defaultShowCycles(self, xyHys[:,0], xyHys[:,1], plotCycles, plotPeaks, labelCycles, Cycles)
+        self.showCycles(self, xyHys[:,0], xyHys[:,1], plotCycles, plotPeaks, labelCycles, Cycles)
         
         colorDict = self.colorDict
         
@@ -495,7 +497,7 @@ class SimpleCycle(CurveBase):
         xyMono = self.xy
         Vectors = self.SubCycles
         
-        defaultShowCycles(self, xyMono[:,0], xyMono[:,1], plotCycles, plotPeaks)
+        self.showCycles(self, xyMono[:,0], xyMono[:,1], plotCycles, plotPeaks)
         
         colorDict = self.colorDict
         if len(SubCyclesIndicies) == 0:

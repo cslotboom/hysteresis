@@ -1,7 +1,7 @@
 import numpy as np
 
 
-from .baseClass import CurveBase, initializeFig
+from .baseClass import CurveBase
 
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit

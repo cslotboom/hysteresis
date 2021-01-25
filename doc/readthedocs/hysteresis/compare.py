@@ -1,6 +1,6 @@
 
 import hysteresis.env as env
-from .defaultDataFuncs import defaultSampleFunction, defaultCombineDiff
+# from .defaultDataFuncs import defaultSampleFunction, defaultCombineDiff
 from .resample import resample
 
 
@@ -9,8 +9,7 @@ from .resample import resample
 # =============================================================================
 # TODO: consider storing the sample function within the class itself.
 
-def compareCycle(Curve1, Curve2, Nsample = 10,
-                 sampleFunction = defaultSampleFunction):
+def compareCycle(Curve1, Curve2, Nsample = 10):
     """
     Compares two Curve objects by resampling them using linear interplation,
     then comparing the distance between both cycles in a comon domain.
@@ -50,7 +49,7 @@ def compareCycle(Curve1, Curve2, Nsample = 10,
 
     return diff
 
-def compareHys(Hys1, Hys2, combineDiff = defaultCombineDiff):
+def compareHys(Hys1, Hys2):
     """
     
 
