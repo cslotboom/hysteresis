@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 Here we load some test data.
 """
 
-testHys = np.loadtxt('BackboneData.csv',delimiter=',')
+inputxy = np.loadtxt('BackboneData.csv',delimiter=',')
 disp = np.loadtxt('Disp.out',delimiter=' ')
 force = np.loadtxt('RFrc.out',delimiter=' ')
 
@@ -35,7 +35,7 @@ If needed, we can access the xy data of the hystresis.
 
 """
 
-DamperHys = hys.Hysteresis(testHys)
+DamperHys = hys.Hysteresis(inputxy)
 xy = DamperHys.xy
 
 
@@ -55,7 +55,7 @@ Let's add some labels to our chart!
 
 fig, ax = DamperHys.initFig()
 DamperHys.plot(plotCycles=True)
-DamperHys.plot()
+# DamperHys.plot()
 
 ax.set_xlabel('Actuator Displacement (mm)')
 ax.set_ylabel('Applied Force (kN)')
@@ -79,7 +79,7 @@ fig, ax = DamperHys.initFig()
 Cycle = DamperHys.getCycle(1)
 Cycle.plot()
 DamperHys.plotCycles(plotCycles = True)
-DamperHys.plotCycles([0,1,5,18,19], True, labelCycles = [0,1,5,18,19])
+# DamperHys.plotCycles([0,1,5,18,19], True, labelCycles = [0,1,5,18,19])
 
 
 """
@@ -123,9 +123,9 @@ ax.grid(b=True, which='minor', linewidth=0.5, alpha = 0.4)
 # Test hysteresis, Ganey 2
 # =============================================================================
 
-# DamperHys = hys.Hysteresis(testHys2)
-
-# DamperHys.plot(plotCycles = True, labelCycles = [17,18,19,23])
+DamperHys = hys.Hysteresis(testHys2)
+fig, ax = DamperHys.initFig()
+DamperHys.plot(plotCycles = True, labelCycles = [17,18,19,23])
 # DamperHys.plotCycles(plotCycles = True, labelCycles = [3,6,8])
 # DamperHys.plotCycles([0,1])
 # slope = DamperHys.Slope
