@@ -1,5 +1,3 @@
-Release 1 coming soon! Currently currently in beta testing - comments welcome.
-
 <h1 align = "Left">Hysteresis: Tools for Non-functional curves.</h1>
 
 
