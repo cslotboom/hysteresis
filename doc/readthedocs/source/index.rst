@@ -40,6 +40,7 @@ A simple script is shown below:
    rst/basicFunctions
    rst/defaultFunctions
    rst/protocol
+   rst/envelope
    rst/climate
    rst/examples
 

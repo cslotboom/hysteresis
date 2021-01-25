@@ -16,3 +16,6 @@ from .resample import resample, resampleDx
 from .compare import compareCycle, compareHys
 from .protocol import exandHysTrace, createProtocol
 from .climate import SeasonalCurve
+from .envelope import getBackboneCurve, getAvgBackbone, fitEEEP
+
+
