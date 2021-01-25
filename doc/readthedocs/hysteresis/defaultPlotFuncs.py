@@ -132,10 +132,11 @@ def defaultPlotFunction(self, x, y, plotCycles, plotPeaks, labelCycles = []):
 
     # fig, ax = initializeFig(xlim, ylim)
           
-    line1 = plt.plot(x, y)
+    line = plt.plot(x, y)
        
     defaultShowCycles(self, x, y, plotCycles, plotPeaks, labelCycles)
-
+    
+    return line
     
 
 

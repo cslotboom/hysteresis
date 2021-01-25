@@ -18,4 +18,8 @@ from .protocol import exandHysTrace, createProtocol
 from .climate import SeasonalCurve
 from .envelope import getBackboneCurve, getAvgBackbone, fitEEEP
 
+# from .env import HYSTERESIS_ENVIRONMENT
+# environment = HYSTERESIS_ENVIRONMENT()
 
+from .env import environment
+environment.restart()
