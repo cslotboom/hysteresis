@@ -29,6 +29,38 @@ Ncycles = len(loadProtocol)*3
 Indexes = np.ones_like(loadProtocol, dtype=int) * 3
 loadProtocolout = hys.protocol.createProtocol(loadProtocol, Indexes)
 
+
+
+# =============================================================================
+# Plot both Hystereses
+# =============================================================================
+
+ExpHys = hys.Hysteresis(Wall_exp_xy)
+AnalHys = hys.Hysteresis(Wall_anal_xy)
+
+
+fig, ax = plt.subplots()
+ExpHys.plot()
+AnalHys.plot()
+ax.set_xlabel('Actuator Drift (m)')
+ax.set_ylabel('Average difference between Curves (kN)')
+plt.minorticks_on()
+ax.grid(which='major', color='grey', linewidth=0.5, alpha = 0.8)
+ax.grid(b=True, which='minor', linewidth=0.5, alpha = 0.4)
+
+
+
+fig, ax = plt.subplots()
+AnalHys.plotCycles([20,21,22,30,50,60])
+
+
+
+
+
+
+
+
+
 # =============================================================================
 # TestHys. Ganey wall
 # =============================================================================
@@ -94,25 +126,6 @@ AnalHys.recalculateCycles(peakProminence = 0.0045)
 # AnalHys.plotLoadProtocol(comparisonProtocol = ExpHys.loadProtocol)
 
 
-# =============================================================================
-# Plot both Hystereses
-# =============================================================================
-
-fig, ax = plt.subplots()
-ExpHys.plot()
-AnalHys.plot()
-ax.set_xlabel('Actuator Drift (m)')
-ax.set_ylabel('Average difference between Curves (kN)')
-plt.minorticks_on()
-ax.grid(which='major', color='grey', linewidth=0.5, alpha = 0.8)
-ax.grid(b=True, which='minor', linewidth=0.5, alpha = 0.4)
-
-
-
-
-
-
-
 
 
 
@@ -124,14 +137,17 @@ ax.grid(b=True, which='minor', linewidth=0.5, alpha = 0.4)
 # Now we can resample and compare the curves!
 AnalHysDx = hys.resample(AnalHys, 10)
 ExpHysDx = hys.resample(ExpHys, 10)
+
+
+
 fig, ax = plt.subplots()
 AnalHysDx.plotLoadProtocol(comparisonProtocol = ExpHysDx.loadProtocol)
 
 fig, ax = plt.subplots()
 AnalHysDx.plot(True)
-
-fig, ax = plt.subplots()
 ExpHysDx.plot(True)
+
+# fig, ax = plt.subplots()
 
 Diff, Diffs = hys.compareHys(AnalHysDx, ExpHysDx)
 
@@ -153,7 +169,7 @@ ExpHys.plot(True)
 
 fig, ax = ExpHys.initFig()
 ExpHys.plotCumArea(True)
-ax.set_xlabel('Cumulative Drift (mm)')
+ax.set_xlabel('Cumulative Drift (m)')
 ax.set_ylabel('Energy (kNm)')
 plt.minorticks_on()
 ax.grid(which='major', color='grey', linewidth=0.5, alpha = 0.8)
