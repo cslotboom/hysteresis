@@ -1,5 +1,5 @@
 
-
+import hysteresis.env as env
 from .defaultDataFuncs import defaultSampleFunction, defaultCombineDiff
 from .resample import resample
 
@@ -33,7 +33,7 @@ def compareCycle(Curve1, Curve2, Nsample = 10,
         The net difference between each curve.
 
     """
-    
+    sampleFunction = env.environment.fSample
     
     
     if Curve1.Npoints != Curve1.Npoints:
@@ -73,6 +73,10 @@ def compareHys(Hys1, Hys2, combineDiff = defaultCombineDiff):
         The average difference between both curves for each cycle.
 
     """
+    
+    combineDiff = env.environment.fCombineDiff
+
+    
     
     if Hys1.NCycles != Hys2.NCycles:
         raise Exception("Hysteresis don't have a similar number of Cycles.")    
