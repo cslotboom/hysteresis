@@ -7,8 +7,6 @@ from hysteresis import data
 
 from .defaultDataFuncs import defaultAreaFunction, defaultSlopeFunction
 from .defaultPlotFuncs import initializeFig, defaultPlotFunction, defaultShowCycles
-
-
 import matplotlib.pyplot as plt
 
        
@@ -191,9 +189,7 @@ class CurveBase:
         else:
             self.minIndexes = peakIndexes[1::2]
             self.maxIndexes = peakIndexes[0::2]    
-    
-      
-    
+        
     def plot(self, plotCycles = False, plotPeaks = False, labelCycles = []):
         """
         Plots the base curve
@@ -203,7 +199,6 @@ class CurveBase:
                     
         self.plotfunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
                 
-
     def plotVsIndex(self, plotCycles = False, plotPeaks = False, 
                     xlim = [], ylim = [], labelCycles = []):
         """
@@ -214,7 +209,6 @@ class CurveBase:
         y = self.xy[:,0]
                     
         self.plotfunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
-
 
     def plotLoadProtocol(self, xlim = [], ylim = [], comparisonProtocol = []):
         """
@@ -245,8 +239,7 @@ class CurveBase:
         y = self.Area
 
         self.plotfunction(self, x ,y, plotCycles, plotPeaks, labelCycles)  
-                     
-    
+                        
     def plotCumArea(self,  plotCycles = False, plotPeaks = False, labelCycles = []):
         
         # We get the cumulative displacement and area
@@ -255,7 +248,6 @@ class CurveBase:
 
         self.plotfunction(self, x ,y, plotCycles, plotPeaks, labelCycles)  
              
-
     def initFig(self, xlims = [], ylims = []):
         return initializeFig(xlims, ylims)
 
@@ -302,8 +294,7 @@ class Hysteresis(CurveBase):
         x = self.xy[:,0]
         self.reversalIndexes = data.GetCycleIndicies(x, peakDist, peakWidth, peakProminence)
         self.loadProtocol = x[self.reversalIndexes]
-        
-           
+                   
     def setCycles(self):
         """ Stores all simple cycle objects in the Hysteresis
         """
