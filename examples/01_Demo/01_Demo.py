@@ -1,3 +1,8 @@
+"""
+An example of very basic usage of the hysteresis package.
+"""
+
+
 import numpy as np
 import hysteresis as hys
 

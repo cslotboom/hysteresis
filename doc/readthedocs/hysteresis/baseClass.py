@@ -7,6 +7,7 @@ from hysteresis import data
 
 from .defaultDataFuncs import defaultAreaFunction, defaultSlopeFunction
 from .defaultPlotFuncs import initializeFig, defaultPlotFunction, defaultShowCycles
+import hysteresis.env as env
 import matplotlib.pyplot as plt
 
        
@@ -68,9 +69,7 @@ class CurveBase:
     
     """
     
-    def __init__(self, XYData, fArea = defaultAreaFunction, 
-                 fslope = defaultSlopeFunction, 
-                 fplot = defaultPlotFunction, xunit = '', yunit = ''):
+    def __init__(self, XYData, xunit = '', yunit = ''):
         """
         
         Parameters
@@ -94,9 +93,13 @@ class CurveBase:
         """
         self.xy = XYData
         self.Npoints = len(XYData[:,0])
-        self.AreaFunction = fArea
-        self.slopefunction = fslope
-        self.plotfunction = fplot
+        # self.AreaFunction = fArea
+        # self.slopefunction = fslope
+        # self.plotfunction = fplot
+        
+        self.AreaFunction = env.environment.fArea
+        self.slopefunction = env.environment.fslope
+        self.plotfunction = env.environment.fplot
         
         self.colorDict = {0:'C0', 1:'C1', 2:'C3'}
         
