@@ -1,5 +1,6 @@
 import numpy as np
 from numpy import trapz
+# import matplotlib.pyplot as plt
 
 from scipy.interpolate import interp1d
 from hysteresis import data
@@ -10,21 +11,8 @@ from .defaultDataFuncs import defaultAreaFunction, defaultSlopeFunction
 from .defaultPlotFuncs import initializeFig, defaultPlotFunction, defaultShowCycles
 
 
-import matplotlib.pyplot as plt
 
  
-
-
-
-
-# Calculate Envelop
-
-
-# lpSteps = [2]*10
-
-# skipEnd = 0
-# skipStart = 0
-
 # =============================================================================
 # Find the backbone
 # =============================================================================
@@ -247,6 +235,51 @@ def _linInterpolateY(xy, yinter, Index):
 # Fit EEEP
 # =============================================================================
 
+
+def _get_ult_1(Pend, dUend):
+    """
+    Gets the ultimate point if the hystresis doesn't reach the failure load.
+    """
+    
+    Pult  = Pend
+    dUult = dUend
+        
+    return Pult, dUult
+
+
+
+
+def _get_ult_2(Plim, xy, xyFail):
+    """ 
+    Gets the ultimate point if the final backbone point is lower than the 
+    failure load.
+    Linear interploation is used to find where the decending slope of xy
+    is equal ot the failure load.
+    
+    """
+    
+    Pult  = Plim
+    
+    # use linear interpolation to find the intersection point.
+    # Find the first index greater than the failure index
+    failIndex = np.argmax(xyFail[:,1] < Plim)
+    dUult     = _linInterpolateY(xyFail, Plim, failIndex)
+
+    # add the new point, then find the index
+    xy       = np.concatenate([xy, [[dUult, Pult]]])
+    order    = np.argsort(xy[:,0])
+    xy       = xy[order]
+    endIndex = np.where(xy[:,0] == dUult)[0][0] + 1
+    
+    # make a new curve that ends at the failure load. 
+    backbone = SimpleCycle(xy[:endIndex])
+    
+    return Pult, dUult, backbone
+
+
+
+
+
 def fitEEEP(backbone):
     """
     Fits a backbone curve with a equivalent elastic perfectly plastic curve
@@ -269,19 +302,13 @@ def fitEEEP(backbone):
     
     
     # There are two options - either there is a decline or there is no decline
-    backbone.setArea()
-    Anet = backbone.getNetArea()
-    xy = backbone.xy
-    
-    # Ppeak = np.max(backbone.xy[:,1])
+    xy       = backbone.xy
     PpeakInd = np.argmax(xy[:,1])
-    xyPeak = xy[PpeakInd,:]
-    Ppeak = xyPeak[1]
-    dUpeak = xyPeak[0]
+    Ppeak    = xy[PpeakInd,1]
     
     # Find the final values of P and u 
     dUend, Pend = xy[-1,:] 
-    xyFail = xy[PpeakInd:,:]
+    xyFail      = xy[PpeakInd:,:]
     
     # ratio = Pmax / Ppeak
     Rlim = 0.8
@@ -289,21 +316,19 @@ def fitEEEP(backbone):
     
     # Find the ultimate point
     if Plim < Pend: # If the final point is greater than 0.8Ppeak, use that point.
-        Pult = Pend
-        dUult = dUend
+        Pult, dUult = _get_ult_1(Pend, dUend)
     else:           # If the final point is less than 0.8Ppeak, find the intercept.
-        # use linear interpolation to find the intersection point.
-        Pult = Plim
-        index = np.argmax(xy[:,1] < Plim)
-        dUult = _linInterpolateY(xyFail, Plim, index)
+        Pult, dUult, backbone = _get_ult_2(Plim, xy, xyFail)
+    
+    backbone.setArea()    
+    Anet = backbone.getNetArea()    
     
     # Find the elastic intercept and slope.
-    Pinter = 0.4*Ppeak
-    index = np.argmin(xy[:,1] < Pinter)
+    Pinter  = 0.4*Ppeak
+    index   = np.argmin(xy[:,1] < Pinter)
     dUinter = _linInterpolateY(xy, Pinter, index)
-    Ke = Pinter / dUinter
-    
-    
+    Ke      = Pinter / dUinter
+        
     radicand = dUult**2 - 2*Anet/Ke
     
     if 0 < radicand:
