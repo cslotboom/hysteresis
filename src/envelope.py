@@ -54,11 +54,32 @@ def _getBackbonePeaks(hystersis, xyPosInd):
 
     return np.array(peaks)
 
+
+def _getBackboneEnds(hystersis, xyPosInd):
+    
+
+
+    return np.array(Ends)
+
+
+
+
+def _checkBBinput(returnPeaks, returnEnd):
+    if not returnPeaks and  not returnEnd:
+        raise Exception('Either peaks or end points must be set.')
+
+def _skipCycles(xyPosInd, skipStart, skipEnd, Ncycle):
+    # Skip any cycles that have been specified at the start or end of the script.
+    endIndex = Ncycle - skipEnd
+    startIndex = skipStart
+    return xyPosInd[startIndex:endIndex]
+    
+    
 """
 TODO:
     Allow for getting the peaks, end point, or both.
 """
-def getBackboneCurve(hysteresis, LPsteps = [], returnPeaks = False,  
+def getBackboneCurve(hysteresis, LPsteps = [], returnPeaks = False,  returnEnd = True, 
                      skipStart = 0, skipEnd =0):
     """
     Returns the positve backbone curve of a hysteresis.
@@ -88,7 +109,10 @@ def getBackboneCurve(hysteresis, LPsteps = [], returnPeaks = False,
         
     returnPeaks : bool, optional
         A switch that when toggled on will cause the function to return 
-        the peak points of each cycle in additon to the end points.    
+        the peak points of each cycle.    
+    returnEnd : bool, optional
+        A switch that when toggled on will cause the function to return 
+        the end points of each cycle.         
     skipStart : int, optional
         The number of cycles to skip from the start of the the backbone 
         curve. The default is 0 which skips no cycles.
@@ -102,8 +126,9 @@ def getBackboneCurve(hysteresis, LPsteps = [], returnPeaks = False,
 
     """
     
-    xyPosCycle = np.array([])
-    xyPosPeak = np.array([])
+    # xyPosCycle = np.array([])
+    # xyPosPeak = np.array([])
+    _checkBBinput(returnPeaks, returnEnd)    
     
     # Get a slice of the reversal indexes
     reversalIndexes = hysteresis.reversalIndexes
@@ -114,41 +139,37 @@ def getBackboneCurve(hysteresis, LPsteps = [], returnPeaks = False,
     # We should always include the first index!
     if xyPosInd[0] != 0:
         xyPosInd = np.hstack((0,xyPosInd))
-    
-    Ncycle = len(xyPosInd)
-    
-    # mess with the indexes as necessary
-    Indexes = _LPparser(LPsteps)
-    if len(Indexes) != 0:
+        
+    # get the indexes of the final cycle
+    if len(LPsteps) != 0:
+        Indexes = _LPparser(LPsteps)
         xyPosInd = xyPosInd[Indexes]
-        Ncycle = len(Indexes)
+        
+    Ncycle = len(xyPosInd)
+       
+    # skip the start/end cycles    
+    xyPosInd = _skipCycles(xyPosInd, skipStart, skipEnd, Ncycle)
     
-    # Skip any cycles that have been specified.
-    endIndex = Ncycle - skipEnd
-    startIndex = skipStart
-    xyPosInd = xyPosInd[startIndex:endIndex]
-    
-    xyPosCycle = xyPoints[xyPosInd]
-    xyPos = xyPosCycle
+    # Get the end indexes if asked
+    if returnEnd == True:
+        xyPosCycleEnd = xyPoints[xyPosInd]
     
     # Get the postive indexes        
     if returnPeaks == True:
         xyPosPeak = _getBackbonePeaks(hysteresis, xyPosInd)
-        xyPos = np.concatenate([xyPosCycle,xyPosPeak])
+        
+    xyPos = np.concatenate([xyPosCycleEnd, xyPosPeak])
         
     # Remove repeated points
     xPos = xyPos[:,0]
     _, indexes = np.unique(xPos,True)
-    
     xyPos = xyPos[indexes]   
     
-    backbone = SimpleCycle(xyPos, True)
-    
-    return backbone
+    return SimpleCycle(xyPos, True)
 
 
 
-def getAvgBackbone(hystersis, LPsteps = [], returnPeaks = False,  
+def getAvgBackbone(hystersis, LPsteps = [], returnPeaks = False,  returnEnd = False,
                    skipStart = 0, skipEnd =0):
     
     """
