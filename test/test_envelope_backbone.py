@@ -6,7 +6,7 @@ Created on Sat Aug 31 15:13:13 2019
 import numpy as np
 import hysteresis as hys
 from scipy.signal import savgol_filter
-
+import pytest
 
 # =============================================================================
 # Load initial stuff
@@ -26,6 +26,23 @@ myHys = hys.Hysteresis(xy)
 # Find the backbone
 # =============================================================================
 
+
+def test_inputParse():
+    """makes sure we get an error if the user doesn't ask for one of end points
+    or peaks."""
+    # Function: get envelope curve
+    analHys = hys.Hysteresis(xy)
+    # analHys.plotVsIndex(True)
+    
+    with pytest.raises(ValueError) as errorInfo:
+    
+        # Get the backbone
+        backbone = hys.getBackboneCurve(analHys, lp, False, False)
+        # assert True
+
+    assert errorInfo.type is ValueError
+
+
 def test_backbone():
     # Function: get envelope curve
     analHys = hys.Hysteresis(xy)
@@ -35,8 +52,6 @@ def test_backbone():
     backbone = hys.getBackboneCurve(analHys, lp, 1)
 
     assert True == True
-
-
 
 # =============================================================================
 # Fit the backbone curve.
