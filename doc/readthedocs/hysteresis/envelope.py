@@ -1,5 +1,6 @@
 import numpy as np
 from numpy import trapz
+# import matplotlib.pyplot as plt
 
 from scipy.interpolate import interp1d
 from hysteresis import data
@@ -10,21 +11,8 @@ from .defaultDataFuncs import defaultAreaFunction, defaultSlopeFunction
 from .defaultPlotFuncs import initializeFig, defaultPlotFunction, defaultShowCycles
 
 
-import matplotlib.pyplot as plt
 
  
-
-
-
-
-# Calculate Envelop
-
-
-# lpSteps = [2]*10
-
-# skipEnd = 0
-# skipStart = 0
-
 # =============================================================================
 # Find the backbone
 # =============================================================================
@@ -66,11 +54,26 @@ def _getBackbonePeaks(hystersis, xyPosInd):
 
     return np.array(peaks)
 
+
+
+
+
+def _checkBBinput(returnPeaks, returnEnd):
+    if returnPeaks == False and  returnEnd == False:
+        raise ValueError('Either peaks or end points must be set.')
+
+def _skipCycles(xyPosInd, skipStart, skipEnd, Ncycle):
+    # Skip any cycles that have been specified at the start or end of the script.
+    endIndex = Ncycle - skipEnd
+    startIndex = skipStart
+    return xyPosInd[startIndex:endIndex]
+    
+    
 """
 TODO:
     Allow for getting the peaks, end point, or both.
 """
-def getBackboneCurve(hysteresis, LPsteps = [], returnPeaks = False,  
+def getBackboneCurve(hysteresis, LPsteps = [], returnPeaks = False,  returnEnd = True, 
                      skipStart = 0, skipEnd =0):
     """
     Returns the positve backbone curve of a hysteresis.
@@ -100,7 +103,10 @@ def getBackboneCurve(hysteresis, LPsteps = [], returnPeaks = False,
         
     returnPeaks : bool, optional
         A switch that when toggled on will cause the function to return 
-        the peak points of each cycle in additon to the end points.    
+        the peak points of each cycle.    
+    returnEnd : bool, optional
+        A switch that when toggled on will cause the function to return 
+        the end points of each cycle.         
     skipStart : int, optional
         The number of cycles to skip from the start of the the backbone 
         curve. The default is 0 which skips no cycles.
@@ -114,8 +120,10 @@ def getBackboneCurve(hysteresis, LPsteps = [], returnPeaks = False,
 
     """
     
-    xyPosCycle = np.array([])
-    xyPosPeak = np.array([])
+    xyPos = np.array([])
+    xyPos.shape = (0,2)
+    
+    _checkBBinput(returnPeaks, returnEnd)    
     
     # Get a slice of the reversal indexes
     reversalIndexes = hysteresis.reversalIndexes
@@ -126,41 +134,38 @@ def getBackboneCurve(hysteresis, LPsteps = [], returnPeaks = False,
     # We should always include the first index!
     if xyPosInd[0] != 0:
         xyPosInd = np.hstack((0,xyPosInd))
-    
-    Ncycle = len(xyPosInd)
-    
-    # mess with the indexes as necessary
-    Indexes = _LPparser(LPsteps)
-    if len(Indexes) != 0:
+        
+    # get the indexes of the final cycle
+    if len(LPsteps) != 0:
+        Indexes = _LPparser(LPsteps)
         xyPosInd = xyPosInd[Indexes]
-        Ncycle = len(Indexes)
+        
+    Ncycle = len(xyPosInd)
+       
+    # skip the start/end cycles    
+    xyPosInd = _skipCycles(xyPosInd, skipStart, skipEnd, Ncycle)
     
-    # Skip any cycles that have been specified.
-    endIndex = Ncycle - skipEnd
-    startIndex = skipStart
-    xyPosInd = xyPosInd[startIndex:endIndex]
-    
-    xyPosCycle = xyPoints[xyPosInd]
-    xyPos = xyPosCycle
+    # Get the end indexes if asked
+    if returnEnd == True:
+        xyPosCycleEnd = xyPoints[xyPosInd]
+        xyPos = np.concatenate([xyPos, xyPosCycleEnd])
     
     # Get the postive indexes        
     if returnPeaks == True:
         xyPosPeak = _getBackbonePeaks(hysteresis, xyPosInd)
-        xyPos = np.concatenate([xyPosCycle,xyPosPeak])
+        xyPos = np.concatenate([xyPos, xyPosPeak])
+    
         
     # Remove repeated points
     xPos = xyPos[:,0]
     _, indexes = np.unique(xPos,True)
-    
     xyPos = xyPos[indexes]   
     
-    backbone = SimpleCycle(xyPos, True)
-    
-    return backbone
+    return SimpleCycle(xyPos, True)
 
 
 
-def getAvgBackbone(hystersis, LPsteps = [], returnPeaks = False,  
+def getAvgBackbone(hystersis, LPsteps = [], returnPeaks = False,  returnEnd = False,
                    skipStart = 0, skipEnd =0):
     
     """
@@ -207,8 +212,8 @@ def getAvgBackbone(hystersis, LPsteps = [], returnPeaks = False,
     
     
     hysNeg = Hysteresis(-hystersis.xy)
-    backBonePos = getBackboneCurve(hystersis, LPsteps, returnPeaks)
-    backBoneNeg = getBackboneCurve(hysNeg, LPsteps, returnPeaks)
+    backBonePos = getBackboneCurve(hystersis, LPsteps, returnPeaks, returnEnd, skipStart, skipEnd)
+    backBoneNeg = getBackboneCurve(hysNeg, LPsteps, returnPeaks, returnEnd, skipStart, skipEnd)
     
     xPos = backBonePos.xy[:,0]
     xNeg = backBoneNeg.xy[:,0]
@@ -247,6 +252,51 @@ def _linInterpolateY(xy, yinter, Index):
 # Fit EEEP
 # =============================================================================
 
+
+def _get_ult_1(Pend, dUend):
+    """
+    Gets the ultimate point if the hystresis doesn't reach the failure load.
+    """
+    
+    Pult  = Pend
+    dUult = dUend
+        
+    return Pult, dUult
+
+
+
+
+def _get_ult_2(Plim, xy, xyFail):
+    """ 
+    Gets the ultimate point if the final backbone point is lower than the 
+    failure load.
+    Linear interploation is used to find where the decending slope of xy
+    is equal ot the failure load.
+    
+    """
+    
+    Pult  = Plim
+    
+    # use linear interpolation to find the intersection point.
+    # Find the first index greater than the failure index
+    failIndex = np.argmax(xyFail[:,1] < Plim)
+    dUult     = _linInterpolateY(xyFail, Plim, failIndex)
+
+    # add the new point, then find the index
+    xy       = np.concatenate([xy, [[dUult, Pult]]])
+    order    = np.argsort(xy[:,0])
+    xy       = xy[order]
+    endIndex = np.where(xy[:,0] == dUult)[0][0] + 1
+    
+    # make a new curve that ends at the failure load. 
+    backbone = SimpleCycle(xy[:endIndex])
+    
+    return Pult, dUult, backbone
+
+
+
+
+
 def fitEEEP(backbone):
     """
     Fits a backbone curve with a equivalent elastic perfectly plastic curve
@@ -269,19 +319,13 @@ def fitEEEP(backbone):
     
     
     # There are two options - either there is a decline or there is no decline
-    backbone.setArea()
-    Anet = backbone.getNetArea()
-    xy = backbone.xy
-    
-    # Ppeak = np.max(backbone.xy[:,1])
+    xy       = backbone.xy
     PpeakInd = np.argmax(xy[:,1])
-    xyPeak = xy[PpeakInd,:]
-    Ppeak = xyPeak[1]
-    dUpeak = xyPeak[0]
+    Ppeak    = xy[PpeakInd,1]
     
     # Find the final values of P and u 
     dUend, Pend = xy[-1,:] 
-    xyFail = xy[PpeakInd:,:]
+    xyFail      = xy[PpeakInd:,:]
     
     # ratio = Pmax / Ppeak
     Rlim = 0.8
@@ -289,21 +333,19 @@ def fitEEEP(backbone):
     
     # Find the ultimate point
     if Plim < Pend: # If the final point is greater than 0.8Ppeak, use that point.
-        Pult = Pend
-        dUult = dUend
+        Pult, dUult = _get_ult_1(Pend, dUend)
     else:           # If the final point is less than 0.8Ppeak, find the intercept.
-        # use linear interpolation to find the intersection point.
-        Pult = Plim
-        index = np.argmax(xy[:,1] < Plim)
-        dUult = _linInterpolateY(xyFail, Plim, index)
+        Pult, dUult, backbone = _get_ult_2(Plim, xy, xyFail)
+    
+    backbone.setArea()    
+    Anet = backbone.getNetArea()    
     
     # Find the elastic intercept and slope.
-    Pinter = 0.4*Ppeak
-    index = np.argmin(xy[:,1] < Pinter)
+    Pinter  = 0.4*Ppeak
+    index   = np.argmin(xy[:,1] < Pinter)
     dUinter = _linInterpolateY(xy, Pinter, index)
-    Ke = Pinter / dUinter
-    
-    
+    Ke      = Pinter / dUinter
+        
     radicand = dUult**2 - 2*Anet/Ke
     
     if 0 < radicand:
