@@ -55,18 +55,12 @@ def _getBackbonePeaks(hystersis, xyPosInd):
     return np.array(peaks)
 
 
-def _getBackboneEnds(hystersis, xyPosInd):
-    
-
-
-    return np.array(Ends)
-
 
 
 
 def _checkBBinput(returnPeaks, returnEnd):
-    if not returnPeaks and  not returnEnd:
-        raise Exception('Either peaks or end points must be set.')
+    if returnPeaks == False and  returnEnd == False:
+        raise ValueError('Either peaks or end points must be set.')
 
 def _skipCycles(xyPosInd, skipStart, skipEnd, Ncycle):
     # Skip any cycles that have been specified at the start or end of the script.
@@ -126,8 +120,9 @@ def getBackboneCurve(hysteresis, LPsteps = [], returnPeaks = False,  returnEnd =
 
     """
     
-    # xyPosCycle = np.array([])
-    # xyPosPeak = np.array([])
+    xyPos = np.array([])
+    xyPos.shape = (0,2)
+    
     _checkBBinput(returnPeaks, returnEnd)    
     
     # Get a slice of the reversal indexes
@@ -153,12 +148,13 @@ def getBackboneCurve(hysteresis, LPsteps = [], returnPeaks = False,  returnEnd =
     # Get the end indexes if asked
     if returnEnd == True:
         xyPosCycleEnd = xyPoints[xyPosInd]
+        xyPos = np.concatenate([xyPos, xyPosCycleEnd])
     
     # Get the postive indexes        
     if returnPeaks == True:
         xyPosPeak = _getBackbonePeaks(hysteresis, xyPosInd)
-        
-    xyPos = np.concatenate([xyPosCycleEnd, xyPosPeak])
+        xyPos = np.concatenate([xyPos, xyPosPeak])
+    
         
     # Remove repeated points
     xPos = xyPos[:,0]
@@ -216,8 +212,8 @@ def getAvgBackbone(hystersis, LPsteps = [], returnPeaks = False,  returnEnd = Fa
     
     
     hysNeg = Hysteresis(-hystersis.xy)
-    backBonePos = getBackboneCurve(hystersis, LPsteps, returnPeaks)
-    backBoneNeg = getBackboneCurve(hysNeg, LPsteps, returnPeaks)
+    backBonePos = getBackboneCurve(hystersis, LPsteps, returnPeaks, returnEnd, skipStart, skipEnd)
+    backBoneNeg = getBackboneCurve(hysNeg, LPsteps, returnPeaks, returnEnd, skipStart, skipEnd)
     
     xPos = backBonePos.xy[:,0]
     xNeg = backBoneNeg.xy[:,0]

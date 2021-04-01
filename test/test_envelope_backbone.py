@@ -57,9 +57,9 @@ def test_backbone():
 # Fit the backbone curve.
 # =============================================================================
 
-
 def test_fit_avg():
-    avg, pos, neg = hys.getAvgBackbone(myHys, lp, 1)   
+    
+    avg, pos, neg = hys.getAvgBackbone(myHys, lp, 1, 1)   
     avg.setArea()
     A1 = avg.getNetArea()
     
@@ -71,3 +71,4 @@ def test_fit_avg():
     check2 = abs(A2 - 5775.33) < 0.01
     # check2 = (A1 - A2) < 10**-6
     assert np.all((check1, check2))
+# test_fit_avg()
