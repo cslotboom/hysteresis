@@ -73,6 +73,7 @@ def test_compare_loadProt(monkeypatch):
 
     assert test1 == True
 
+# def test_compare():
 def test_compare(monkeypatch):
     
     ExpHys,AnalHys= getHys()
@@ -84,11 +85,11 @@ def test_compare(monkeypatch):
     
     Diff, Diffs = hys.compareHys(AnalHys, ExpHys)
     
-    test1 = abs(Diff - 6.800144) < 0.00001
+    test1 = abs(Diff - 6.79762) < 0.00001
     
     assert test1 == True
 
-
+# test_compare()
 
 # # Now we can resample and compare the curves!
 # AnalHysDx = hys.reSample(AnalHys, 10)
