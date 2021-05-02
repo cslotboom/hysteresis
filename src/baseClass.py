@@ -8,16 +8,6 @@ from hysteresis import data
 import hysteresis.env as env
 import matplotlib.pyplot as plt
 
-       
-"""
-I'm not sure if I want to store the xy data at both levels, i.e. in the Cycle
-AND in the 
-"""
-
-"""
-TODO:
-    Create function that get's peak times and values'
-"""
 
 """
 TODO:
@@ -32,22 +22,17 @@ TODO:
 TODO:
     Allow for custom headings:
     Perhaps a style object?
+
+    Add limitts to the style object?    
+    Make the limits part of the hysteresis object, so they don't need
+    to continually be passed to each funciton.
 """
 
-
-"""
-TODO:
-    Add current peak/cycle sampling parameters to part of the base class.\
-    This allows for us to create new hysteresis objects with the propreties of 
-    the old ones.
-    
-"""
 
 
 """
 TODO: Make Plot functions Lamda function, then specialize for slope, area, etc.
-TODO: Make the limits part of the hysteresis object, so they don't need
-to continually be passed to each funciton.
+
 """
 
 
@@ -118,6 +103,9 @@ class CurveBase:
     #     return x / self.xy[:,1]
     
     # def __mul__(self, x):
+    #     y = self.xy[:,1]*x
+    #     xy = np.column_stack([x,y])
+        
     #     return self.xy[:,1]*x
 
     # def __add__(self, x):
@@ -127,7 +115,7 @@ class CurveBase:
     #     return self.xy[:,1] - x
         
     def setArea(self):
-        """ Finds the area under each point of the curve using the area function"""
+        """ sets the area under each point of the curve using the area function"""
         self.Area = self.AreaFunction(self.xy)
         return self.Area
     
@@ -205,7 +193,7 @@ class CurveBase:
         self.plotfunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
                 
     def plotVsIndex(self, plotCycles = False, plotPeaks = False, 
-                    xlim = [], ylim = [], labelCycles = []):
+                     labelCycles = []):
         """
         Plots the base curve against index (as opposed to X values)
         """          
@@ -215,7 +203,7 @@ class CurveBase:
                     
         self.plotfunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
 
-    def plotLoadProtocol(self, xlim = [], ylim = [], comparisonProtocol = []):
+    def plotLoadProtocol(self, comparisonProtocol = []):
         """
         Plots the load protcol of the curve.
         """           
@@ -231,7 +219,7 @@ class CurveBase:
             plt.plot(comparisonProtocol)    
     
     def plotSlope(self,  plotCycles = False, plotPeaks = False, 
-                  xlim = [], ylim = [], labelCycles = []):
+                  labelCycles = []):
         
         x = self.xy[:,0]
         y = self.Slope
@@ -264,6 +252,11 @@ class CurveBase:
     # This can potentially be fixed by having the user overwrite the default 
     # function
 
+# =============================================================================
+# 
+# =============================================================================
+
+
 class Hysteresis(CurveBase):
     """
     Hysteresis objects are those that have at least one reversal point in 
@@ -277,29 +270,55 @@ class Hysteresis(CurveBase):
     
     """
     
-    
-    def __init__(self, XYData, setCycles = True, setArea = True, setSlope =True):
-        CurveBase.__init__(self, XYData)
+    revDist = 2
+    revWidth = None
+    revProminence = None
+
+    def __init__(self, XYData, revDist = 2, revWidth = None, revProminence = None,
+                 setCycles = True, setArea = True, setSlope = True, **kwargs):
+        CurveBase.__init__(self, XYData, **kwargs)
 
         #TODO Create warning if cycles don't make sense.
         if setCycles == True:
-            self.setReversalIndexes()
+            self.setReversalIndexes(revDist, revWidth, revProminence)
             self.setCycles()
         
-        #TODO: Evaluate how long this takes, then potentially ymake optional
         if setArea ==True:
             self.setArea()
         if setSlope ==True:
             self.setSlope()
-            
-    def setReversalIndexes(self, peakDist = 2, peakWidth = None, 
-                           peakProminence = None):
+    
+    def setReversalPropreties(self, revDist = 2, revWidth = None, 
+                           revProminence = None):
+        """
+        Sets the propreties that are used to caculate where reversal points occur.
+        These are used if we want to copy new classes using the same parameters.
+        """
+        self.revDist = revDist
+        self.revWidth = revWidth
+        self.revProminence = revProminence
+        
+        
+    def setReversalIndexes(self, revDist = 2, revWidth = None, 
+                           revProminence = None, **kwargs):
         """ Finds the location of the reversal points
         """
+        
+        # Deprication waring
+        findPeakKwargs(**kwargs)
+       
+        self.setReversalPropreties(revDist, revWidth, revProminence)
+        
         x = self.xy[:,0]
-        self.reversalIndexes = data.GetCycleIndicies(x, peakDist, peakWidth, peakProminence)
+        self.reversalIndexes = data.GetCycleIndicies(x, revDist, revWidth, revProminence)
         self.loadProtocol = x[self.reversalIndexes]
-                   
+
+    def getReversalxy(self):
+        """
+        Gets the reversal xy indexes
+        """
+        return self.xy[self.reversalIndexes]
+    
     def setCycles(self):
         """ Stores all simple cycle objects in the Hysteresis
         """
@@ -309,6 +328,7 @@ class Hysteresis(CurveBase):
         
         Cycles = [None]*NIndex
         for ii in range(NIndex):
+            # I forget why we overshoot the cycles here by one
             Cycles[ii] = SimpleCycle(xy[indices[ii]:(indices[ii+1]+1), :])
                        
         self.Cycles = Cycles
@@ -372,23 +392,24 @@ class Hysteresis(CurveBase):
         # return fig, ax    
     
        
-    def recalculateCycles(self, peakDist = 2, peakWidth = None, peakProminence = None):
+    def recalculateCycles(self, revDist = 2, revWidth = None, revProminence = None, **kwargs):
         """
-        Peaks are calculated using scipy's find_peaks function
+        Calcualtes the cycles again, using the input parameters for distance,
+        width, and prominence. Peaks are calculated using scipy's find_peaks function.
         
         Parameters
         ----------
             
-        distance : number, optional
+        revDist : number, optional
             The minimum minimal numbr of indexese (>= 1) in samples between
             neighbouring peaks. Smaller peaks are removed first until the condition
             is fulfilled for all remaining peaks.
-        prominence : number or ndarray or sequence, optional
+        revProminence : number or ndarray or sequence, optional
             Required prominence of peaks. Either a number, ``None``, an array
             matching `x` or a 2-element sequence of the former. The first
             element is always interpreted as the  minimal and the second, if
             supplied, as the maximal required prominence.
-        width : number or ndarray or sequence, optional
+        revWidth : number or ndarray or sequence, optional
             Required width of peaks in samples. Either a number, ``None``, an array
             matching `x` or a 2-element sequence of the former. The first
             element is always interpreted as the  minimal and the second, if
@@ -400,9 +421,42 @@ class Hysteresis(CurveBase):
         None.
 
         """
-        self.setReversalIndexes(peakDist, peakWidth, peakProminence)
+        
+        # Deprication waring, remove later
+        findPeakKwargs(**kwargs)
+        
+        self.setReversalIndexes(revDist, revWidth, revProminence)
         self.setCycles()
-        self.setArea()    
+        self.setArea()
+        
+        
+    def recalculateCycles_like(self, sampleHysteresis):
+        """
+        Recalulates the peaks of one hysteresis using another the reversal
+        propreties from another hysteresis. Peaks are calculated using scipy's 
+        find_peaks function.
+        
+        Parameters
+        ----------
+            
+        sampleHysteresis : Hysteresis, optional
+            The hysteresis to be be used when recalculating the cycle points.
+
+        
+        
+        Returns
+        -------
+        None.
+
+        """        
+        revDist = sampleHysteresis.revDist
+        revWidth = sampleHysteresis.revWidth
+        revProminence = sampleHysteresis.revProminence
+       
+        self.setReversalIndexes(revDist, revWidth, revProminence)
+        self.setCycles()
+        self.setArea()        
+    
 
     def RemoveCycles():
         pass
@@ -412,7 +466,7 @@ class SimpleCycle(CurveBase):
     Y direction.
     """
     
-    def __init__(self, XYData, FindPeaks = False, setSlope = False, setArea = False,
+    def __init__(self, XYData, findPeaks = False, setSlope = False, setArea = False,
                  peakDist = 2, peakWidth = None, peakProminence = None):
         CurveBase.__init__(self, XYData)
         
@@ -421,7 +475,7 @@ class SimpleCycle(CurveBase):
         if setArea == True:
             self.setArea()       
         
-        if FindPeaks == True:
+        if findPeaks == True:
             self.setPeaks(peakDist, peakWidth, peakProminence)
             self.setSubCycles()
     
@@ -559,3 +613,18 @@ class MonotonicCurve(CurveBase):
             self.direction =  1
         else:
             self.direction = -1
+
+
+# =============================================================================
+# Deprication warnings
+# =============================================================================
+
+def findPeakKwargs(**kwargs):
+    if 'peakDist' in kwargs.keys():
+        raise Exception('Use of "peakDist" has been depricated. Instead use "revDist".')
+    if 'peakDist' in kwargs.keys():
+        print('Use of "peakWidth" has been depricated. Instead use "revWidth".')
+    if 'peakProminence' in kwargs.keys():
+        print('Use of "peakProminence" has been depricated. Instead use "revProminence".')    
+    
+    # pass
