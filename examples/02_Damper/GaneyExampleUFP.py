@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
 """
-In this example I will show some of the basic functionality of the hystresis
-module on a real hystresis.
+In this example I will show some of the basic functionality of the hysteresis
+module on a real hysteresis.
+
+Data taken from Ryan Ganey's 2015 thesis:
+https://digital.lib.washington.edu/researchworks/handle/1773/33664
 
 """
 import numpy as np

@@ -41,4 +41,3 @@ def test_Curv3_Area():
     A = Curve.getNetArea()
 
     assert abs(A - (np.e**4 + 11)) < 0.0001
-

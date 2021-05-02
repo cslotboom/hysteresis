@@ -97,7 +97,7 @@ print(ExpHys.NCycles)
 
 # We will remove all peaks with prominence less than half the first value in
 # the load protocol. 
-ExpHys.recalculateCycles(peakProminence = loadProtocol[0]/2)
+ExpHys.recalculateCycles(revProminence = loadProtocol[0]/2)
 fig, ax = ExpHys.initFig()
 # ExpHys.plotVsIndex(True)
 ExpHys.plotLoadProtocol(comparisonProtocol = loadProtocol)
@@ -115,14 +115,14 @@ AnalHys.plot(True)
 # Because there are few data points int the experimental data set, I'm 
 # comfortable skipping the initial cycles. We can filter them out 
 # by recalculating the peaks with a prominence comand
-AnalHys.recalculateCycles(peakProminence = 0.005)
+AnalHys.recalculateCycles(revProminence = 0.005)
 # AnalHys.plotLoadProtocol(comparisonProtocol = ExpHys.loadProtocol)
 
 
 # Almost there! It looks like we are missing one of the Analysis points
 # To get there, lets cut off the appropriate number of points
 AnalHys = hys.Hysteresis(Wall_anal_xy[500:,:])
-AnalHys.recalculateCycles(peakProminence = 0.0045)
+AnalHys.recalculateCycles(revProminence = 0.0045)
 # AnalHys.plotLoadProtocol(comparisonProtocol = ExpHys.loadProtocol)
 
 

@@ -60,15 +60,15 @@ def test_ReCalc():
 
     
     ExpHys, AnalHys= getHys()
-    AnalHys.recalculateCycles(peakProminence = 0.005)
+    AnalHys.recalculateCycles(revProminence = 0.005)
 
     assert True == True
     
 def test_compare_loadProt(monkeypatch):
     
     ExpHys,AnalHys= getHys()
-    AnalHys.recalculateCycles(peakProminence = 0.0045)
-    ExpHys.recalculateCycles(peakProminence = 0.035*4.1/100/2)
+    AnalHys.recalculateCycles(revProminence = 0.0045)
+    ExpHys.recalculateCycles(revProminence = 0.035*4.1/100/2)
     test1 = len(AnalHys.loadProtocol) == len(ExpHys.loadProtocol)
 
     assert test1 == True
@@ -77,8 +77,8 @@ def test_compare_loadProt(monkeypatch):
 def test_compare(monkeypatch):
     
     ExpHys,AnalHys= getHys()
-    AnalHys.recalculateCycles(peakProminence = 0.0045)
-    ExpHys.recalculateCycles(peakProminence = 0.035*4.1/100/2)
+    AnalHys.recalculateCycles(revProminence = 0.0045)
+    ExpHys.recalculateCycles(revProminence = 0.035*4.1/100/2)
     
     AnalHys = hys.resample(AnalHys, 10)
     ExpHys = hys.resample(ExpHys, 10)

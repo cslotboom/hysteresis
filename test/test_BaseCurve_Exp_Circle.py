@@ -47,7 +47,7 @@ def test_Circle_Plot(monkeypatch):
     Circle = MakeCircle()
     Circle.plotCycles()
     Circle.plot(plotCycles=True)
-    Circle.plotSlope(plotCycles=True, ylim = [-10,10])
+    Circle.plotSlope(plotCycles=True)
     
     assert True == True
 

@@ -13,7 +13,7 @@ from scipy.interpolate import interp1d
 x = np.linspace(0, 1, 1000)*10
 triangleSmall = scipy.signal.sawtooth(x*20,0.5)/7
 trianglexy = np.column_stack((x,triangleSmall))
-smallTriangles = hys.SimpleCycle(trianglexy, FindPeaks = True)
+smallTriangles = hys.SimpleCycle(trianglexy, findPeaks = True)
 
 def test_plot_peaks(monkeypatch):
     monkeypatch.setattr(plt, 'show', lambda: None)
