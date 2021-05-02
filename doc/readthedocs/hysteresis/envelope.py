@@ -164,6 +164,26 @@ def getBackboneCurve(hysteresis, LPsteps = [], returnPeaks = False,  returnEnd =
     return SimpleCycle(xyPos, True)
 
 
+def _averageBackbones(backBonePos,backBoneNeg):
+    xPos = backBonePos.xy[:,0]
+    xNeg = backBoneNeg.xy[:,0]
+    
+    f1 =  interp1d(backBonePos.xy[:,0], backBonePos.xy[:,1], fill_value = 'extrapolate')
+    f2 =  interp1d(backBoneNeg.xy[:,0], backBoneNeg.xy[:,1], fill_value = 'extrapolate')
+    
+    xnet = np.concatenate((xPos, xNeg))
+    x = np.unique(xnet)
+    
+    ypos = f1(x)
+    yneg = f2(x)
+    
+    yavg = (ypos + yneg) / 2
+    
+    xy = np.column_stack([x, yavg])
+    backBoneAvg = SimpleCycle(xy, True)
+    
+    return backBoneAvg
+
 
 def getAvgBackbone(hystersis, LPsteps = [], returnPeaks = False,  returnEnd = False,
                    skipStart = 0, skipEnd =0):
@@ -212,25 +232,12 @@ def getAvgBackbone(hystersis, LPsteps = [], returnPeaks = False,  returnEnd = Fa
     
     
     hysNeg = Hysteresis(-hystersis.xy)
+    hysNeg.recalculateCycles_like(hystersis)
     backBonePos = getBackboneCurve(hystersis, LPsteps, returnPeaks, returnEnd, skipStart, skipEnd)
     backBoneNeg = getBackboneCurve(hysNeg, LPsteps, returnPeaks, returnEnd, skipStart, skipEnd)
     
-    xPos = backBonePos.xy[:,0]
-    xNeg = backBoneNeg.xy[:,0]
-    
-    f1 =  interp1d(backBonePos.xy[:,0], backBonePos.xy[:,1], fill_value = 'extrapolate')
-    f2 =  interp1d(backBoneNeg.xy[:,0], backBoneNeg.xy[:,1], fill_value = 'extrapolate')
-    
-    xnet = np.concatenate((xPos, xNeg))
-    x = np.unique(xnet)
-    
-    ypos = f1(x)
-    yneg = f2(x)
-    
-    yavg = (ypos + yneg) / 2
-    
-    xy = np.column_stack([x, yavg])
-    backBoneAvg = SimpleCycle(xy)
+    backBoneAvg = _averageBackbones(backBonePos, backBoneNeg)
+
     
     return backBoneAvg, backBonePos, backBoneNeg
 
@@ -293,6 +300,14 @@ def _get_ult_2(Plim, xy, xyFail):
     
     return Pult, dUult, backbone
 
+def _getIntersection(xy, Ppeak, intersection):
+    # Find the elastic intercept and slope.
+    Pinter  = intersection*Ppeak
+    index   = np.argmin(xy[:,1] < Pinter)
+    dUinter = _linInterpolateY(xy, Pinter, index)
+    Ke      = Pinter / dUinter
+    
+    return Ke
 
 
 
@@ -341,10 +356,11 @@ def fitEEEP(backbone):
     Anet = backbone.getNetArea()    
     
     # Find the elastic intercept and slope.
-    Pinter  = 0.4*Ppeak
-    index   = np.argmin(xy[:,1] < Pinter)
-    dUinter = _linInterpolateY(xy, Pinter, index)
-    Ke      = Pinter / dUinter
+    # Pinter  = 0.4*Ppeak
+    # index   = np.argmin(xy[:,1] < Pinter)
+    # dUinter = _linInterpolateY(xy, Pinter, index)
+    # _getIntersection(xy, Ppeak, 0.4)
+    Ke      = _getIntersection(xy, Ppeak, 0.4)
         
     radicand = dUult**2 - 2*Anet/Ke
     
@@ -353,9 +369,11 @@ def fitEEEP(backbone):
     else:
         Py = 0.85*Ppeak
     
-    curve = np.column_stack([[0, Py/Ke, dUult], [0,Py,Py]])
+    curvexy = np.column_stack([[0, Py/Ke, dUult], [0,Py,Py]])
+    curve = SimpleCycle(curvexy)
+    curve.setArea()
     
-    return SimpleCycle(curve)
+    return curve
 
 
 

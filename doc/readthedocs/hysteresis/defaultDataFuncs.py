@@ -39,25 +39,20 @@ def defaultSlopeFunction(xy):
         dxMid = (xyp[:,0] - xyn[:,0])
         unDefinedIndex = np.array(np.where(dxMid == 0))
         dxMid[unDefinedIndex] = np.max(np.abs(dxMid))
-        
-        # slopeMid = ((xyp[:,1] - xyn[:,1]) / (xyp[:,0] - xyn[:,0]))
         slopeMid = ((xyp[:,1] - xyn[:,1]) / dxMid)
         slopeMid[unDefinedIndex] = slopeMid[unDefinedIndex - 1]
-    
-    # TODO: why would the slope equal = 0 here???
-    # else:
-    #     slopeMid = []
-    
+        
     Startdx = xy[1,0] - xy[0,0]
     Enddx = xy[1,0] - xy[0,0]
     
-    # Used for debugging?
-    if Startdx == 0:
-        a = 1
-        pass
+    slopeStart = 0 
+    slopeEnd = 0
     
-    slopeStart = (xy[1,1] - xy[0,1]) / Startdx
-    slopeEnd = (xy[-1,1] - xy[-2,1]) / Enddx
+    if Startdx != 0:
+        slopeStart = (xy[1,1] - xy[0,1]) / Startdx
+        
+    if Startdx != 0:
+        slopeEnd = (xy[-1,1] - xy[-2,1]) / Enddx
     
     return np.concatenate([[slopeStart], slopeMid, [slopeEnd]])  
    

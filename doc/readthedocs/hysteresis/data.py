@@ -10,130 +10,9 @@ from scipy.interpolate import interp1d
 
 """
 TODO
-    Consider removing Sample Data - I don't think this us used anymore
+    Consider removing ShiftDataFrame - I don't think this us used anymore
 """
 
-
-def SampleData(ExperimentX, ExperimentY, AnalysisX, AnalysisY, Nsample = 10, 
-               peakDist = 2, peakwidth = None, Norm = None):
-    """
-        
-    This functions samples two data sets that undergo a cyclic, or monotonic 
-    response. The function automatically detects reversals in the data. 
-    Adjustments may be necessary to find peaks in the data 
-    
-    The Experiment and Analysis must have the same number of cycles
-
-    Parameters
-    ----------
-    ExperimentX : Array
-        The X values from the experiment dataset.
-    ExperimentY : Array
-        The Y values from the experiment dataset.
-    AnalysisX : Array
-        The X values from the analysis dataset.
-    AnalysisY : Array
-        The Y values from the analysis dataset.
-
-    Raises
-    ------
-    Exception
-        If the datasets don't have the same number of cycles, the sampling
-        doesn't work
-
-    Returns
-    -------
-    Rnet : float
-        Returns a the sampled value 
-
-    """
-       
-    # We get the indicies where the reversal happens.
-    
-    ExperimentIndicies = GetCycleIndicies(ExperimentX, Nsample, peakDist, peakwidth, ExperimentY)
-    AnalysisIndicies = GetCycleIndicies(AnalysisX, Nsample, peakDist, peakwidth, AnalysisY)
-    
-    # We check that both curves have the same number of indicies
-    NIndex = len(ExperimentIndicies) - 1
-    NIndex_2 = len(AnalysisIndicies) - 1
-    R= np.zeros(NIndex)
-    
-    # If they don't we create a error
-    if NIndex!=NIndex_2:
-        raise Exception('The experiment and Analysis have a different number of cycles')
-        
-    # For each index, we loop through 
-    for ii in range(NIndex):
-        # We get define the arrays for the x and y coordinants of the sub-vector
-        Ex = np.zeros(NIndex)
-        Ey = np.zeros(NIndex)
-        Ax = np.zeros(NIndex)
-        Ay = np.zeros(NIndex)
-        
-        # We get the subvector values between the indicies
-        [Ex,Ey] = GetCycleSubVector(ExperimentX , ExperimentY, ExperimentIndicies[ii], ExperimentIndicies[ii+1], Nsample)
-        [Ax,Ay] = GetCycleSubVector(AnalysisX , AnalysisY, AnalysisIndicies[ii], AnalysisIndicies[ii+1], Nsample)
-        
-        # We sample each point on the curve using the difference between the
-        # two points
-        if Norm == None:
-            R[ii] = np.sum(((Ey-Ay)**2 + (Ex-Ax)**2)**0.5)
-        else:
-            R[ii] = Norm(Ex, Ey, Ay, Ax)
-        
-    Rnet = np.sum(R)
-    
-    return Rnet
-
-
-def SampleMonotonicData(ExperimentX, ExperimentY, AnalysisX, AnalysisY,
-                        Nsample = 10, Norm = None):
-    """
-    This functions works the same way as the cyclic data function
-    
-    This functions samples two data sets of data and returns a 
-    
-    The Experiment and Analysis must have the same number of cycles
-
-    Parameters
-    ----------
-    ExperimentX : Array
-        The X values from the experiment dataset.
-    ExperimentY : Array
-        The Y values from the experiment dataset.
-    AnalysisX : Array
-        The X values from the analysis dataset.
-    AnalysisY : Array
-        The Y values from the analysis dataset.
-
-    Returns
-    -------
-    Rnet : float
-        Returns a the sampled value 
-
-    """
-    
-    Nindex = len(ExperimentX)
-    R= np.zeros(Nsample)
-    
-    for ii in range(Nsample):
-        Ex = np.zeros(Nsample)
-        Ey = np.zeros(Nsample)
-        Ax = np.zeros(Nsample)
-        Ay = np.zeros(Nsample)
-        
-        
-        [Ex,Ey] = GetCycleSubVector(ExperimentX , ExperimentY, 0, Nindex, Nsample)
-        [Ax,Ay] = GetCycleSubVector(AnalysisX , AnalysisY, 0, Nindex, Nsample)
-        
-        R[ii] = np.sum(((Ey-Ay)**2 + (Ex-Ax)**2)**0.5)
-        if Norm == None:
-            R[ii] = np.sum(((Ey-Ay)**2 + (Ex-Ax)**2)**0.5)
-        else:
-            R[ii] = Norm(Ex, Ey, Ay, Ax)        
-    Rnet = np.sum(R)
-    
-    return Rnet
 
 
 def GetCycleSubVector(VectorX, VectorY, Index1, Index2, Nsample):
@@ -316,7 +195,7 @@ def LinearInterpolation(x1, x2, y1, y2, x):
         the output y value.
 
     """
-    
+
     dx = (x2 - x1)
     if dx == 0:
         y = y1
@@ -326,7 +205,141 @@ def LinearInterpolation(x1, x2, y1, y2, x):
     return y
    
 
-def ShiftDataFrame(Samplex, Sampley, Targetx):
+
+
+
+
+def SampleData(ExperimentX, ExperimentY, AnalysisX, AnalysisY, Nsample = 10, 
+               peakDist = 2, peakwidth = None, Norm = None):
+    """
+        
+    This functions samples two data sets that undergo a cyclic, or monotonic 
+    response. The function automatically detects reversals in the data. 
+    Adjustments may be necessary to find peaks in the data 
+    
+    The Experiment and Analysis must have the same number of cycles
+
+    Parameters
+    ----------
+    ExperimentX : Array
+        The X values from the experiment dataset.
+    ExperimentY : Array
+        The Y values from the experiment dataset.
+    AnalysisX : Array
+        The X values from the analysis dataset.
+    AnalysisY : Array
+        The Y values from the analysis dataset.
+
+    Raises
+    ------
+    Exception
+        If the datasets don't have the same number of cycles, the sampling
+        doesn't work
+
+    Returns
+    -------
+    Rnet : float
+        Returns a the sampled value 
+
+    """
+       
+    # We get the indicies where the reversal happens.
+    
+    ExperimentIndicies = GetCycleIndicies(ExperimentX, Nsample, peakDist, peakwidth, ExperimentY)
+    AnalysisIndicies = GetCycleIndicies(AnalysisX, Nsample, peakDist, peakwidth, AnalysisY)
+    
+    # We check that both curves have the same number of indicies
+    NIndex = len(ExperimentIndicies) - 1
+    NIndex_2 = len(AnalysisIndicies) - 1
+    R= np.zeros(NIndex)
+    
+    # If they don't we create a error
+    if NIndex!=NIndex_2:
+        raise Exception('The experiment and Analysis have a different number of cycles')
+        
+    # For each index, we loop through 
+    for ii in range(NIndex):
+        # We get define the arrays for the x and y coordinants of the sub-vector
+        Ex = np.zeros(NIndex)
+        Ey = np.zeros(NIndex)
+        Ax = np.zeros(NIndex)
+        Ay = np.zeros(NIndex)
+        
+        # We get the subvector values between the indicies
+        [Ex,Ey] = GetCycleSubVector(ExperimentX , ExperimentY, ExperimentIndicies[ii], ExperimentIndicies[ii+1], Nsample)
+        [Ax,Ay] = GetCycleSubVector(AnalysisX , AnalysisY, AnalysisIndicies[ii], AnalysisIndicies[ii+1], Nsample)
+        
+        # We sample each point on the curve using the difference between the
+        # two points
+        if Norm == None:
+            R[ii] = np.sum(((Ey-Ay)**2 + (Ex-Ax)**2)**0.5)
+        else:
+            R[ii] = Norm(Ex, Ey, Ay, Ax)
+        
+    Rnet = np.sum(R)
+    
+    return Rnet
+
+
+def SampleMonotonicData(ExperimentX, ExperimentY, AnalysisX, AnalysisY,
+                        Nsample = 10, Norm = None):
+    """
+    This functions works the same way as the cyclic data function
+    
+    This functions samples two data sets of data and returns a 
+    
+    The Experiment and Analysis must have the same number of cycles
+
+    Parameters
+    ----------
+    ExperimentX : Array
+        The X values from the experiment dataset.
+    ExperimentY : Array
+        The Y values from the experiment dataset.
+    AnalysisX : Array
+        The X values from the analysis dataset.
+    AnalysisY : Array
+        The Y values from the analysis dataset.
+
+    Returns
+    -------
+    Rnet : float
+        Returns a the sampled value 
+
+    """
+    
+    Nindex = len(ExperimentX)
+    R= np.zeros(Nsample)
+    
+    for ii in range(Nsample):
+        Ex = np.zeros(Nsample)
+        Ey = np.zeros(Nsample)
+        Ax = np.zeros(Nsample)
+        Ay = np.zeros(Nsample)
+        
+        
+        [Ex,Ey] = GetCycleSubVector(ExperimentX , ExperimentY, 0, Nindex, Nsample)
+        [Ax,Ay] = GetCycleSubVector(AnalysisX , AnalysisY, 0, Nindex, Nsample)
+        
+        R[ii] = np.sum(((Ey-Ay)**2 + (Ex-Ax)**2)**0.5)
+        if Norm == None:
+            R[ii] = np.sum(((Ey-Ay)**2 + (Ex-Ax)**2)**0.5)
+        else:
+            R[ii] = Norm(Ex, Ey, Ay, Ax)        
+    Rnet = np.sum(R)
+    
+    return Rnet
+
+
+
+
+
+# =============================================================================
+# Unused and to be removed
+# =============================================================================
+
+
+def ShiftDataFrame1(Samplex, Sampley, Targetx):
     """
     
     SciPy's ID interpolate baseically does what this does, it probably makes
