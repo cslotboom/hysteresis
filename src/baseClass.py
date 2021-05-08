@@ -190,7 +190,7 @@ class CurveBase:
         x = self.xy[:,0]
         y = self.xy[:,1]
                     
-        self.plotfunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
+        return self.plotfunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
                 
     def plotVsIndex(self, plotCycles = False, plotPeaks = False, 
                      labelCycles = []):
