@@ -59,12 +59,12 @@ class CurveBase:
         ----------
         XYData : array
             The input array of XY date for the curve.
-        AreaFunction : function, optional
+        areaFunction : function, optional
             The function to be used to calcualte area. 
-            The default is defaultAreaFunction.
+            The default is defaultareaFunction.
         slopefunction : function, optional
             The function to be used to calcualte slope. 
-            The default is defaultAreaFunction.
+            The default is defaultareaFunction.
         plotfunction : function, optional
             The function to be used to plot the curve. 
             The default is defaultPlotFunction.
@@ -76,11 +76,11 @@ class CurveBase:
         """
         self.xy = XYData
         self.Npoints = len(XYData[:,0])
-        # self.AreaFunction = fArea
+        # self.areaFunction = fArea
         # self.slopefunction = fslope
         # self.plotfunction = fplot
         
-        self.AreaFunction = env.environment.fArea
+        self.areaFunction = env.environment.fArea
         self.slopefunction = env.environment.fslope
         self.plotfunction = env.environment.fplot
         
@@ -116,8 +116,8 @@ class CurveBase:
         
     def setArea(self):
         """ sets the area under each point of the curve using the area function"""
-        self.Area = self.AreaFunction(self.xy)
-        return self.Area
+        self.area = self.areaFunction(self.xy)
+        return self.area
     
     def getCumDisp(self):
         """ Gets the absolute value of cumulative displacement of the curve at each x value.
@@ -125,36 +125,36 @@ class CurveBase:
         dx = np.diff(self.xy[:,0])
         return np.append(0, np.cumsum(np.abs(dx)))
     
-    def getNetCumDisp(self, StartIndex = 0, EndIndex = 0):
+    def getNetCumDisp(self, startIndex = 0, endIndex = 0):
         """ Gets the total cumulative displacement between the start and start and end 
         indexes. By default the whole curve us used.
         """
         x = self.xy[:,0]
         dx = np.append(0, np.diff(self.xy[:,0]))
         
-        if EndIndex == 0:
-            EndIndex = self.Npoints
+        if endIndex == 0:
+            endIndex = self.Npoints
                    
-        return np.sum(np.abs(dx[StartIndex:EndIndex]))
+        return np.sum(np.abs(dx[startIndex:endIndex]))
     
     def getCumArea(self):
         """ Gets the cumulative area under the curve for the entire curve
         """
-        Area = self.Area
+        Area = self.area
         return np.cumsum(Area)
     
-    def getNetArea(self, StartIndex = 0, EndIndex = 0):
+    def getNetArea(self, startIndex = 0, endIndex = 0):
         """
         Returns the net area between two indexes in the xy curve. The default 
         setting is to return the area for the whole cuve.
 
         """
-        Area = self.Area
+        Area = self.area
 
-        if EndIndex == 0:
-            EndIndex = self.Npoints
+        if endIndex == 0:
+            endIndex = self.Npoints
                    
-        return np.sum(Area[StartIndex:EndIndex])
+        return np.sum(Area[startIndex:endIndex])
            
     def setSlope(self):
         """
@@ -164,7 +164,7 @@ class CurveBase:
         
         # Calculate end point slope
         xy = self.xy
-        self.Slope  = self.slopefunction(xy)
+        self.slope  = self.slopefunction(xy)
     
     def setPeaks(self, peakDist = 2, peakWidth = None, peakProminence = None):
         """
@@ -172,7 +172,7 @@ class CurveBase:
         """
         
         y = self.xy[:,1]
-        peakIndexes = data.GetCycleIndicies(y, peakDist, peakWidth, peakProminence)        
+        peakIndexes = data.getCycleIndicies(y, peakDist, peakWidth, peakProminence)        
         self.peakIndexes = peakIndexes
         
         xy = self.xy
@@ -222,14 +222,14 @@ class CurveBase:
                   labelCycles = []):
         
         x = self.xy[:,0]
-        y = self.Slope
+        y = self.slope
 
         self.plotfunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
                 
     def plotArea(self,  plotCycles = False, plotPeaks = False, labelCycles = []):
         
         x = self.xy[:,0]
-        y = self.Area
+        y = self.area
 
         self.plotfunction(self, x ,y, plotCycles, plotPeaks, labelCycles)  
                         
@@ -310,7 +310,7 @@ class Hysteresis(CurveBase):
         self.setReversalPropreties(revDist, revWidth, revProminence)
         
         x = self.xy[:,0]
-        self.reversalIndexes = data.GetCycleIndicies(x, revDist, revWidth, revProminence)
+        self.reversalIndexes = data.getCycleIndicies(x, revDist, revWidth, revProminence)
         self.loadProtocol = x[self.reversalIndexes]
 
     def getReversalxy(self):
@@ -331,25 +331,25 @@ class Hysteresis(CurveBase):
             # I forget why we overshoot the cycles here by one
             Cycles[ii] = SimpleCycle(xy[indices[ii]:(indices[ii+1]+1), :])
                        
-        self.Cycles = Cycles
+        self.cycles = Cycles
         self.NCycles = NIndex
         self.NCycles = len(Cycles)
     
     def getCycles(self, Indicies):
         """ Returns a list of cycles given a list of indicies"""
-        Cycles = [self.Cycles[index] for index in Indicies]
+        Cycles = [self.cycles[index] for index in Indicies]
         return Cycles      
     
     def getCycle(self, Index):
         """ Returns a list of cycles given a input index"""
-        return self.Cycles[Index]
+        return self.cycles[Index]
 
     def setCycleNetAreas(self):
         """ Calculates the net area under each cycle."""
         areas = np.zeros(self.NCycles)
-        for ii, vector in enumerate(self.Cycles):
+        for ii, vector in enumerate(self.cycles):
             # Skip the last point to avoid counting it twice!
-            areas[ii] = vector.getNetArea(EndIndex = -1)
+            areas[ii] = vector.getNetArea(endIndex = -1)
             
         self.CycleAreas = areas
 
@@ -359,14 +359,14 @@ class Hysteresis(CurveBase):
 
     def plotCycle(self, Index, plotPeaks = False):
         """ Plots a specific cycle."""
-        Cycle = self.Cycles[Index]
+        Cycle = self.cycles[Index]
         return Cycle.plot(plotPeaks = plotPeaks)
 
     def plotCycles(self, Cycles = [], plotCycles = False, plotPeaks = False, 
                     labelCycles = []):
         """ Plots several cycles on the same figure """
         xyHys = self.xy
-        Vectors = self.Cycles
+        Vectors = self.cycles
         # fig, ax = initializeFig(xlim, ylim)
         
         self.showCycles(self, xyHys[:,0], xyHys[:,1], plotCycles, plotPeaks, labelCycles, Cycles)
@@ -511,7 +511,7 @@ class SimpleCycle(CurveBase):
         for ii in range(NIndex):
             SubCycles[ii] = MonotonicCurve(xy[indices[ii]:(indices[ii+1]+1), :])
                        
-        self.SubCycles = SubCycles
+        self.subCycles = SubCycles
         self.NsubCycles = len(SubCycles)
         
         
@@ -520,7 +520,7 @@ class SimpleCycle(CurveBase):
         Sets the net area for all SubCycles
         """
         try:
-            SubCycles = self.SubCycles
+            SubCycles = self.subCycles
         except:
             raise Exception('No SubCycles not yet set')
             
@@ -532,7 +532,7 @@ class SimpleCycle(CurveBase):
         Sets the net area for all MonotonicCurves
         """
         try:
-            SubCycles = self.SubCycles
+            SubCycles = self.subCycles
         except:
             raise Exception('SubCycles not yet set')
             
@@ -540,16 +540,16 @@ class SimpleCycle(CurveBase):
             SubCycle.setSlope()       
       
     def getSubCycles(self, Indicies):
-        SubCycles = [self.SubCycles[index] for index in Indicies]
+        SubCycles = [self.subCycles[index] for index in Indicies]
         return SubCycles      
     
     def getSubCycle(self, Index):
-        return self.SubCycles[Index]
+        return self.subCycles[Index]
      
     def plotSubCycles(self, SubCyclesIndicies = [], plotCycles = False, plotPeaks = False):
         
         xyMono = self.xy
-        Vectors = self.SubCycles
+        Vectors = self.subCycles
         
         self.showCycles(self, xyMono[:,0], xyMono[:,1], plotCycles, plotPeaks)
         

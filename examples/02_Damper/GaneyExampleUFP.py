@@ -97,8 +97,8 @@ You can subsitute your own function to estimate area or slope if you'd like!
 Area = DamperHys.Area
 NetArea = DamperHys.getNetArea()
 
-Slope = DamperHys.Slope
-Cycle1 = DamperHys.Cycles[1]
+Slope = DamperHys.slope
+Cycle1 = DamperHys.cycles[1]
 
 curvexy = Cycle1.xy
 

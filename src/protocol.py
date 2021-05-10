@@ -94,11 +94,11 @@ def exandHysTrace(hysteresis, loadProtocolNcycles, skipStart = 1,
 
     # TODO: Consider making a copy, this may be unsafe.
     # Get the cycles to be expanded
-    Cycles = hysteresis.Cycles
-    # NcyclesHys = len(Cycles)
+    cycles = hysteresis.cycles
+    # NcyclesHys = len(cycles)
     
     # Skip the requested start and end cycles.
-    toExpand = Cycles[skipStart:]
+    toExpand = cycles[skipStart:]
     if skipEnd != 0 :
         toExpand = toExpand[:-skipEnd]
     
@@ -127,15 +127,15 @@ def exandHysTrace(hysteresis, loadProtocolNcycles, skipStart = 1,
     nn = 0
     mm = 0
     # The first cycles are unchanged
-    xyList[:skipStart] = Cycles[:skipStart]
+    xyList[:skipStart] = cycles[:skipStart]
     
     nn += skipStart
     mm += skipStart
     # All other cycles are expanded
     for Ncycles in loadProtocolNcycles:
         # Get the negative, positive, and positive exit cycles
-        CycleNeg = Cycles[nn]
-        CyclePosExit = Cycles[nn + 1]
+        CycleNeg = cycles[nn]
+        CyclePosExit = cycles[nn + 1]
         CyclePos = getReturnCycle(CycleNeg, CyclePosExit)
 
         # get the secondary cycles
@@ -154,7 +154,7 @@ def exandHysTrace(hysteresis, loadProtocolNcycles, skipStart = 1,
         nn += 2
     
     if skipEnd != 0 :
-        xyList[-skipEnd:] = Cycles[-skipEnd:]
+        xyList[-skipEnd:] = cycles[-skipEnd:]
 
     return concatenateHys(*xyList)
 

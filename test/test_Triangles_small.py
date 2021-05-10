@@ -41,7 +41,7 @@ def test_plot_Slope(monkeypatch):
 
 def test_Slope():
     smallTriangles.setSlope()
-    slope = smallTriangles.Slope
+    slope = smallTriangles.slope
     assert abs(slope[-1] - -1.8189136353358175) < 10**-5
 
 def test_Area():

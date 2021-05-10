@@ -5,7 +5,7 @@ from numpy import trapz
 from scipy.interpolate import interp1d
 from hysteresis import data
 
-from .data import LinearInterpolation
+from .data import linearInterpolation
 from .baseClass import Hysteresis, SimpleCycle
 from .defaultDataFuncs import defaultAreaFunction, defaultSlopeFunction
 from .defaultPlotFuncs import initializeFig, defaultPlotFunction, defaultShowCycles
@@ -253,7 +253,7 @@ def _linInterpolateY(xy, yinter, Index):
     x1 = xy[Index - 1,0]
     x2 = xy[Index    ,0]
     
-    return LinearInterpolation(y1,y2,x1,x2,yinter)
+    return linearInterpolation(y1,y2,x1,x2,yinter)
 
 # =============================================================================
 # Fit EEEP

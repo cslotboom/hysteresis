@@ -30,7 +30,7 @@ def test_notchedTriangles_peaks():
 
 def test_notchedTriangles_Slope():
     notchedTriangles.setSlope()
-    slope = notchedTriangles.Slope
+    slope = notchedTriangles.slope
    
     assert abs(slope[-1] - -0.54567409060066) < 10**-8
 

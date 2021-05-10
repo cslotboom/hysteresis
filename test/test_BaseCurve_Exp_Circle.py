@@ -37,7 +37,7 @@ def test_Circle_SLope():
     ind = np.argmin( abs(x - 0.5))
     testSlope = -x[ind] / (1 - x[ind]**2)**0.5
     
-    Slope2 = Cycle1.Slope[ind]
+    Slope2 = Cycle1.slope[ind]
     
     assert abs(testSlope - Slope2) < 10**-5
 
@@ -55,7 +55,7 @@ def test_Circle_Subvector_Plot(monkeypatch):
     monkeypatch.setattr(plt, 'show', lambda: None)
     
     Circle = MakeCircle()
-    Vector1 = Circle.Cycles[0]
+    Vector1 = Circle.cycles[0]
     Vector2 = hys.resample(Vector1, 30)
     Vector3 = hys.resample(Circle, 10)
     

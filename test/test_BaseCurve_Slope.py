@@ -21,7 +21,7 @@ def function3(x):
 def test_Curve1_Area():
     Curve = makeCurveBase(function1)
     Curve.setSlope()
-    slope = Curve.Slope
+    slope = Curve.slope
     
     test1 = (abs(slope[0] - 1) < 0.0001)
     test2 = (abs(slope[-1] - 1) < 0.0001)
@@ -32,7 +32,7 @@ def test_Curve1_Area():
 def test_Curve2_Area():
     Curve = makeCurveBase(function2)
     Curve.setSlope()
-    slope = Curve.Slope
+    slope = Curve.slope
     
     test1 = (abs(slope[0] - 0) < 0.05)
     test2 = (abs(slope[-1] - 24) < 0.05)
@@ -43,7 +43,7 @@ def test_Curve2_Area():
 def test_Curve3_Area():
     Curve = makeCurveBase(function3)
     Curve.setSlope()
-    slope = Curve.Slope
+    slope = Curve.slope
 
     test1 = (abs(slope[0] - 1) < 0.01)
     test2 = (abs(slope[-1] - (np.e)**4) < 0.2)

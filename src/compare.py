@@ -81,18 +81,18 @@ def compareHys(Hys1, Hys2):
         raise Exception("Hysteresis don't have a similar number of Cycles.")    
     # Check both hystesis have the same number of reversals
     
-    Cycles1 = Hys1.Cycles
-    Cycles2 = Hys2.Cycles
+    Cycles1 = Hys1.cycles
+    Cycles2 = Hys2.cycles
     
     NCycles = Hys1.NCycles
     
-    CycleDiffs = [None]*NCycles
+    cycleDiffs = [None]*NCycles
     for ii in range(NCycles):
-        CycleDiffs[ii]= compareCycle(Cycles1[ii], Cycles2[ii])
+        cycleDiffs[ii]= compareCycle(Cycles1[ii], Cycles2[ii])
         
-    netdiff = combineDiff(CycleDiffs)
+    netdiff = combineDiff(cycleDiffs)
 
-    return netdiff, CycleDiffs
+    return netdiff, cycleDiffs
     
 
 

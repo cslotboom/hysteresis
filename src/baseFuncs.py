@@ -63,7 +63,7 @@ def concatenateHys(*argv):
 # resample functions
 # =============================================================================
 
-def _LinInterpolate(x,y, Nsamples):
+def _linInterpolate(x,y, Nsamples):
     """
     A linear interpolation function that takes a target input curve to a 
     target sample curve. The sample curve goes between x0 and xN with Nsamples.

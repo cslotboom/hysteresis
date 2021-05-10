@@ -15,7 +15,7 @@ TODO
 
 
 
-def GetCycleSubVector(VectorX, VectorY, Index1, Index2, Nsample):
+def getCycleSubVector(VectorX, VectorY, Index1, Index2, Nsample):
     """
       
     
@@ -62,7 +62,7 @@ def GetCycleSubVector(VectorX, VectorY, Index1, Index2, Nsample):
     return xSample,ySample
         
     
-def GetCycleIndicies(VectorX, peakDist = 2, peakWidth = None, 
+def getCycleIndicies(VectorX, peakDist = 2, peakWidth = None, 
                      peakProminence = None, VectorY = np.array([]), CreatePlot = False):
     """
     This function finds the index where there is areversal in the XY data. 
@@ -179,7 +179,7 @@ def GetCycleIndicies(VectorX, peakDist = 2, peakWidth = None,
     return Indexes
 
 
-def LinearInterpolation(x1, x2, y1, y2, x):
+def linearInterpolation(x1, x2, y1, y2, x):
     """
     A default linear interpolation functions for the value x between two points
     p1 = (x1,y1) and p2 = (x2,y2). 
@@ -209,7 +209,7 @@ def LinearInterpolation(x1, x2, y1, y2, x):
 
 
 
-def SampleData(ExperimentX, ExperimentY, AnalysisX, AnalysisY, Nsample = 10, 
+def sampleData(ExperimentX, ExperimentY, AnalysisX, AnalysisY, Nsample = 10, 
                peakDist = 2, peakwidth = None, Norm = None):
     """
         
@@ -245,8 +245,8 @@ def SampleData(ExperimentX, ExperimentY, AnalysisX, AnalysisY, Nsample = 10,
        
     # We get the indicies where the reversal happens.
     
-    ExperimentIndicies = GetCycleIndicies(ExperimentX, Nsample, peakDist, peakwidth, ExperimentY)
-    AnalysisIndicies = GetCycleIndicies(AnalysisX, Nsample, peakDist, peakwidth, AnalysisY)
+    ExperimentIndicies = getCycleIndicies(ExperimentX, Nsample, peakDist, peakwidth, ExperimentY)
+    AnalysisIndicies = getCycleIndicies(AnalysisX, Nsample, peakDist, peakwidth, AnalysisY)
     
     # We check that both curves have the same number of indicies
     NIndex = len(ExperimentIndicies) - 1
@@ -266,8 +266,8 @@ def SampleData(ExperimentX, ExperimentY, AnalysisX, AnalysisY, Nsample = 10,
         Ay = np.zeros(NIndex)
         
         # We get the subvector values between the indicies
-        [Ex,Ey] = GetCycleSubVector(ExperimentX , ExperimentY, ExperimentIndicies[ii], ExperimentIndicies[ii+1], Nsample)
-        [Ax,Ay] = GetCycleSubVector(AnalysisX , AnalysisY, AnalysisIndicies[ii], AnalysisIndicies[ii+1], Nsample)
+        [Ex,Ey] = getCycleSubVector(ExperimentX , ExperimentY, ExperimentIndicies[ii], ExperimentIndicies[ii+1], Nsample)
+        [Ax,Ay] = getCycleSubVector(AnalysisX , AnalysisY, AnalysisIndicies[ii], AnalysisIndicies[ii+1], Nsample)
         
         # We sample each point on the curve using the difference between the
         # two points
@@ -281,7 +281,7 @@ def SampleData(ExperimentX, ExperimentY, AnalysisX, AnalysisY, Nsample = 10,
     return Rnet
 
 
-def SampleMonotonicData(ExperimentX, ExperimentY, AnalysisX, AnalysisY,
+def sampleMonotonicData(ExperimentX, ExperimentY, AnalysisX, AnalysisY,
                         Nsample = 10, Norm = None):
     """
     This functions works the same way as the cyclic data function
@@ -318,8 +318,8 @@ def SampleMonotonicData(ExperimentX, ExperimentY, AnalysisX, AnalysisY,
         Ay = np.zeros(Nsample)
         
         
-        [Ex,Ey] = GetCycleSubVector(ExperimentX , ExperimentY, 0, Nindex, Nsample)
-        [Ax,Ay] = GetCycleSubVector(AnalysisX , AnalysisY, 0, Nindex, Nsample)
+        [Ex,Ey] = getCycleSubVector(ExperimentX , ExperimentY, 0, Nindex, Nsample)
+        [Ax,Ay] = getCycleSubVector(AnalysisX , AnalysisY, 0, Nindex, Nsample)
         
         R[ii] = np.sum(((Ey-Ay)**2 + (Ex-Ax)**2)**0.5)
         if Norm == None:
@@ -339,7 +339,7 @@ def SampleMonotonicData(ExperimentX, ExperimentY, AnalysisX, AnalysisY,
 # =============================================================================
 
 
-def ShiftDataFrame1(Samplex, Sampley, Targetx):
+def shiftDataFrame1(Samplex, Sampley, Targetx):
     """
     
     SciPy's ID interpolate baseically does what this does, it probably makes
@@ -434,7 +434,7 @@ def ShiftDataFrame1(Samplex, Sampley, Targetx):
                
         
         # Interpolate
-        Targety[ii] = LinearInterpolation(x1,x2,y1,y2,x)
+        Targety[ii] = linearInterpolation(x1,x2,y1,y2,x)
         
         ii+=1
         

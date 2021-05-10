@@ -58,7 +58,7 @@ def test_plot_Slope(monkeypatch):
     
     monkeypatch.setattr(plt, 'show', lambda: None)   
     DamperHys = hys.Hysteresis(testHys2)  
-    slope = DamperHys.Slope
+    slope = DamperHys.slope
     DamperHys.plotSlope()
     plt.close()
     

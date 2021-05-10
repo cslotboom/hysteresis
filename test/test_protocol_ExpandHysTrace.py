@@ -19,7 +19,7 @@ def test_expandHysTrace():
     curve = makeCurveBase()
     expand = hys.exandHysTrace(curve, [2])
     
-    assert len(expand.Cycles) == 6
+    assert len(expand.cycles) == 6
 
 
 

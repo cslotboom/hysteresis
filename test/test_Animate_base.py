@@ -7,7 +7,7 @@ Created on Sat May  1 23:49:09 2021
 
 
 import numpy as np
-import hysteresis.Animate.core as ani
+import hysteresis.plotSpecial.animate as ani
 import hysteresis as hys
 import scipy
 

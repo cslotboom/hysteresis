@@ -7,18 +7,26 @@ Created on Fri Aug 21 23:47:36 2020
 import hysteresis as hys
 import numpy as np
 import matplotlib.pyplot as plt
-
         
 disp = np.loadtxt('UFP_Disp.out',delimiter=' ')
 force = np.loadtxt('UFP_RFrc.out',delimiter=' ')
 testHys2 = np.column_stack([disp[:,1], -force[:,1]])
 
+DamperHys = hys.Hysteresis(testHys2) 
+# DamperHys.plot(True)
+
+# viewer = ani.CycleViewer(DamperHys)
+viewer = ani.CycleViewerCum(DamperHys)
+
+# ani.CycleViewer(DamperHys)
+# viewer.updateplt(0)
+# viewer.updateplt(0)
 
 def test_plot_Slope():
     """ Tests if the slope is the correct value"""
 
     DamperHys = hys.Hysteresis(testHys2)  
-    slope = DamperHys.slope
+    slope = DamperHys.Slope
     
     assert abs(slope[-2] - 40499.99999999157) < 10**-5
     
