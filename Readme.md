@@ -1,4 +1,4 @@
-<h1 align = "Left">Hysteresis: Tools for Non-functional curves.</h1>
+<h1 align = "Left">Hysteresis: Tools for Non-functional Curves.</h1>
 
 
 Hysteresis is a library of tools for non-functional curves, with an emphasis on force-deformation hysteresis curves.
