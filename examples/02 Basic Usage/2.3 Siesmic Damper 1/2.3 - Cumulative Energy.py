@@ -2,6 +2,9 @@
 """
 Created on Fri Sep  4 22:19:58 2020
 
+An example of finding the energy in a seismic damper.
+
+
 @author: Christian
 """
 
@@ -39,11 +42,10 @@ hysTrace.plotCycles()
 
 # Expand the hysteresis trace
 hysProt = hysTrace.loadProtocol
-cycles = hysTrace.Cycles
+cycles = hysTrace.cycles
 FullHys = hys.exandHysTrace(hysTrace, LoadProtocol[3:,2], skipStart = 1, skipEnd = 3)
-# FullHys.plotLoadProtocol(comparisonProtocol = LoadProtocol[:,1])
 
-
+# Get cumulative area and displacement.
 cumulativex = FullHys.getCumDisp()
 netDisp = FullHys.getNetCumDisp()
 cumulativeArea = FullHys.getCumArea()
@@ -51,7 +53,6 @@ cumulativeArea = FullHys.getCumArea()
 
 fig, ax = FullHys.initFig()
 FullHys.plotCumArea(True)
-# ax.plot(Energy[:,0],Energy[:,1])
 ax.set_xlabel('Cumulative Deformation (mm)')
 ax.set_ylabel('Energy (kNm)')
 plt.minorticks_on()

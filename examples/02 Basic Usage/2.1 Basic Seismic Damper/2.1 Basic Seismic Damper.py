@@ -82,7 +82,6 @@ fig, ax = DamperHys.initFig()
 Cycle = DamperHys.getCycle(1)
 Cycle.plot()
 DamperHys.plotCycles(plotCycles = True)
-# DamperHys.plotCycles([0,1,5,18,19], True, labelCycles = [0,1,5,18,19])
 
 
 """
@@ -94,7 +93,7 @@ Note that slope is undefined at reversal points.
 You can subsitute your own function to estimate area or slope if you'd like!
 """
 
-Area = DamperHys.Area
+Area = DamperHys.area
 NetArea = DamperHys.getNetArea()
 
 Slope = DamperHys.slope
@@ -109,9 +108,7 @@ the total energy added to a system.
 
 """
 fig, ax = DamperHys.initFig()
-# DamperHys.plotCumArea()
 DamperHys.plotCumArea(True, labelCycles = [0, 5, 10, 15, 20])
-# fig, ax = DamperHys.plotArea(True, labelCycles = [0, 5, 10, 15, 20])
 
 
 ax.set_xlabel('Cumulative Deformation (mm)')
@@ -120,36 +117,13 @@ plt.minorticks_on()
 ax.grid(which='major', color='grey', linewidth=0.5, alpha = 0.8)
 ax.grid(b=True, which='minor', linewidth=0.5, alpha = 0.4)
 
-# DamperHys.plot(True, labelCycles = 'all')
 
-# =============================================================================
-# Test hysteresis, Ganey 2
-# =============================================================================
+"""
+We can also make a plot with labels!
+"""
+
 
 DamperHys = hys.Hysteresis(testHys2)
 fig, ax = DamperHys.initFig()
 DamperHys.plot(plotCycles = True, labelCycles = [17,18,19,23])
-# DamperHys.plotCycles(plotCycles = True, labelCycles = [3,6,8])
-# DamperHys.plotCycles([0,1])
-# slope = DamperHys.Slope
-# DamperHys.plotSlope()
-# DamperHys.plotArea()
 
-# Cycle = DamperHys.getCycle(20)
-# Cycle.setSlope()
-
-# Cycle.plotSlope()
-
-# DamperHys.plotCycles([2,3])
-# DamperHys.plotCycles([4,5])
-# DamperHys.plotCycles([6,7])
-
-# # DamperHys.plotCycle(1)
-
-# xy = DamperHys.xy
-# reversalIndexes = DamperHys.reversalIndexes
-# Curve = DamperHys.getCycle(1)
-# curvexy = Curve.xy
-# # reversalIndexes
-
-# A = DamperHys.getNetArea()
