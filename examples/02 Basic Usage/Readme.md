@@ -1,4 +1,4 @@
-<h1 align = "Left">Baasic Examples.</h1>
+<h1 align = "Left">Basic Examples.</h1>
 
 
 The following examples show basic usage of the Hysteresis objects:
