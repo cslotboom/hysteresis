@@ -61,7 +61,8 @@ def compareHys(Hys1, Hys2):
         The second Hysteresis object.
     combineDiff : function, optional
         The function used to combine the differences for each cycle into a 
-        single value. The default is defaultCombineDiff.
+        single value. The default is defaultCombineDiff, which is the average
+        distance between each point.
 
 
     Returns
@@ -75,8 +76,7 @@ def compareHys(Hys1, Hys2):
     
     combineDiff = env.environment.fCombineDiff
 
-    
-    
+
     if Hys1.NCycles != Hys2.NCycles:
         raise Exception("Hysteresis don't have a similar number of Cycles.")    
     # Check both hystesis have the same number of reversals

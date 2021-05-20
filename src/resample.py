@@ -31,7 +31,6 @@ def resample(curve, Nsamples):
     """  
         
     # We recursively resample by calling the function again for sub-cycle objects
-    
     # if the curve is a SimpleCycle
     if isinstance(curve, SimpleCycle):
     

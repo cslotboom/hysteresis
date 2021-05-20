@@ -25,7 +25,7 @@ class GUIBase:
         fig, ax = init_gui()
         self.fig = fig
         self.ax = ax
-        
+        pass
         
     def addNextBtns(self):
         
@@ -36,7 +36,11 @@ class GUIBase:
         self.bprev = Button(self.axprev, 'Previous')
         self.bprev.on_clicked(self.plotPrev)
         
-
+    def setlims(self, xlims,ylims):
+        if xlims != []:
+            self.ax.set_xlim(*xlims)
+        if ylims != []:
+            self.ax.set_xlim(*ylims)            
 
 class CycleViewer(GUIBase):
 
@@ -103,7 +107,7 @@ class CycleViewer(GUIBase):
 
     plotMethods = {}
     
-    def __init__(self, hysteresis, plotMethod = 0):
+    def __init__(self, hysteresis, plotMethod = 0, xlims=[],ylims = []):
         """
         An interactive  figures to be plotted 
         
@@ -128,6 +132,8 @@ class CycleViewer(GUIBase):
         
         
         super().__init__()
+        self.setlims(xlims,ylims)
+        
         
         # Chhose the plot method
         self.plotMethod = plotMethod 
@@ -136,7 +142,7 @@ class CycleViewer(GUIBase):
         
         # Store the data.
         self.hysteresis = hysteresis
-        self.curves = np.array(hysteresis.Cycles)
+        self.curves = np.array(hysteresis.cycles)
         # print(self.curves)
         
         # self.ind = np.array([0],dtype=int)
@@ -199,7 +205,8 @@ class CycleViewer(GUIBase):
         self.ind = (self.ind - 1) % self.Ncurves
         self.updateplt(self.ind)
 
-
+    # def plot():
+    #     plt.show()
 
     # def CyclePlot()
     

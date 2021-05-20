@@ -205,7 +205,7 @@ class CurveBase:
 
     def plotLoadProtocol(self, comparisonProtocol = []):
         """
-        Plots the load protcol of the curve.
+        Plots the peak x values for each cycle in acurve.
         """           
         plotCycles = False
         plotPeaks = False
