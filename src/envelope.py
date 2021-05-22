@@ -128,7 +128,6 @@ def getBackboneCurve(hysteresis, LPsteps = [], returnPeaks = False,  returnEnd =
     # Get a slice of the reversal indexes
     reversalIndexes = hysteresis.reversalIndexes
     xyPoints = hysteresis.xy[reversalIndexes]
-    # xyPosInd = np.where(0 <= xyPoints[:,0])[0]
     
     diff = np.diff(xyPoints[:,0])
     xyPosInd = np.where(0 <= diff)[0] + 1
