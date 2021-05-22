@@ -8,11 +8,6 @@ import matplotlib.pyplot as plt
 from scipy.signal import find_peaks
 from scipy.interpolate import interp1d
 
-"""
-TODO
-    Consider removing ShiftDataFrame - I don't think this us used anymore
-"""
-
 
 
 def getCycleSubVector(VectorX, VectorY, Index1, Index2, Nsample):
@@ -60,10 +55,45 @@ def getCycleSubVector(VectorX, VectorY, Index1, Index2, Nsample):
     ySample = InterpFunction(xSample)
           
     return xSample,ySample
-        
+
+
+def getMaxIndicies(VectorX, peakDist = 2, peakWidth = None, 
+                     peakProminence = None, **kwargs):
+    MaxIndexes,_ = find_peaks(VectorX, height = (None, None), distance = peakDist, 
+                            width = peakWidth, prominence = peakProminence, **kwargs)
+
+    Nindex = len(MaxIndexes) + 2
+    Indexes = np.zeros(Nindex, dtype = int)
+    Indexes[0] = 0
+    Indexes[-1] = len(VectorX) - 1
     
+    Indexes[1:-1] = MaxIndexes
+
+    return Indexes
+
+
+
+
+def _findOrder(L1, L2, MinIndexes, MaxIndexes):
+    # We check the order, starting with the minimum number of possibilities
+    # if there are no minimus, order doesn't matter
+    # If the first index is a minimum, order = 1, otherwise order = 2
+    if L1 == 0 and L2 == 0: # Edge case 1: Curve is monotonic - order doesn't matter
+        order = 1
+    elif L1 == 0: # Edge case 2: There are no intermediate min points and one intermediate max
+        order = 2
+    elif L2 == 0: # Edge case 3: There are no intermediate maxi points and one intermediate min
+        order = 1
+    elif MinIndexes[0] < MaxIndexes[0]: 
+        order = 1
+    else:
+        order = 2
+    return order
+
+
+
 def getCycleIndicies(VectorX, peakDist = 2, peakWidth = None, 
-                     peakProminence = None, VectorY = np.array([]), CreatePlot = False):
+                     peakProminence = None, **kwargs):
     """
     This function finds the index where there is areversal in the XY data. 
     You may need to adjust the find peaks factor to get satisfactory results.
@@ -100,21 +130,7 @@ def getCycleIndicies(VectorX, peakDist = 2, peakWidth = None,
     # the max and min values in an array of indexes
     Nindex = len(MaxIndexes) + len(MinIndexes) + 2
     Indexes = np.zeros(Nindex, dtype = int)
-    
-    
-    # # If no value was found, we assume monotonic
-    # if not MaxIndex: 
-    #     print('No local peaks were found, assuming x data is monotonic.')
-    #     Nindex = 2
-    #     MinIndex = [0]
-    #     MaxIndex = [len(VectorX) - 1]
-    #     Indexes = np.zeros(Nindex, dtype = int)
-    
-    # plt.plot(VectorX)
-    # plt.plot(MaxIndexes,VectorX[MaxIndexes], 'x')
-    # plt.plot(MinIndexes,VectorX[MinIndexes], '+')
-    # plt.show()
-    
+       
     # Define first and last point
     Indexes[0] = 0
     Indexes[-1] = len(VectorX) - 1
@@ -125,23 +141,10 @@ def getCycleIndicies(VectorX, peakDist = 2, peakWidth = None,
     
     if abs(L1 - L2) > 1:
         raise Exception('There are', L1, 'minimums which is more than one than ', L2, ' maximums. There are likely repeated peaks.')
-        
     
-    # We check the order, starting with the minimum number of possibilities
-    # if there are no minimus, order doesn't matter
-    # If the first index is a minimum, order = 1, otherwise order = 2
-    if L1 == 0 and L2 == 0: # Edge case 1: Curve is monotonic - order doesn't matter
-        order = 1
-    elif L1 == 0: # Edge case 2: There are no intermediate min points and one intermediate max
-        order = 2
-    elif L2 == 0: # Edge case 3: There are no intermediate maxi points and one intermediate min
-        order = 1
-    elif MinIndexes[0] < MaxIndexes[0]: 
-        order = 1
-    else:
-        order = 2
+    # 1 means min first, 2 means max first
+    order = _findOrder(L1, L2, MinIndexes, MaxIndexes)
     
-    # We assign the order. We also check if there are any entries to assign.
     if order == 1:
         Indexes[1:-1:2] = MinIndexes
         if L2 !=0:
@@ -149,32 +152,8 @@ def getCycleIndicies(VectorX, peakDist = 2, peakWidth = None,
     else:
         Indexes[1:-1:2] = MaxIndexes
         if L1 !=0:
-            Indexes[2:-1:2] = MinIndexes
-    
-    # make a picture if it is true
-    if CreatePlot == True:
-        if VectorY.size == 0:
-            VectorY = VectorX
-        
-        MaxValueXValue = VectorX[Indexes]
-        MaxValueYValue = VectorY[Indexes]        
-
-        fig = plt.subplots()
-        line  = plt.plot(Indexes,MaxValueYValue,'x')
-        # line  = plt.plot(MaxIndex,MaxValueYpos,'x')
-        # line  = plt.plot(MinIndex,MaxValueYneg,'x')
-        
-        line2  = plt.plot(VectorY[:])
-        plt.title('Peak Indexes')
-        plt.show()
-        
-        
-        fig = plt.subplots()        
-        line2  = plt.plot(VectorX,VectorY)
-        line  = plt.plot(MaxValueXValue,MaxValueYValue,'x')
-        plt.title('Peak Index x values')
-        plt.show()
-    
+            Indexes[2:-1:2] = MinIndexes      
+ 
     
     return Indexes
 
@@ -440,3 +419,8 @@ def shiftDataFrame1(Samplex, Sampley, Targetx):
         
     return Targety
 
+
+"""
+TODO
+    Consider removing ShiftDataFrame - I don't think this us used anymore
+"""

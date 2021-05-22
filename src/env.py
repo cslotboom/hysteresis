@@ -1,6 +1,7 @@
 
 from .defaultDataFuncs import (defaultAreaFunction, defaultSlopeFunction, 
-                                defaultSampleFunction, defaultCombineDiff)
+                                defaultSampleFunction, defaultCombineDiff,
+                                defaultLengthFunction)
 
 from .defaultPlotFuncs import initializeFig, defaultPlotFunction, defaultShowCycles
 
@@ -21,6 +22,7 @@ class HYSTERESIS_ENVIRONMENT:
         
         self.fslope = defaultSlopeFunction
         self.fArea = defaultAreaFunction
+        self.flength = defaultLengthFunction
         
         self.finit = initializeFig
         self.fplot = defaultPlotFunction

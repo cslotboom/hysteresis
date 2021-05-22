@@ -103,4 +103,9 @@ def test_compare(monkeypatch):
     
 #     assert True == True
 
+ExpHys,AnalHys= getHys()
 
+ExpHys.plot(True)
+plt.close()
+AnalHys.plot(True) 
+plt.close()

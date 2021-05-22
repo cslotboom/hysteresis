@@ -7,13 +7,17 @@ Created on Fri Aug 21 23:47:36 2020
 import hysteresis as hys
 import numpy as np
 import matplotlib.pyplot as plt
-import scipy
+from  scipy.signal import sawtooth
 from scipy.interpolate import interp1d
 
 x = np.linspace(0, 1, 1000)*10
-triangleSmall = scipy.signal.sawtooth(x*20,0.5)/7
+triangleSmall = sawtooth(x*20,0.5)/7
 trianglexy = np.column_stack((x,triangleSmall))
 smallTriangles = hys.SimpleCycle(trianglexy, findPeaks = True)
+
+
+
+
 
 def test_plot_peaks(monkeypatch):
     monkeypatch.setattr(plt, 'show', lambda: None)
@@ -48,6 +52,9 @@ def test_Area():
     smallTriangles.setArea()
     Anet = smallTriangles.getNetArea()
     assert abs(Anet - 0.004982994450842999) < 10**-8
+
+
+
 
 
 # smallTriangles.setArea()

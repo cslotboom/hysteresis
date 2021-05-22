@@ -2,38 +2,11 @@ import numpy as np
 from numpy import trapz
 
 from scipy.interpolate import interp1d
+from scipy.signal import find_peaks
 from hysteresis import data
-
-
 import hysteresis.env as env
 import matplotlib.pyplot as plt
 
-
-"""
-TODO:
-    For Monotonic curves:
-    Find and time between peaks is optional.
-    Find interesections
-    FInd area nearest to current peak
-"""
-
-
-"""
-TODO:
-    Allow for custom headings:
-    Perhaps a style object?
-
-    Add limitts to the style object?    
-    Make the limits part of the hysteresis object, so they don't need
-    to continually be passed to each funciton.
-"""
-
-
-
-"""
-TODO: Make Plot functions Lamda function, then specialize for slope, area, etc.
-
-"""
 
 
 # =============================================================================
@@ -62,10 +35,10 @@ class CurveBase:
         areaFunction : function, optional
             The function to be used to calcualte area. 
             The default is defaultareaFunction.
-        slopefunction : function, optional
+        slopeFunction : function, optional
             The function to be used to calcualte slope. 
             The default is defaultareaFunction.
-        plotfunction : function, optional
+        plotFunction : function, optional
             The function to be used to plot the curve. 
             The default is defaultPlotFunction.
         xunit : str, optional
@@ -76,16 +49,13 @@ class CurveBase:
         """
         self.xy = XYData
         self.Npoints = len(XYData[:,0])
-        # self.areaFunction = fArea
-        # self.slopefunction = fslope
-        # self.plotfunction = fplot
         
         self.areaFunction = env.environment.fArea
-        self.slopefunction = env.environment.fslope
-        self.plotfunction = env.environment.fplot
+        self.slopeFunction = env.environment.fslope
+        self.lengthFunction = env.environment.flength
+        self.plotFunction = env.environment.fplot
         
         self.initializeFig = env.environment.finit
-        self.plotfunction = env.environment.fplot
         self.showCycles = env.environment.fcycles
         
         self.colorDict = {0:'C0', 1:'C1', 2:'C3'}
@@ -164,8 +134,19 @@ class CurveBase:
         
         # Calculate end point slope
         xy = self.xy
-        self.slope  = self.slopefunction(xy)
-    
+        self.slope  = self.slopeFunction(xy)
+
+    def setLength(self):
+        """
+        Calcuates the slope of the curve at each point.
+        The user can pass in a custom function that calculates the slope.
+        """
+        
+        # Calculate end point slope
+        xy = self.xy
+        self.length  = self.lengthFunction(xy)
+
+
     def setPeaks(self, peakDist = 2, peakWidth = None, peakProminence = None):
         """
         Finds the indexes of max and min points, then stores them.
@@ -190,7 +171,7 @@ class CurveBase:
         x = self.xy[:,0]
         y = self.xy[:,1]
                     
-        return self.plotfunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
+        return self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
                 
     def plotVsIndex(self, plotCycles = False, plotPeaks = False, 
                      labelCycles = []):
@@ -201,7 +182,7 @@ class CurveBase:
         x = np.arange(0,len(self.xy[:,0]))
         y = self.xy[:,0]
                     
-        self.plotfunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
+        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
 
     def plotLoadProtocol(self, comparisonProtocol = []):
         """
@@ -213,10 +194,11 @@ class CurveBase:
         y = self.loadProtocol
         x = np.arange(0,len(y))
                     
-        self.plotfunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
+        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
         
         if len(comparisonProtocol) != 0:
             plt.plot(comparisonProtocol)    
+    
     
     def plotSlope(self,  plotCycles = False, plotPeaks = False, 
                   labelCycles = []):
@@ -224,14 +206,14 @@ class CurveBase:
         x = self.xy[:,0]
         y = self.slope
 
-        self.plotfunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
+        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
                 
     def plotArea(self,  plotCycles = False, plotPeaks = False, labelCycles = []):
         
         x = self.xy[:,0]
         y = self.area
 
-        self.plotfunction(self, x ,y, plotCycles, plotPeaks, labelCycles)  
+        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles)  
                         
     def plotCumArea(self,  plotCycles = False, plotPeaks = False, labelCycles = []):
         
@@ -239,7 +221,7 @@ class CurveBase:
         x = self.getCumDisp()
         y = self.getCumArea()
 
-        self.plotfunction(self, x ,y, plotCycles, plotPeaks, labelCycles)  
+        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles)  
              
     def initFig(self, xlims = [], ylims = []):
         return self.initializeFig(xlims, ylims)
@@ -432,7 +414,7 @@ class Hysteresis(CurveBase):
         
     def recalculateCycles_like(self, sampleHysteresis):
         """
-        Recalulates the peaks of one hysteresis using another the reversal
+        Recalulates the cycles of one hysteresis using another the reversal
         propreties from another hysteresis. Peaks are calculated using scipy's 
         find_peaks function.
         
@@ -456,7 +438,49 @@ class Hysteresis(CurveBase):
         self.setReversalIndexes(revDist, revWidth, revProminence)
         self.setCycles()
         self.setArea()        
-    
+        
+    def recalculateCycles_dist(self, revDist = 2, revWidth = None, 
+                               revProminence = None, **kwargs):
+        """
+        Recalulates the reversals of one hysteresis using another the reversal
+        propreties from another hysteresis. Peaks are calculated using scipy's 
+        find_peaks function.
+        
+        Parameters
+        ----------
+             
+        revDist : number, optional
+            The minimum minimal numbr of indexese (>= 1) in samples between
+            neighbouring peaks. Smaller peaks are removed first until the condition
+            is fulfilled for all remaining peaks.
+        revProminence : number or ndarray or sequence, optional
+            Required prominence of peaks. Either a number, ``None``, an array
+            matching `x` or a 2-element sequence of the former. The first
+            element is always interpreted as the  minimal and the second, if
+            supplied, as the maximal required prominence.
+        revWidth : number or ndarray or sequence, optional
+            Required width of peaks in samples. Either a number, ``None``, an array
+            matching `x` or a 2-element sequence of the former. The first
+            element is always interpreted as the  minimal and the second, if
+            supplied, as the maximal required width.
+        
+        Returns
+        -------
+        None.
+
+        """        
+        
+        
+        try:
+            dxy = self.length
+        except:
+            raise Exception('Length not set yet, set length using .setLength')
+                        
+        self.reversalIndexes = data.getMaxIndicies(dxy, revDist, revWidth, revProminence)
+        self.loadProtocol = self.xy[self.reversalIndexes,0]
+        
+        self.setCycles()
+        self.setArea()           
 
     def RemoveCycles():
         pass
@@ -628,3 +652,30 @@ def findPeakKwargs(**kwargs):
         print('Use of "peakProminence" has been depricated. Instead use "revProminence".')    
     
     # pass
+
+
+"""
+TODO:
+    For Monotonic curves:
+    Find and time between peaks is optional.
+    Find interesections
+    FInd area nearest to current peak
+"""
+
+
+"""
+TODO:
+    Allow for custom headings:
+    Perhaps a style object?
+
+    Add limitts to the style object?    
+    Make the limits part of the hysteresis object, so they don't need
+    to continually be passed to each funciton.
+"""
+
+
+
+"""
+TODO: Make Plot functions Lamda function, then specialize for slope, area, etc.
+
+"""

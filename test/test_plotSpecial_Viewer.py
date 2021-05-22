@@ -17,12 +17,13 @@ testHys2 = np.column_stack([disp[:,1], -force[:,1]])
 DamperHys = hys.Hysteresis(testHys2) 
 # DamperHys.plot(True)
 
-# viewer = ani.CycleViewer(DamperHys)
-# viewer = ani.CycleViewerCum(DamperHys)
+
+def test_CycleViewer(monkeypatch):
+    monkeypatch.setattr(plt, 'show', lambda: None)
+
+    CycleViewer(DamperHys, xlims = [0,20])
+    
+    assert True == True
 
 
-# fig, ax = plt.subplots()
-# ax.set_xlim([0,1])
-CycleViewer(DamperHys, xlims = [0,20])
-# viewer.updateplt(0)
-# viewer.updateplt(0)
+# test_CycleViewer()

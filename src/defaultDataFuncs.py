@@ -145,4 +145,34 @@ def defaultCombineDiff(diffs):
 
 
     
+def defaultLengthFunction(xy):
+    """
+    This function gets the lengths of the line segment between each point in
+    a xy curve.
+    If they are exactly the same it will return a value of zero.
+    The default function returns the average error between each sample point in two arrays of x/y points,
+    xy1 and xy2.
+    
+    Parameters
+    ----------
+    xy1 : array
+        The first input 2D x/y array of points.
+    xy2 : array
+        The second input 2D x/y array of points.
 
+    Returns
+    -------
+    float
+        The average "distance" between each point on the curve. The output quantity is unitless.
+    """
+
+    # xy = self.xy
+    # Get the length of each point 
+    xybase = xy[:-1]
+    xyNext = xy[1:]
+        
+    dyx = np.sum((xybase- xyNext)**2,1)**(0.5)
+
+    # diff = ((x1 - x2)**2 + (y1 - y2)**2)**(0.5)
+    
+    return dyx
