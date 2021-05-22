@@ -376,8 +376,11 @@ class Hysteresis(CurveBase):
        
     def recalculateCycles(self, revDist = 2, revWidth = None, revProminence = None, **kwargs):
         """
-        Calcualtes the cycles again, using the input parameters for distance,
-        width, and prominence. Peaks are calculated using scipy's find_peaks function.
+        Calcualtes the cycles again, using the input parameters for distance 
+        (number of indexes), width (distance on the x axis), and prominence
+        (distance in the y axis).
+        
+        Peaks are calculated using scipy's find_peaks function.
         
         Parameters
         ----------
@@ -442,9 +445,13 @@ class Hysteresis(CurveBase):
     def recalculateCycles_dist(self, revDist = 2, revWidth = None, 
                                revProminence = None, **kwargs):
         """
-        Recalulates the reversals of one hysteresis using another the reversal
-        propreties from another hysteresis. Peaks are calculated using scipy's 
-        find_peaks function.
+        Calcualtes the cycles again, using the input parameters for distance 
+        (number of indexes), width (distance on the x axis), and prominence
+        (distance in the y axis).
+        
+        The instead of the xy curve, the secant length between each point on 
+        the curve is used to find revesal indexes. 
+        Peaks are calculated using scipy's find_peaks function.
         
         Parameters
         ----------
