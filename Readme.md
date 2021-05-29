@@ -10,7 +10,7 @@ Examples can be found here: https://github.com/cslotboom/hysteresis/tree/master/
 
 
 ## Contents
-* [Demo](https://github.com/cslotboom/Hysteresis#demo)
+* [Basic Demo](https://github.com/cslotboom/Hysteresis#demo)
 * [Install](https://github.com/cslotboom/Hysteresis#install)
 * [Features](https://github.com/cslotboom/Hysteresis#features)
 * [Tutorials](https://github.com/cslotboom/Hysteresis#tutorials)
