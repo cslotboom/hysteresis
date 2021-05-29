@@ -21,9 +21,13 @@ Examples can be found here: https://github.com/cslotboom/hysteresis/tree/master/
 ## Basic Demo
 
 Hysteresis objects are created by passing a xy curve to one of the base classes.
-The resulting object has many useful methods that help with analyzing the data. Here we plot the data, seeing the the reversal poitns have been detected.
+The resulting object has many useful methods that help with analyzing the data. Here we plot the data, seeing the the reversal points have been detected.
 
-![Hysteresis demo 1](doc/images/feat/demo.gif)
+<p align="center">
+  <img src="doc/images/feat/demo.gif">
+</p>
+
+
 ```python
 import numpy as np
 import hysteresis as hys
@@ -59,10 +63,16 @@ Using a Hysteresis object, it's possible to find the reversal points in your dat
 Experimental data is often messy, and the Hysteresis package comes with a number of ways to filter the peaks of data.
 
 Filtering peaks in data:
-![Hysteresis demo 1](doc/images/feat/demo2.gif)
+<p align="center">
+  <img src="doc/images/feat/demo2.gif" width="70%" height="70%" >
+</p>
+
 
 Finding reversal points in data ([Ex. 2.1](https://github.com/cslotboom/hysteresis/blob/master/examples/02%20Basic%20Usage/2.1%20Basic%20Seismic%20Damper/2.1%20Basic%20Seismic%20Damper.py)):
-![Hysteresis demo 2](doc/images/feat/demo3.png)
+<p align="center">
+  <img src="doc/images/feat/demo3.png" width="70%" height="70%" >
+</p>
+
 
 ### Easily display data
 All Hysteresis objects come with built in plotting functionality, built off matplotlib. It's possible to plot a variatety of features about the curve, and make publication ready plots.
@@ -84,16 +94,25 @@ cumulativeArea = myHys.getCumArea()
 slope = DamperHys.slope
 ```
 
-![Hysteresis demo 3](doc/images/feat/CumulativeArea_base.png)
-
+<p align="center">
+  <img src="doc/images/feat/CumulativeArea_base.png" width="70%" height="70%" >
+</p>
 ### Down sample a hysteresis:
 It's also possible to reduce the number of points in a curve, using the resample funcitons. These functions use linear interpolation to make a new curve with less data points than the original.
-![Hysteresis demo 3](doc/images/feat/demo4.png)
+<p align="center">
+  <img src="doc/images/feat//demo4.png" width="70%" height="70%" >
+</p>
+
 
 ### Compare two hystereses:
 If two hystereses have the same load protocol, the hysteresis package allows you to "comapre" the curves. This operation will take two hystereses, resample them, then find the average "difference" between each point on the curve. 
-![Hysteresis demo 4](doc/images/feat/compare.png)
+<p align="center">
+  <img src="doc/images/feat//demo5.png" width="70%" height="70%" >
+</p>
 
+<p align="center">
+  <img src="doc/images/feat//demo6.png" width="70%" height="70%" >
+</p>
 
 ***
 ## Tutorials
