@@ -85,10 +85,18 @@ AnalHysDx = hys.resample(AnalHys, NsamplesPerCurve)
 ExpHysDx = hys.resample(ExpHys, NsamplesPerCurve)
 
 fig, ax = plt.subplots()
-AnalHysDx.plot(True)
-ExpHysDx.plot(True)
+line1 = AnalHysDx.plot(True)
+line2 = ExpHysDx.plot(True)
+ax.lines[2].set_color('C3')
+ax.lines[3].set_color('C2')
+ax.set_xlabel('Drift (%)')
+ax.set_ylabel('Force (kN)')
+plt.minorticks_on()
+ax.grid(which='major', color='grey', linewidth=0.5, alpha = 0.8)
+ax.grid(b=True, which='minor', linewidth=0.5, alpha = 0.4)
 
 
+plt.show()
 
 """
 The comparHys function can be used to guage how similar two hystereses are.
@@ -108,7 +116,7 @@ similar/different.
 fig, ax = plt.subplots()
 plt.plot(Diffs)
 ax.set_xlabel('Cycle (#)')
-ax.set_ylabel('Average difference between Curves (kN)')
+ax.set_ylabel('Avg. difference between Curves (unitless)')
 plt.minorticks_on()
 ax.grid(which='major', color='grey', linewidth=0.5, alpha = 0.8)
 ax.grid(b=True, which='minor', linewidth=0.5, alpha = 0.4)
