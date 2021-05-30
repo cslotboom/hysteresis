@@ -108,7 +108,7 @@ def defaultShowCycles(self, x, y, plotCycles, plotPeaks, labelCycles = [], Cycle
             # Annotate = plt.annotate(int(Cycle), xy=(ReversalX[ii], ReversalY[ii]), xytext=(-1, 5), textcoords = 'offset points', fontsize=12)
             # Annotate = plt.annotate(int(ii), xy=(ReversalX[ii], ReversalY[ii]))
 
-def defaultPlotFunction(self, x, y, plotCycles, plotPeaks, labelCycles = []):
+def defaultPlotFunction(self, x, y, plotCycles, plotPeaks, labelCycles = [], **kwargs):
     """
     Parameters
     ----------
@@ -132,7 +132,7 @@ def defaultPlotFunction(self, x, y, plotCycles, plotPeaks, labelCycles = []):
 
     # fig, ax = initializeFig(xlim, ylim)
           
-    line, = plt.plot(x, y)
+    line, = plt.plot(x, y, **kwargs)
        
     defaultShowCycles(self, x, y, plotCycles, plotPeaks, labelCycles)
     

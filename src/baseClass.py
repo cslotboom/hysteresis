@@ -164,17 +164,19 @@ class CurveBase:
             self.minIndexes = peakIndexes[1::2]
             self.maxIndexes = peakIndexes[0::2]    
         
-    def plot(self, plotCycles = False, plotPeaks = False, labelCycles = []):
+    def plot(self, plotCycles = False, plotPeaks = False, labelCycles = [],
+             **kwargs):
         """
         Plots the base curve
         """        
         x = self.xy[:,0]
         y = self.xy[:,1]
                     
-        return self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
+        return self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles,
+                                 **kwargs)
                 
     def plotVsIndex(self, plotCycles = False, plotPeaks = False, 
-                     labelCycles = []):
+                     labelCycles = [], **kwargs):
         """
         Plots the base curve against index (as opposed to X values)
         """          
@@ -182,9 +184,9 @@ class CurveBase:
         x = np.arange(0,len(self.xy[:,0]))
         y = self.xy[:,0]
                     
-        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
+        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles, **kwargs)
 
-    def plotLoadProtocol(self, comparisonProtocol = []):
+    def plotLoadProtocol(self, comparisonProtocol = [], **kwargs):
         """
         Plots the peak x values for each cycle in acurve.
         """           
@@ -194,34 +196,34 @@ class CurveBase:
         y = self.loadProtocol
         x = np.arange(0,len(y))
                     
-        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
+        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles, **kwargs)
         
         if len(comparisonProtocol) != 0:
             plt.plot(comparisonProtocol)    
     
     
     def plotSlope(self,  plotCycles = False, plotPeaks = False, 
-                  labelCycles = []):
+                  labelCycles = [], **kwargs):
         
         x = self.xy[:,0]
         y = self.slope
 
-        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
+        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles, **kwargs)
                 
-    def plotArea(self,  plotCycles = False, plotPeaks = False, labelCycles = []):
+    def plotArea(self,  plotCycles = False, plotPeaks = False, labelCycles = [], **kwargs):
         
         x = self.xy[:,0]
         y = self.area
 
-        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles)  
+        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles, **kwargs)  
                         
-    def plotCumArea(self,  plotCycles = False, plotPeaks = False, labelCycles = []):
+    def plotCumArea(self,  plotCycles = False, plotPeaks = False, labelCycles = [], **kwargs):
         
         # We get the cumulative displacement and area
         x = self.getCumDisp()
         y = self.getCumArea()
 
-        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles)  
+        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles, **kwargs)  
              
     def initFig(self, xlims = [], ylims = []):
         return self.initializeFig(xlims, ylims)
