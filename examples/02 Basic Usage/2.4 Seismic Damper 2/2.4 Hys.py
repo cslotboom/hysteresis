@@ -29,10 +29,7 @@ fig, ax  = hysTrace.initFig()
 hysTrace.plot(True)
 
 
-# ExpandLoops = [3, ]
-
-# Expand the hysteresis 
-# FullHys = hys.exandHysTrace(hysTrace, LoadProtocol[:,2], skipStart = 1, skipEnd = 0)
+# Expand the hysteresis Trace
 FullHys = hys.exandHysTrace(hysTrace, np.array([3,3,3,3,3,3,3]), skipStart = 1, skipEnd = 0)
 fig, ax = hysTrace.initFig()
 FullHys.plot()
