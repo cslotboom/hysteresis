@@ -106,7 +106,7 @@ It's also possible to reduce the number of points in a curve, using the resample
 
 
 ### Compare two hystereses:
-If two hystereses have the same load protocol, the hysteresis package allows you to "comapre" the curves. This operation will take two hystereses, resample them, then find the average "difference" between each point on the curve. 
+If two hystereses have the same load protocol, the hysteresis package allows you to "compare" the curves. This operation will take two hystereses, resample them, then find the average "difference" between each point on the curve. 
 <p align="center">
   <img src="doc/images/feat//demo5.png" width="70%" height="70%" >
 </p>
