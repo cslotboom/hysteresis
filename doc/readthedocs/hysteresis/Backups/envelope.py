@@ -319,7 +319,7 @@ def fitEEEP(backbone):
     """
     Fits a backbone curve with a equivalent elastic perfectly plastic curve
     using the ASTM E2126 methodology.
-    The curve has equivalent area to the input backone curve.
+    The cirve has equivalent area to the input backone curve.
     
     http://www.materialstandard.com/wp-content/uploads/2019/10/E2126-11.pdf
 

@@ -164,19 +164,17 @@ class CurveBase:
             self.minIndexes = peakIndexes[1::2]
             self.maxIndexes = peakIndexes[0::2]    
         
-    def plot(self, plotCycles = False, plotPeaks = False, labelCycles = [],
-             **kwargs):
+    def plot(self, plotCycles = False, plotPeaks = False, labelCycles = []):
         """
         Plots the base curve
         """        
         x = self.xy[:,0]
         y = self.xy[:,1]
                     
-        return self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles,
-                                 **kwargs)
+        return self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
                 
     def plotVsIndex(self, plotCycles = False, plotPeaks = False, 
-                     labelCycles = [], **kwargs):
+                     labelCycles = []):
         """
         Plots the base curve against index (as opposed to X values)
         """          
@@ -184,9 +182,9 @@ class CurveBase:
         x = np.arange(0,len(self.xy[:,0]))
         y = self.xy[:,0]
                     
-        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles, **kwargs)
+        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
 
-    def plotLoadProtocol(self, comparisonProtocol = [], **kwargs):
+    def plotLoadProtocol(self, comparisonProtocol = []):
         """
         Plots the peak x values for each cycle in acurve.
         """           
@@ -196,34 +194,34 @@ class CurveBase:
         y = self.loadProtocol
         x = np.arange(0,len(y))
                     
-        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles, **kwargs)
+        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
         
         if len(comparisonProtocol) != 0:
             plt.plot(comparisonProtocol)    
     
     
     def plotSlope(self,  plotCycles = False, plotPeaks = False, 
-                  labelCycles = [], **kwargs):
+                  labelCycles = []):
         
         x = self.xy[:,0]
         y = self.slope
 
-        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles, **kwargs)
+        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
                 
-    def plotArea(self,  plotCycles = False, plotPeaks = False, labelCycles = [], **kwargs):
+    def plotArea(self,  plotCycles = False, plotPeaks = False, labelCycles = []):
         
         x = self.xy[:,0]
         y = self.area
 
-        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles, **kwargs)  
+        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles)  
                         
-    def plotCumArea(self,  plotCycles = False, plotPeaks = False, labelCycles = [], **kwargs):
+    def plotCumArea(self,  plotCycles = False, plotPeaks = False, labelCycles = []):
         
         # We get the cumulative displacement and area
         x = self.getCumDisp()
         y = self.getCumArea()
 
-        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles, **kwargs)  
+        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles)  
              
     def initFig(self, xlims = [], ylims = []):
         return self.initializeFig(xlims, ylims)
@@ -378,11 +376,8 @@ class Hysteresis(CurveBase):
        
     def recalculateCycles(self, revDist = 2, revWidth = None, revProminence = None, **kwargs):
         """
-        Calcualtes the cycles again, using the input parameters for distance 
-        (number of indexes), width (distance on the x axis), and prominence
-        (distance in the y axis).
-        
-        Peaks are calculated using scipy's find_peaks function.
+        Calcualtes the cycles again, using the input parameters for distance,
+        width, and prominence. Peaks are calculated using scipy's find_peaks function.
         
         Parameters
         ----------
@@ -447,13 +442,9 @@ class Hysteresis(CurveBase):
     def recalculateCycles_dist(self, revDist = 2, revWidth = None, 
                                revProminence = None, **kwargs):
         """
-        Calcualtes the cycles again, using the input parameters for distance 
-        (number of indexes), width (distance on the x axis), and prominence
-        (distance in the y axis).
-        
-        The instead of the xy curve, the secant length between each point on 
-        the curve is used to find revesal indexes. 
-        Peaks are calculated using scipy's find_peaks function.
+        Recalulates the reversals of one hysteresis using another the reversal
+        propreties from another hysteresis. Peaks are calculated using scipy's 
+        find_peaks function.
         
         Parameters
         ----------
