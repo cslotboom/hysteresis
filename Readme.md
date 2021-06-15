@@ -84,7 +84,7 @@ ax.set_xlabel('Actuator Displacement (mm)')
 ax.set_ylabel('Applied Force (kN)')
 ```
 
-### Find the backbone of a Hysteresis
+### Find the backbone of a hysteresis
 Using the Hysteresis module, it's possible to find the backbone of a hysteresis, then fit a curve to that data.  ([Ex. 3.2](https://github.com/cslotboom/hysteresis/blob/master/examples/03%20Find%20Backbone%20of%20Experimental%20Data/3.2/3.2%20-%20SPC1%20-%20EEEP.py)).
 Data provided by Dr. Thomas Tannert of UNBC: Drexler M, Dires S, Tannert T (2021), "Internal perforated-steel-plate connections for CLT shear walls.", In proceedings of World Conference for Timber Engineering, Santiago de Chile. 
 
