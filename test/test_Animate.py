@@ -31,10 +31,9 @@ def test_Toggle():
 # test_Toggle()
 
 
-xyAni = ani.getAnixy(trianglexy, 2)
+# xyAni   = ani.getAnixy(trianglexy, 2)
+# frames  = ani.getAniFrames(trianglexy[:,0], 0.1)
 
-frames  = ani.getAniFrames(trianglexy[:,0], 0.1)
-
-myAnimation = ani.Animation(test,1,1,5)
 # myAnimation = ani.Animation(test,1,1,5,widgets = False)
-out = myAnimation.animate()
+# myAnimation = ani.Animation(test,1,1,5)
+# out = myAnimation.animate()
