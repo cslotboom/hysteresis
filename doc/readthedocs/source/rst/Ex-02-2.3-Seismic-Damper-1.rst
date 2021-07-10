@@ -1,14 +1,14 @@
-Basic Siesmic Damper
+Basic Seismic Damper
 ========
 
-The following example showcases how to find the reversal points and make plots for a baisic siesmic damper.\
+A hands off example showing how to get cumulative energy in a seismic damper.\
 The following data is used in the example: 
 
-#. Displacement data  :download:`here </examples/02 Basic Usage/2.1 Basic Seismic Damper/Disp.out>`.
-#. Reaction force data :download:`here </examples/02 Basic Usage/2.1 Basic Seismic Damper/RFrc.out>`.
-#. Backbone data for second Hysteresis :download:`here </examples/02 Basic Usage/2.1 Basic Seismic Damper/BackboneData.csv>`.
+#. Input xy data  :download:`here </examples/02 Basic Usage/2.3 Seismic Damper 1/Hys1.csv>`.
+#. Input load protocol :download:`here </examples/02 Basic Usage/2.3 Seismic Damper 1/LoadProtocol.csv>`.
+#. Reported energy in hysteresis :download:`here </examples/02 Basic Usage/2.3 Seismic Damper 1/Hys1_Energy.csv>`.
 
-.. literalinclude:: /examples/02 Basic Usage/2.1 Basic Seismic Damper/2.1 Basic Seismic Damper.py
+.. literalinclude:: /examples/02 Basic Usage/2.3 Seismic Damper 1/2.3 - Cumulative Energy.py
    :linenos:
 
 
