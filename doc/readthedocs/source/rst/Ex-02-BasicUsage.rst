@@ -15,7 +15,7 @@ Examples are broken into the following categories
    
    Ex-02-2.1-Basic-Seismic-Damper.rst
    Ex-02-2.2-Hysteresis-with-Noisey-Data.rst
-   Ex-02-2.3-Siesmic-Damper-1.rst
+   Ex-02-2.3-Seismic-Damper-1.rst
    Ex-02-2.4-Seismic-Damper-2.rst
 
 

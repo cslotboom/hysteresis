@@ -2,23 +2,26 @@ Seismic Damper with Noisey Data
 ========
 
 The following example showcases how to work with 'messy' experimental data, as well as comparing two hystereses.
-THe following experimental data and numerical analysis data is used:
+The following experimental data and numerical analysis data is used:
 
 #. Experimental data  :download:`here </examples/02 Basic Usage/2.2 Hysteresis with Noisey Data/TS1_Experiment_Shear.csv>`.
 #. Analysis reaction force data :download:`here </examples/02 Basic Usage/2.2 Hysteresis with Noisey Data/Ts1_Load_Dsp.out>`.
-#. Analysis displacement data for:download:`here </examples/02 Basic Usage/2.2 Hysteresis with Noisey Data/Ts1_Wall_Reaction.out>`.
+#. Analysis displacement data for :download:`here </examples/02 Basic Usage/2.2 Hysteresis with Noisey Data/Ts1_Wall_Reaction.out>`.
 
 A Basic Plotting Example
+
 .. literalinclude:: /examples/02 Basic Usage/2.2 Hysteresis with Noisey Data/2.2.1 - Basic Plotting.py
    :linenos:
 
 
 Finding the revesal points in the data:
+
 .. literalinclude:: /examples/02 Basic Usage/2.2 Hysteresis with Noisey Data/2.2.2 - Finding Reversal Points.py
    :linenos:
 
 
 Working with "messy" Experimental data the revesal points in the data:
+
 .. literalinclude:: /examples/02 Basic Usage/2.2 Hysteresis with Noisey Data/2.2.3 - Messy Data Wall Example.py
    :linenos:
 
