@@ -1,4 +1,4 @@
-Seismic Damper with Hoisey Data
+Seismic Damper with Noisey Data
 ========
 
 The following example showcases how to work with 'messy' experimental data, as well as comparing two hystereses.

@@ -1,4 +1,4 @@
-Basic Seismic Damper
+Energy in Seismic Damper
 ========
 
 A hands off example showing how to get cumulative energy in a seismic damper.\

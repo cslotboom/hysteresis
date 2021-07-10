@@ -34,7 +34,7 @@ release = '1.0.8'
 extensions = ['sphinx.ext.autodoc', 
               'sphinx.ext.coverage', 
               'sphinx.ext.napoleon', 
-              'sphinx.ext.autosummary'
+              'sphinx.ext.autosummary',
               'sphinx.ext.viewcode']
 autosummary_generate = True  # Turn on sphinx.ext.autosummary
 
