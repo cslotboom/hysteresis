@@ -1,7 +1,7 @@
 Evelope Functions
 ===============
 
-These functions help calcualte the envelope or backbone curve of a hyesteresis.
+These functions help calcualte the envelope or backbone curve of a hysteresis.
 
 #. :doc:`envelope-getBackboneCurve`
 #. :doc:`envelope-getAvgBackbone`
