@@ -1,4 +1,4 @@
-Basic Seismic Damper
+Basic Siesmic Damper
 ========
 
 The following example showcases how to find the reversal points and make plots for a baisic siesmic damper.\
@@ -6,7 +6,7 @@ The following data is used in the example:
 
 #. Displacement data  :download:`here </examples/02 Basic Usage/2.1 Basic Seismic Damper/Disp.out>`.
 #. Reaction force data :download:`here </examples/02 Basic Usage/2.1 Basic Seismic Damper/RFrc.out>`.
-#. Backbone data for second hysteresis :download:`here </examples/02 Basic Usage/2.1 Basic Seismic Damper/BackboneData.csv>`.
+#. Backbone data for second Hysteresis :download:`here </examples/02 Basic Usage/2.1 Basic Seismic Damper/BackboneData.csv>`.
 
 .. literalinclude:: /examples/02 Basic Usage/2.1 Basic Seismic Damper/2.1 Basic Seismic Damper.py
    :linenos:
