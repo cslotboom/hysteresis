@@ -1,8 +1,8 @@
-Basic Demo
+Demo
 ========
 
-In the following is a list of examples showing how the hysteresis package can be used. 
-Examples are broken into the following categories
+An example of very basic usage of the hysteresis package.
+
 
 .. literalinclude:: /examples/01 Demo/01_Demo.py
    :language: python
