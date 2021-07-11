@@ -1,10 +1,10 @@
-Example 1: Basic Demo
+Custom Functions
 ========
 
-In the following is a list of examples showing how the hysteresis package can be used. 
-Examples are broken into the following categories
+An example of how to overwrite the default hysteresis functions with custom functions.
+In this example the slope function is changed so that it always returns one.
 
-.. literalinclude:: /examples/01 Demo/01_Demo.py
+.. literalinclude:: /examples/06 Custom Functions/customFunctions.py
    :language: python
    :linenos:
 

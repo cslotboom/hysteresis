@@ -1,12 +1,11 @@
-Example 1: Basic Demo
+Fit model parameters to experiment
 ========
 
-In the following is a list of examples showing how the hysteresis package can be used. 
-Examples are broken into the following categories
+The following examples show how to fit model parameters to experimetnal data using the Hysteresis package.
+Examples make use of the following OpenSeesPy :download:`code </examples/04 Fit Analysis Model to Experiment/OpenSeesAnalysis.py>`:
 
-.. literalinclude:: /examples/01 Demo/01_Demo.py
+.. literalinclude:: /examples/04 Fit Analysis Model to Experiment/4.1 Fit Steel02 Material.py.py
    :language: python
-   :linenos:
 
 
 
