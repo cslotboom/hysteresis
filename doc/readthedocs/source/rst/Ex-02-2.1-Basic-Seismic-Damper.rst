@@ -9,7 +9,6 @@ The following data is used in the example:
 #. Backbone data for second hysteresis :download:`here </examples/02 Basic Usage/2.1 Basic Seismic Damper/BackboneData.csv>`.
 
 .. literalinclude:: /examples/02 Basic Usage/2.1 Basic Seismic Damper/2.1 Basic Seismic Damper.py
-   :linenos:
 
 
 

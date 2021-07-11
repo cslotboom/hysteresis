@@ -9,7 +9,6 @@ The following data is used in the example:
 #. Reported energy in hysteresis :download:`here </examples/02 Basic Usage/2.4 Seismic Damper 2/Hys1_Energy.csv>`.
 
 .. literalinclude:: /examples/02 Basic Usage/2.4 Seismic Damper 2/2.4 Hys.py
-   :linenos:
 
 
 

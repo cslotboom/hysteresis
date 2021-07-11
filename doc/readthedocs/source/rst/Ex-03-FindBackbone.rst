@@ -1,8 +1,5 @@
-Find Backbone
+Find Hystersis Backbone
 ========
-
-<h1 align = "Left">Find Backbone for Experimental Data.</h1>
-
 
 The following examples show how to find the backbone of experimental data:
 

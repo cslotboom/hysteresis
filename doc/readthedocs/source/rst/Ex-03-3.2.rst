@@ -8,7 +8,6 @@ The following data is used in the example:
 #. Hysteresis Data  :download:`here </examples/03 Find Backbone of Experimental Data/3.2/SPC1.csv>`.
 
 .. literalinclude:: /examples/03 Find Backbone of Experimental Data/3.2/3.2 - SPC1 - EEEP.py
-   :linenos:
 
 
 

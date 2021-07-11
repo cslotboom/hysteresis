@@ -6,8 +6,6 @@ In this example the slope function is changed so that it always returns one.
 
 .. literalinclude:: /examples/06 Custom Functions/customFunctions.py
    :language: python
-   :linenos:
-
 
 
 
