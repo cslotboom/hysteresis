@@ -63,7 +63,8 @@ html_theme_options = {
     'prev_next_buttons_location': 'bottom',
 }
 
-
+# The name of the Pygments (syntax highlighting) style to use.
+pygments_style = 'sphinx'
 
 
 # Add any paths that contain custom static files (such as style sheets) here,
