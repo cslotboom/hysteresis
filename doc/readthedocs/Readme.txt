@@ -11,4 +11,4 @@ update github
 
 
 Note:
-I don't know why we need botht the :doc: and toc tree part of the sub-functions
+I don't know why we need both the :doc: and toc tree part of the sub-functions
