@@ -1,14 +1,15 @@
-Basic Seismic Damper
+Find Positive Backbone
 ========
 
-The following example showcases how to find the reversal points and make plots for a baisic siesmic damper.\
+
+An example of finding the backbone curve for data from a siesmic damper.
+OpenSees is used to generate input data for the damper.\
 The following data is used in the example: 
 
-#. Displacement data  :download:`here </examples/02 Basic Usage/2.1 Basic Seismic Damper/Disp.out>`.
-#. Reaction force data :download:`here </examples/02 Basic Usage/2.1 Basic Seismic Damper/RFrc.out>`.
-#. Backbone data for second hysteresis :download:`here </examples/02 Basic Usage/2.1 Basic Seismic Damper/BackboneData.csv>`.
+#. Displacement data  :download:`here </examples/03 Find Backbone of Experimental Data/3.1/Disp.out>`.
+#. Reaction force data :download:`here </examples/03 Find Backbone of Experimental Data/3.1/RFrc.out>`.
 
-.. literalinclude:: /examples/02 Basic Usage/2.1 Basic Seismic Damper/2.1 Basic Seismic Damper.py
+.. literalinclude:: /examples/03 Find Backbone of Experimental Data/3.1/3.1 Find backbone.py
    :linenos:
 
 
