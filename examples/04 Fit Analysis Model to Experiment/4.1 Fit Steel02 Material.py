@@ -3,6 +3,8 @@
 Created on Sat Aug 31 15:13:13 2019
 @author: Christian
 """
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 import hysteresis as hys
@@ -28,7 +30,7 @@ myHys = hys.Hysteresis(xy)
 myHys.plotVsIndex(True)
 
 # Get the backbone
-backbone = myHys.getBackboneCurve(myHys, lpSteps)
+backbone = hys.getBackboneCurve(myHys, lpSteps)
 
 # Check if the outputs make sense with a plot
 fig, ax = plt.subplots()
