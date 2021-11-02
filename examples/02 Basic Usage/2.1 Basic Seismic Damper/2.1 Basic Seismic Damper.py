@@ -20,7 +20,8 @@ import matplotlib.pyplot as plt
 Here we load some test data.
 """
 
-inputxy = np.loadtxt('BackboneData.csv',delimiter=',')
+experimentDataFile = 'xyTestData.csv'
+inputxy = np.loadtxt(experimentDataFile, delimiter=',')
 disp = np.loadtxt('Disp.out',delimiter=' ')
 force = np.loadtxt('RFrc.out',delimiter=' ')
 
