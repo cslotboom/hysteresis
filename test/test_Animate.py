@@ -8,6 +8,9 @@ Created on Sat May  1 23:49:09 2021
 
 import numpy as np
 import hysteresis.plotSpecial.animate as ani
+
+import matplotlib.pyplot as plt
+import matplotlib.lines as lines
 import hysteresis as hys
 import scipy
 
@@ -17,23 +20,45 @@ y = np.sin(x)
 trianglexy = np.column_stack((x, y))
 
 test = hys.Hysteresis(trianglexy)
-testBase = ani.AnimationBase()
+# testBase = ani.AnimationBase()
+# testBase.initAnimation()
+skipStart  =3
+skipEnd = 3
+myAnimation = ani.Animation(test, skipStart = 3, skipEnd = 3)
+# Animation
+# myAnimatino.skipStartEnd
 
-
-def test_Play():
-    assert testBase.play == True
+def test_skip():
     
-def test_Toggle():
-    testBase.togglePlay()
-    assert testBase.play == False
+    xy = myAnimation.skipStartEnd(trianglexy, skipStart, skipEnd)
+    assert len(xy) == 101 - skipStart - skipEnd
 
-# test_Play()
-# test_Toggle()
+def test_skip_start():
+    
+    xy = myAnimation.skipStartEnd(trianglexy, skipStart, 0)
+    assert len(xy) == 101 - skipStart
+
+# def test_update():
+#     myAnimation.initAnimation()
+#     out = myAnimation.update(10)
+    
+def test_update(monkeypatch):
+    """ Tests if the cycles can plot correctly"""
+    
+    monkeypatch.setattr(plt, 'show', lambda: None)
+    myAnimation.initAnimation()
+    line, = myAnimation.update(10)
+    test1 = isinstance(line, lines.Line2D)
+    temp = trianglexy[skipStart:-skipEnd,:]
+    x, y = line.get_data()
+    # print(temp[:10,:] )
+    # print(line._xy )
+    test2 = np.all(y - temp[:10,1] == 0)
+    
+    test =  np.all([test1, test2])
+    
+    assert test
+    
 
 
-# xyAni   = ani.getAnixy(trianglexy, 2)
-# frames  = ani.getAniFrames(trianglexy[:,0], 0.1)
 
-# myAnimation = ani.Animation(test,1,1,5,widgets = False)
-# myAnimation = ani.Animation(test,1,1,5)
-# out = myAnimation.animate()

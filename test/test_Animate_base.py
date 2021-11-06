@@ -3,38 +3,33 @@
 Created on Sat May  1 23:49:09 2021
 
 @author: Christian
+
+IT's diffcult to test the GUI functions 
+
+
 """
 
 
 import numpy as np
 import hysteresis.plotSpecial.animate as ani
-import hysteresis as hys
-import scipy
 
-np.random.seed(101)
-x = np.linspace(0, 1, 101)*10
-y = np.sin(x)
-trianglexy = np.column_stack((x, y))
-
-test = hys.Hysteresis(trianglexy)
 testBase = ani.AnimationBase()
+testBase.isPlaying = True
+testBase.frames = np.arange(20)
 
-
-def test_Play():
-    assert testBase.play == True
     
 def test_Toggle():
     testBase.togglePlay()
-    assert testBase.play == False
+    assert testBase.isPlaying == False
+    
+def test_get_next_frame_incriment():
+    frame = testBase._get_next_frame(5)
+    assert frame == 6
 
-# test_Play()
-# test_Toggle()
+def test_get_next_frame_loop():
+    frame = testBase._get_next_frame(21)
+    assert frame == 0
 
 
-xyAni = ani.getAnixy(trianglexy, 2)
 
-frames  = ani.getAniFrames(trianglexy[:,0], 0.1)
 
-myAnimation = ani.Animation(test,1,1,5)
-# myAnimation = ani.Animation(test,1,1,5,widgets = False)
-out = myAnimation.animate()
