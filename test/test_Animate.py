@@ -37,10 +37,6 @@ def test_skip_start():
     
     xy = myAnimation.skipStartEnd(trianglexy, skipStart, 0)
     assert len(xy) == 101 - skipStart
-
-# def test_update():
-#     myAnimation.initAnimation()
-#     out = myAnimation.update(10)
     
 def test_update(monkeypatch):
     """ Tests if the cycles can plot correctly"""
