@@ -156,3 +156,9 @@ def removeNegative(Curve):
         Output = _RemoveNeg(x, y, direction)
 
     return  Output
+
+
+
+
+# def get
+

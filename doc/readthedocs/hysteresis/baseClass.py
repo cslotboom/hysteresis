@@ -13,6 +13,10 @@ import matplotlib.pyplot as plt
 # Curve objects
 # =============================================================================
 
+
+
+
+
 class CurveBase:
     """
     
@@ -62,21 +66,38 @@ class CurveBase:
         
         self.xunit = xunit
         self.yunit = yunit
-        
+    
     def __len__(self):
         return len(self.xy[:,0])
 
-    # def __truediv__(self, x):
-    #     return self.xy[:,1] / x
-
-    # def __rtruediv__(self, x):
-    #     return x / self.xy[:,1]
+    def _getInstance(self):
+        return type(self)
     
-    # def __mul__(self, x):
-    #     y = self.xy[:,1]*x
-    #     xy = np.column_stack([x,y])
+    def _convertToCurve(self, otherCurve):
+        """
+        Converts non-hysteresis datatypes 
+        """
+        if isinstance(otherCurve, np.ndarray):
+            return CurveBase(otherCurve)
+        # else:
+            # otherType = type(otherCurve)
+            # raise Exception(f'multiplication not supported for {otherType}.')
+
+
+    
+    def __mul__(self, curve):
+        """
+        I need a way of saving the hysteresis state and copying it over...
+        """
         
-    #     return self.xy[:,1]*x
+        # Get the current instance of curve
+        Instance = self._getInstance()
+        operand = _getOperand(curve)
+
+        x = self.xy[:,0]
+        y = self.xy[:,1]*operand
+        
+        return Instance(np.column_stack([x,y]))
 
     # def __add__(self, x):
     #     return self.xy[:,1] + x
@@ -228,6 +249,26 @@ class CurveBase:
     def initFig(self, xlims = [], ylims = []):
         return self.initializeFig(xlims, ylims)
 
+
+def _getOperand(curve):
+    """
+    Gets the operand (what data the function acts on) for operation functions.
+    The data used depands on the input given
+    
+    In the future, a strategy pattern could be used to replace this.
+    """
+    if not hasattr(curve, '__len__'): # assume scalar if no length
+        operand = curve
+    elif hasattr(curve, 'xy'): # use the xy if it's a hysteresis curve
+        operand = curve.xy[:,1]
+    elif isinstance(curve, np.ndarray):
+        if 1 == len(curve.shape):
+            operand = curve
+        elif 2 == len(curve.shape) and curve.shape[-1] == 2: # if 2D array
+            operand = curve[:,1]
+        else: # if 1D array
+            raise Exception(f'{curve.shape[-1]}D curve give, only 1 or 2D supported')
+    return operand
 
 # TODO:
     # Make the Hysteresis object take in the optional arguements as well. This
