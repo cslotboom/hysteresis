@@ -16,9 +16,7 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 # from dataclasses import dataclass
 from matplotlib.widgets import Button, Slider
-import openseespyvis
 import numpy as np
-# from ABC import staticmethod
 
 # Add this function to somewhere else
 def init_Animation():

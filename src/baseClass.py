@@ -14,23 +14,6 @@ import matplotlib.pyplot as plt
 # =============================================================================
 
 
-def _getOperand(curve):
-    """
-    Could a strategy pattern be used to replace this?
-    """
-    if not hasattr(curve, '__len__'):
-        operand = curve
-    elif hasattr(curve, 'xy'):
-        operand = curve.xy[:,1]
-    elif isinstance(curve, np.ndarray):
-        if 1 == len(curve.shape):
-            operand = curve
-        elif 2 == len(curve.shape) and curve.shape[-1] == 2: # if 2D array
-            operand = curve[:,1]
-        else: # if 1D array
-            raise Exception(f'{curve.shape[-1]}D curve give, only 1 or 2D supported')
-    return operand
-
 
 
 
@@ -266,6 +249,26 @@ class CurveBase:
     def initFig(self, xlims = [], ylims = []):
         return self.initializeFig(xlims, ylims)
 
+
+def _getOperand(curve):
+    """
+    Gets the operand (what data the function acts on) for operation functions.
+    The data used depands on the input given
+    
+    In the future, a strategy pattern could be used to replace this.
+    """
+    if not hasattr(curve, '__len__'): # assume scalar if no length
+        operand = curve
+    elif hasattr(curve, 'xy'): # use the xy if it's a hysteresis curve
+        operand = curve.xy[:,1]
+    elif isinstance(curve, np.ndarray):
+        if 1 == len(curve.shape):
+            operand = curve
+        elif 2 == len(curve.shape) and curve.shape[-1] == 2: # if 2D array
+            operand = curve[:,1]
+        else: # if 1D array
+            raise Exception(f'{curve.shape[-1]}D curve give, only 1 or 2D supported')
+    return operand
 
 # TODO:
     # Make the Hysteresis object take in the optional arguements as well. This
