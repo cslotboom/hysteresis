@@ -1,0 +1,10 @@
+Animations and Joint Animations
+========
+
+This example shows how to animate a single curve, or a series of curves on the same plot.
+
+.. literalinclude:: /examples/05 Special Plots/5.1 Animate Curves.py
+
+
+
+
