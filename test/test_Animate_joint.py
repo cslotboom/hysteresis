@@ -9,32 +9,31 @@ Created on Sat May  1 23:49:09 2021
 import numpy as np
 import hysteresis.plotSpecial.animate as ani
 import hysteresis as hys
-import scipy
+import pytest
 
 np.random.seed(101)
 x = np.linspace(0, 1, 101)*10
-y = np.sin(x)
-trianglexy = np.column_stack((x, y))
+y1 = np.sin(x)
+y2 = np.cos(x)
 
-test = hys.Hysteresis(trianglexy)
-testBase = ani.AnimationBase()
-# testBase.initAnimation()
+x2 = np.linspace(0, 1, 10)
 
-# def test_Play():
+trianglexy1 = np.column_stack((x, y1))
+trianglexy2 = np.column_stack((x, y2))
+trianglexy3 = np.column_stack([x2, x2])
+test1 = hys.Hysteresis(trianglexy1)
+test2 = hys.Hysteresis(trianglexy2)
+test3 = hys.Hysteresis(trianglexy3)
+
+
+def test_validate_pass():
     
-#     assert testBase.isPlaying == True
-    
-# def test_Toggle():
-#     testBase.togglePlay()
-#     assert testBase.isPlaying == False
-
-# test_Play()
-# test_Toggle()
+    curves = [test1, test2]
+    ani.JointAnimation(curves)
 
 
-xyAni   = ani.getAnixy(trianglexy, 2)
-frames  = ani.getAniFrames(trianglexy[:,0], 0.1)
+def test_validate_fail():
 
-myAnimation = ani.Animation(test,1,1,5,widgets = False)
-myAnimation = ani.Animation(test,1,1,5)
-out = myAnimation.animate()
+    with pytest.raises(Exception):
+        curves = [test1, test2, test3]
+        ani.JointAnimation(curves)

@@ -28,6 +28,7 @@ myAnimation = ani.Animation(test, skipStart = 3, skipEnd = 3)
 # Animation
 # myAnimatino.skipStartEnd
 
+
 def test_skip():
     
     xy = myAnimation.skipStartEnd(trianglexy, skipStart, skipEnd)
