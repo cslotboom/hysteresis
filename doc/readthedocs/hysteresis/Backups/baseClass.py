@@ -13,6 +13,10 @@ import matplotlib.pyplot as plt
 # Curve objects
 # =============================================================================
 
+
+
+
+
 class CurveBase:
     """
     
@@ -62,21 +66,38 @@ class CurveBase:
         
         self.xunit = xunit
         self.yunit = yunit
-        
+    
     def __len__(self):
         return len(self.xy[:,0])
 
-    # def __truediv__(self, x):
-    #     return self.xy[:,1] / x
-
-    # def __rtruediv__(self, x):
-    #     return x / self.xy[:,1]
+    def _getInstance(self):
+        return type(self)
     
-    # def __mul__(self, x):
-    #     y = self.xy[:,1]*x
-    #     xy = np.column_stack([x,y])
+    def _convertToCurve(self, otherCurve):
+        """
+        Converts non-hysteresis datatypes 
+        """
+        if isinstance(otherCurve, np.ndarray):
+            return CurveBase(otherCurve)
+        # else:
+            # otherType = type(otherCurve)
+            # raise Exception(f'multiplication not supported for {otherType}.')
+
+
+    
+    def __mul__(self, curve):
+        """
+        I need a way of saving the hysteresis state and copying it over...
+        """
         
-    #     return self.xy[:,1]*x
+        # Get the current instance of curve
+        Instance = self._getInstance()
+        operand = _getOperand(curve)
+
+        x = self.xy[:,0]
+        y = self.xy[:,1]*operand
+        
+        return Instance(np.column_stack([x,y]))
 
     # def __add__(self, x):
     #     return self.xy[:,1] + x
@@ -164,17 +185,19 @@ class CurveBase:
             self.minIndexes = peakIndexes[1::2]
             self.maxIndexes = peakIndexes[0::2]    
         
-    def plot(self, plotCycles = False, plotPeaks = False, labelCycles = []):
+    def plot(self, plotCycles = False, plotPeaks = False, labelCycles = [],
+             **kwargs):
         """
         Plots the base curve
         """        
         x = self.xy[:,0]
         y = self.xy[:,1]
                     
-        return self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
+        return self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles,
+                                 **kwargs)
                 
     def plotVsIndex(self, plotCycles = False, plotPeaks = False, 
-                     labelCycles = []):
+                     labelCycles = [], **kwargs):
         """
         Plots the base curve against index (as opposed to X values)
         """          
@@ -182,9 +205,9 @@ class CurveBase:
         x = np.arange(0,len(self.xy[:,0]))
         y = self.xy[:,0]
                     
-        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
+        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles, **kwargs)
 
-    def plotLoadProtocol(self, comparisonProtocol = []):
+    def plotLoadProtocol(self, comparisonProtocol = [], **kwargs):
         """
         Plots the peak x values for each cycle in acurve.
         """           
@@ -194,38 +217,58 @@ class CurveBase:
         y = self.loadProtocol
         x = np.arange(0,len(y))
                     
-        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
+        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles, **kwargs)
         
         if len(comparisonProtocol) != 0:
             plt.plot(comparisonProtocol)    
     
     
     def plotSlope(self,  plotCycles = False, plotPeaks = False, 
-                  labelCycles = []):
+                  labelCycles = [], **kwargs):
         
         x = self.xy[:,0]
         y = self.slope
 
-        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles)
+        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles, **kwargs)
                 
-    def plotArea(self,  plotCycles = False, plotPeaks = False, labelCycles = []):
+    def plotArea(self,  plotCycles = False, plotPeaks = False, labelCycles = [], **kwargs):
         
         x = self.xy[:,0]
         y = self.area
 
-        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles)  
+        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles, **kwargs)  
                         
-    def plotCumArea(self,  plotCycles = False, plotPeaks = False, labelCycles = []):
+    def plotCumArea(self,  plotCycles = False, plotPeaks = False, labelCycles = [], **kwargs):
         
         # We get the cumulative displacement and area
         x = self.getCumDisp()
         y = self.getCumArea()
 
-        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles)  
+        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles, **kwargs)  
              
     def initFig(self, xlims = [], ylims = []):
         return self.initializeFig(xlims, ylims)
 
+
+def _getOperand(curve):
+    """
+    Gets the operand (what data the function acts on) for operation functions.
+    The data used depands on the input given
+    
+    In the future, a strategy pattern could be used to replace this.
+    """
+    if not hasattr(curve, '__len__'): # assume scalar if no length
+        operand = curve
+    elif hasattr(curve, 'xy'): # use the xy if it's a hysteresis curve
+        operand = curve.xy[:,1]
+    elif isinstance(curve, np.ndarray):
+        if 1 == len(curve.shape):
+            operand = curve
+        elif 2 == len(curve.shape) and curve.shape[-1] == 2: # if 2D array
+            operand = curve[:,1]
+        else: # if 1D array
+            raise Exception(f'{curve.shape[-1]}D curve give, only 1 or 2D supported')
+    return operand
 
 # TODO:
     # Make the Hysteresis object take in the optional arguements as well. This
@@ -376,8 +419,11 @@ class Hysteresis(CurveBase):
        
     def recalculateCycles(self, revDist = 2, revWidth = None, revProminence = None, **kwargs):
         """
-        Calcualtes the cycles again, using the input parameters for distance,
-        width, and prominence. Peaks are calculated using scipy's find_peaks function.
+        Calcualtes the cycles again, using the input parameters for distance 
+        (number of indexes), width (distance on the x axis), and prominence
+        (distance in the y axis).
+        
+        Peaks are calculated using scipy's find_peaks function.
         
         Parameters
         ----------
@@ -442,9 +488,13 @@ class Hysteresis(CurveBase):
     def recalculateCycles_dist(self, revDist = 2, revWidth = None, 
                                revProminence = None, **kwargs):
         """
-        Recalulates the reversals of one hysteresis using another the reversal
-        propreties from another hysteresis. Peaks are calculated using scipy's 
-        find_peaks function.
+        Calcualtes the cycles again, using the input parameters for distance 
+        (number of indexes), width (distance on the x axis), and prominence
+        (distance in the y axis).
+        
+        The instead of the xy curve, the secant length between each point on 
+        the curve is used to find revesal indexes. 
+        Peaks are calculated using scipy's find_peaks function.
         
         Parameters
         ----------

@@ -1,0 +1,10 @@
+Utility Features
+========
+
+An example of operations can be used with hysteresis curves. 
+
+.. literalinclude:: /examples/02 Basic Usage/2.5 Utility Features/2.5.1 Operations.py
+
+
+
+

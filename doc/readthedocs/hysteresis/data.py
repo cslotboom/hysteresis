@@ -97,6 +97,7 @@ def getCycleIndicies(VectorX, peakDist = 2, peakWidth = None,
     """
     This function finds the index where there is areversal in the XY data. 
     You may need to adjust the find peaks factor to get satisfactory results.
+    Built on the scipy find peaks funciton
     
 
     Parameters
@@ -107,8 +108,19 @@ def getCycleIndicies(VectorX, peakDist = 2, peakWidth = None,
         Input Y Vector. This is only used if we want to plot the values.
     CreatePlot : Boolean
         This switch specifies whether or not to display the output.plot
-    peakDist : TYPE, optional
-        The sampling distance used to find peaks. The default is 2.
+    peakDist : int, optional
+        Required minimal horizontal distance (>= 1) in samples between
+        neighbouring peaks. Smaller peaks are removed first until the condition
+        is fulfilled for all remaining peaks.
+        The default is 2.
+    peakWidth : int, optional
+        The approximate width in number of samples of the peak at half it's prominence.
+        Peaks that occur very abruptly have a small width, while those that occur
+        gradually have a big width.
+    peakProminence : number, optional
+        Used to filter out peaks that aren't sufficently high. Prominence is 
+        the desired difference in height between peaks and their neighbouring peaks. 
+        The default is None, which results in no filtering.
 
     Returns
     -------
