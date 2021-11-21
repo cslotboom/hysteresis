@@ -15,9 +15,9 @@ import matplotlib.pyplot as plt
 
 
 
-
-
 class CurveBase:
+    
+    __array_ufunc__ = None
     """
     
     The curve base object represents a generic xy curve with no limitations.
@@ -35,25 +35,20 @@ class CurveBase:
         Parameters
         ----------
         XYData : array
-            The input array of XY date for the curve.
-        areaFunction : function, optional
-            The function to be used to calcualte area. 
-            The default is defaultareaFunction.
-        slopeFunction : function, optional
-            The function to be used to calcualte slope. 
-            The default is defaultareaFunction.
-        plotFunction : function, optional
-            The function to be used to plot the curve. 
-            The default is defaultPlotFunction.
+            The input array of XY date for the curve. A list [x,y] can also be 
+            passed into the function.
         xunit : str, optional
             The units on the x axis. The default is ''.
         yunit : str, optional
             The units on the y axis. The default is ''.
 
         """
-        self.xy = XYData
+        
+        
+        self.xy = self._parseXY(XYData)
         self.Npoints = len(XYData[:,0])
         
+        # The function to be used to calcualte area. These can be overwritten
         self.areaFunction = env.environment.fArea
         self.slopeFunction = env.environment.fslope
         self.lengthFunction = env.environment.flength
@@ -67,44 +62,86 @@ class CurveBase:
         self.xunit = xunit
         self.yunit = yunit
     
+    def _parseXY(self, xy):
+        if isinstance(xy, list):
+            xy = np.column_stack(xy)
+        return xy
+    
     def __len__(self):
         return len(self.xy[:,0])
 
     def _getInstance(self):
         return type(self)
     
-    def _convertToCurve(self, otherCurve):
+    def _convertToCurve(self, other):
         """
         Converts non-hysteresis datatypes 
         """
-        if isinstance(otherCurve, np.ndarray):
-            return CurveBase(otherCurve)
+        if isinstance(other, np.ndarray):
+            return CurveBase(other)
         # else:
             # otherType = type(otherCurve)
             # raise Exception(f'multiplication not supported for {otherType}.')
 
-
-    
-    def __mul__(self, curve):
-        """
-        I need a way of saving the hysteresis state and copying it over...
-        """
+    def __add__(self, other):
+        """ Enables addition of curve x values"""
+        Instance = self._getInstance()
+        operand = _getOperand(other)
+        x = self.xy[:,0]
+        y = self.xy[:,1]+operand        
         
+        return Instance(np.column_stack([x,y]))
+    
+    def __sub__(self, other):
+        Instance = self._getInstance()
+        operand = _getOperand(other)
+        x = self.xy[:,0]
+        y = self.xy[:,1] - operand        
+        
+        return Instance(np.column_stack([x,y]))
+    
+    def __rsub__(self, other):
+        Instance = self._getInstance()
+        operand = _getOperand(other)
+        x = self.xy[:,0]
+        y = operand - self.xy[:,1]   
+        
+        return Instance(np.column_stack([x,y]))
+    
+    def __mul__(self, other):
+        """
+        It would be useful of having a hystresis base state, then copying that over.
+        """
         # Get the current instance of curve
         Instance = self._getInstance()
-        operand = _getOperand(curve)
-
+        operand = _getOperand(other)
         x = self.xy[:,0]
         y = self.xy[:,1]*operand
         
         return Instance(np.column_stack([x,y]))
 
-    # def __add__(self, x):
-    #     return self.xy[:,1] + x
-    
-    # def __sub__(self, x):
-    #     return self.xy[:,1] - x
+
+    def __truediv__(self, other):
+        # Get the current instance of curve
+        Instance = self._getInstance()
+        operand = _getOperand(other)
+        x = self.xy[:,0]
+        y = self.xy[:,1] / operand
         
+        return Instance(np.column_stack([x,y]))
+
+
+    def __rtruediv__(self, other):
+        # Get the current instance of curve
+        Instance = self._getInstance()
+        operand = _getOperand(other)    
+        x = self.xy[:,0]
+        y = operand / self.xy[:,1]
+        
+        return Instance(np.column_stack([x,y]))
+        
+    
+    
     def setArea(self):
         """ sets the area under each point of the curve using the area function"""
         self.area = self.areaFunction(self.xy)
@@ -184,7 +221,11 @@ class CurveBase:
         else:
             self.minIndexes = peakIndexes[1::2]
             self.maxIndexes = peakIndexes[0::2]    
-        
+    
+    
+    
+    
+    
     def plot(self, plotCycles = False, plotPeaks = False, labelCycles = [],
              **kwargs):
         """
@@ -259,9 +300,9 @@ def _getOperand(curve):
     """
     if not hasattr(curve, '__len__'): # assume scalar if no length
         operand = curve
-    elif hasattr(curve, 'xy'): # use the xy if it's a hysteresis curve
+    elif hasattr(curve, 'xy'): # use the xy if it's a curve from the hysteresis module.
         operand = curve.xy[:,1]
-    elif isinstance(curve, np.ndarray):
+    elif isinstance(curve, np.ndarray): # If a numpy array, do stuff depending on array dimension.
         if 1 == len(curve.shape):
             operand = curve
         elif 2 == len(curve.shape) and curve.shape[-1] == 2: # if 2D array
@@ -285,7 +326,7 @@ def _getOperand(curve):
 class Hysteresis(CurveBase):
     """
     Hysteresis objects are those that have at least one reversal point in 
-    the x direction of the data.
+    their data. Reversal points are those where the x axis changes direction.
     
     The hysteresis object has a number of functions that help find the reversal
     points in the x data of the curve.
@@ -293,15 +334,39 @@ class Hysteresis(CurveBase):
     The hysteresis object also stores each each half-cycle (where there is no
     change in direction) as a SimpleCycle object.
     
+    
+    Parameters
+    ----------
+    XYData : array
+        The input array of XY date for the curve. A list [x,y] can also be 
+        passed into the function.
+    revDist : int, optional
+        Used to filter reversal points based on the minimal horizontal distance 
+        (>= 1) between neighbouring peaks in the x axis. Smaller peaks are 
+        removed first until the condition is fulfilled for all remaining peaks.
+        The default is 2.
+    revWidth : int, optional
+        Used to filter reversal points using the approximate width in number of 
+        samples of each peak at half it's prominence. Peaks that occur very 
+        abruptly have a small width, while those that occur gradually have 
+        a big width.
+        The default is None, which results in no filtering.  
+    revProminence : number, optional
+        Used to filter reversal points that aren't sufficently high. Prominence 
+        is the desired difference in height between peaks and their 
+        neighbouring peaks. 
+        The default is None, which results in no filtering.        
+    
     """
     
-    revDist = 2
-    revWidth = None
-    revProminence = None
+
 
     def __init__(self, XYData, revDist = 2, revWidth = None, revProminence = None,
                  setCycles = True, setArea = True, setSlope = True, **kwargs):
+ 
         CurveBase.__init__(self, XYData, **kwargs)
+        self.setReversalPropreties(revDist, revWidth, revProminence)
+        
 
         #TODO Create warning if cycles don't make sense.
         if setCycles == True:
@@ -537,7 +602,35 @@ class Hysteresis(CurveBase):
 
 class SimpleCycle(CurveBase):
     """ A curve that doesn't change direction on the X axis, but can change
-    Y direction.
+    Y direction. The data has a number of peaks, each of which is the largest
+    y value in relation to other points on the curve. This point canbe 
+    
+    
+    Parameters
+    ----------
+    XYData : array
+        The input array of XY date for the curve. A list [x,y] can also be 
+        passed into the function.
+    peakDist : int, optional
+        Used to filter peaks based on the minimal horizontal distance in number 
+        of samples (>= 1) between neighbouring peaks in the y axis. 
+        Smaller peaks are removed first until the condition is fulfilled for 
+        all remaining peaks.
+        The default is 2.
+    peakWidth : int, optional
+        Used to filter peaks points using the approximate width in number of 
+        samples of each peak at half it's prominence. Peaks that occur very 
+        abruptly have a small width, while those that occur gradually have 
+        a big width.
+        The default is None, which results in no filtering.  
+    peakProminence : number, optional
+        Used to filter peaks points that aren't sufficently high. Prominence 
+        is the desired difference in height between peaks and their 
+        neighbouring peaks. 
+        The default is None, which results in no filtering.        
+        
+    
+    
     """
     
     def __init__(self, XYData, findPeaks = False, setSlope = False, setArea = False,
@@ -673,6 +766,12 @@ class SimpleCycle(CurveBase):
         self.setArea()  
 
 class MonotonicCurve(CurveBase):
+    """
+    A curve that has no changes in it's x axis direction, as well as no changes
+    in it's y axis.
+    """
+    
+    
     def __init__(self, XYData):
         CurveBase.__init__(self, XYData)
         
