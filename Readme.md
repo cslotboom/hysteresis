@@ -108,7 +108,7 @@ slope = DamperHys.slope
 </p>
 
 ### Down sample a hysteresis:
-It's also possible to reduce the number of points in a curve, using the resample funcitons. These functions use linear interpolation to make a new curve with less data points than the original.
+It's also possible to reduce the number of points in a curve, using the resample functions. These functions use linear interpolation to make a new curve with less data points than the original.
 <p align="center">
   <img src="doc/images/feat//demo4.png" width="70%" height="70%" >
 </p>
