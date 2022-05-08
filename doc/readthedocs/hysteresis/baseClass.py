@@ -19,13 +19,11 @@ class CurveBase:
     
     __array_ufunc__ = None
     """
-    
     The curve base object represents a generic xy curve with no limitations.
     
     All other curves inherit from the CurveBase class. It has access to methods
-    all other curves should have access to.
-    This uncludes plotting functionality, slope functions, area functions, 
-    and displacement functions.
+    all other curves should have access to. This uncludes plotting 
+    functionality, slope functions, area functions, and displacement functions.
     
     """
     
@@ -44,9 +42,8 @@ class CurveBase:
 
         """
         
-        
         self.xy = self._parseXY(XYData)
-        self.Npoints = len(XYData[:,0])
+        self.Npoints = len(self.xy[:,0])
         
         # The function to be used to calcualte area. These can be overwritten
         self.areaFunction = env.environment.fArea
@@ -79,9 +76,6 @@ class CurveBase:
         """
         if isinstance(other, np.ndarray):
             return CurveBase(other)
-        # else:
-            # otherType = type(otherCurve)
-            # raise Exception(f'multiplication not supported for {otherType}.')
 
     def __add__(self, other):
         """ Enables addition of curve x values"""
@@ -130,7 +124,6 @@ class CurveBase:
         
         return Instance(np.column_stack([x,y]))
 
-
     def __rtruediv__(self, other):
         # Get the current instance of curve
         Instance = self._getInstance()
@@ -139,8 +132,6 @@ class CurveBase:
         y = operand / self.xy[:,1]
         
         return Instance(np.column_stack([x,y]))
-        
-    
     
     def setArea(self):
         """ sets the area under each point of the curve using the area function"""
@@ -148,7 +139,8 @@ class CurveBase:
         return self.area
     
     def getCumDisp(self):
-        """ Gets the absolute value of cumulative displacement of the curve at each x value.
+        """ 
+        Gets the absolute value of cumulative displacement of the curve at each data point.
         """
         dx = np.diff(self.xy[:,0])
         return np.append(0, np.cumsum(np.abs(dx)))
@@ -166,7 +158,8 @@ class CurveBase:
         return np.sum(np.abs(dx[startIndex:endIndex]))
     
     def getCumArea(self):
-        """ Gets the cumulative area under the curve for the entire curve
+        """ 
+        Gets the cumulative area under the curve for the entire curve.
         """
         Area = self.area
         return np.cumsum(Area)
@@ -188,6 +181,9 @@ class CurveBase:
         """
         Calcuates the slope of the curve at each point.
         The user can pass in a custom function that calculates the slope.
+        
+        By default, uses the basic slope funciton. Custom behaviour can be
+        specified by modifying the environment slope function.        
         """
         
         # Calculate end point slope
@@ -196,14 +192,19 @@ class CurveBase:
 
     def setLength(self):
         """
-        Calcuates the slope of the curve at each point.
-        The user can pass in a custom function that calculates the slope.
+        Calcuates the length of the curve, that is, the distance from each 
+        point to the next point. 
+        Starts at point 0, and ther are there are N-1 length values for the N 
+        data points.
+        
+        By default, uses the basic length funciton. Custom behaviour can be
+        specified by modifying the environment length function.
+
         """
         
         # Calculate end point slope
         xy = self.xy
         self.length  = self.lengthFunction(xy)
-
 
     def setPeaks(self, peakDist = 2, peakWidth = None, peakProminence = None):
         """
@@ -222,14 +223,27 @@ class CurveBase:
             self.minIndexes = peakIndexes[1::2]
             self.maxIndexes = peakIndexes[0::2]    
     
-    
-    
-    
-    
     def plot(self, plotCycles = False, plotPeaks = False, labelCycles = [],
              **kwargs):
         """
-        Plots the base curve
+        Used the plot function to make a xy plot of the curve. The default 
+        plot function uses matplotlib for plotting, and returns the plotted
+        line.
+        
+        Parameters
+        ----------
+        plotCycles : bool
+            A switch that specifics if cycle reversal points should be plotted.
+        plotPeaks : bool
+            A switch that specifics if the detected peak values should be plotted.
+        labelCycles : list or 'all', optional
+            A list of the cycles to be labled. 
+            A value of 'all' can also be specified, in which case all cucles will be plotted.
+            The default is [], which labels no cycles    
+        kwargs : list, optional
+            Any additional keyword arguements will be passed to the matplotlib
+            plot function. This can be used to custize char appearance.            
+
         """        
         x = self.xy[:,0]
         y = self.xy[:,1]
@@ -240,46 +254,150 @@ class CurveBase:
     def plotVsIndex(self, plotCycles = False, plotPeaks = False, 
                      labelCycles = [], **kwargs):
         """
-        Plots the base curve against index (as opposed to X values)
-        """          
+        Used the plot function to make a plot of each x point vs. it's index.
+        This can be useful for understanding how x values change over time.
+        The default plot function uses matplotlib for plotting, and returns 
+        the plotted line.
+        
+        Parameters
+        ----------
+        plotCycles : bool
+            A switch that specifics if cycle reversal points should be plotted.
+        plotPeaks : bool
+            A switch that specifics if the detected peak values should be plotted.
+
+        labelCycles : list or 'all', optional
+            A list of the cycles to be labled. 
+            A value of 'all' can also be specified, in which case all cucles will be plotted.
+            The default is [], which labels no cycles     
+        kwargs : list, optional
+            Any additional keyword arguements will be passed to the matplotlib
+            plot function. This can be used to custize char appearance.
+            
+        """           
         
         x = np.arange(0,len(self.xy[:,0]))
         y = self.xy[:,0]
                     
-        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles, **kwargs)
+        return self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles, **kwargs)
 
     def plotLoadProtocol(self, comparisonProtocol = [], **kwargs):
         """
-        Plots the peak x values for each cycle in acurve.
+        Plots the peak x values for each cycle in a curve.
+        An additional load protocol can be provided, so the user can comapare the
+        curves peak x points against an expected load protocol.
+        
+        The default plot function uses matplotlib for plotting, and returns 
+        the plotted line.
+        
+        Parameters
+        ----------
+        comparisonProtocol : array
+            A load protocol that will be plotted on the same figure. Useful
+            for comparing the curves load protcol to the input protocol.
+        kwargs : list, optional
+            Any additional keyword arguements will be passed to the matplotlib
+            plot function. This can be used to custize char appearance.
         """           
         plotCycles = False
         plotPeaks = False
         labelCycles = []
         y = self.loadProtocol
         x = np.arange(0,len(y))
-                    
-        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles, **kwargs)
+                
+        line = self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles, **kwargs)
         
         if len(comparisonProtocol) != 0:
-            plt.plot(comparisonProtocol)    
-    
+            line2 = plt.plot(comparisonProtocol)
+            return [line, line2]
+
+        return line
     
     def plotSlope(self,  plotCycles = False, plotPeaks = False, 
                   labelCycles = [], **kwargs):
+        """
+        Used the plot function to make a xy plot of the slope at each point of 
+        the curve. The slope is calcualted using the slope function, which
+        uses a centeral finite difference scheme by default.
+        plot function uses matplotlib for plotting, and returns the plotted
+        line.
+        
+        Parameters
+        ----------
+        plotCycles : bool
+            A switch that specifics if cycle reversal points should be plotted.
+        plotPeaks : bool
+            A switch that specifics if the detected peak values should be plotted.
+
+        labelCycles : list or 'all', optional
+            A list of the cycles to be labled. 
+            A value of 'all' can also be specified, in which case all cucles will be plotted.
+            The default is [], which labels no cycles  
+        kwargs : list, optional
+            Any additional keyword arguements will be passed to the matplotlib
+            plot function. This can be used to custize char appearance.
+        """          
         
         x = self.xy[:,0]
         y = self.slope
 
-        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles, **kwargs)
+        return self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles, **kwargs)
                 
     def plotArea(self,  plotCycles = False, plotPeaks = False, labelCycles = [], **kwargs):
+        """
+        Used the plot function to make a xy plot of the area under each point of 
+        the curve. The area is calculated using the area function, which
+        uses the midpoint rule by default.
+        The plot function uses matplotlib for plotting, and returns the plotted
+        line.
+        
+        Parameters
+        ----------
+        plotCycles : bool
+            A switch that specifics if cycle reversal points should be plotted.
+        plotPeaks : bool
+            A switch that specifics if the detected peak values should be plotted.
+
+        labelCycles : list or 'all', optional
+            A list of the cycles to be labled. 
+            A value of 'all' can also be specified, in which case all cucles will be plotted.
+            The default is [], which labels no cycles
+        kwargs : list, optional
+            Any additional keyword arguements will be passed to the matplotlib
+            plot function. This can be used to custize char appearance.            
+            
+        """       
         
         x = self.xy[:,0]
         y = self.area
 
-        self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles, **kwargs)  
+        return self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles, **kwargs)  
                         
     def plotCumArea(self,  plotCycles = False, plotPeaks = False, labelCycles = [], **kwargs):
+        """
+        Used the plot function to make a xy plot of cumulative area at each
+        point of the curve. The cumulative area is a summation of the areas up
+        to the point in question.
+        The area is calculated using the area function, which uses the midpoint 
+        rule by default.
+        The plot function uses matplotlib for plotting, and returns the plotted
+        line.
+        
+        Parameters
+        ----------
+        plotCycles : bool
+            A switch that specifics if cycle reversal points should be plotted.
+        plotPeaks : bool
+            A switch that specifics if the detected peak values should be plotted.
+        labelCycles : list or 'all', optional
+            A list of the cycles to be labled. 
+            A value of 'all' can also be specified, in which case all cucles will be plotted.
+            The default is [], which labels no cycles
+        kwargs : list, optional
+            Any additional keyword arguements will be passed to the matplotlib
+            plot function. This can be used to custize char appearance.
+        
+        """   
         
         # We get the cumulative displacement and area
         x = self.getCumDisp()
@@ -288,15 +406,19 @@ class CurveBase:
         self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles, **kwargs)  
              
     def initFig(self, xlims = [], ylims = []):
+        """       
+        Initializes the plot using the default rules.
+        """        
+        
         return self.initializeFig(xlims, ylims)
 
 
 def _getOperand(curve):
     """
-    Gets the operand (what data the function acts on) for operation functions.
-    The data used depands on the input given
+    Gets the operand (what data the function acts on) for operation functions
+    (+,-,*,/)
+    The data used in these functions depends on the input given.
     
-    In the future, a strategy pattern could be used to replace this.
     """
     if not hasattr(curve, '__len__'): # assume scalar if no length
         operand = curve
@@ -355,19 +477,25 @@ class Hysteresis(CurveBase):
         Used to filter reversal points that aren't sufficently high. Prominence 
         is the desired difference in height between peaks and their 
         neighbouring peaks. 
-        The default is None, which results in no filtering.        
-    
+        The default is None, which results in no filtering.     
+    setCycles : Boolean, optional
+        Used to turn on or off setting the cycle revesal points. 
+        Can be turned off for performance reasons.
+    setArea : Boolean, optional
+        Used to turn on or off setting the Area by default. 
+        Can be turned off for performance reasons.
+    setSlope : Boolean, optional
+        Used to turn on or off setting the slopeby default. 
+        Can be turned off for performance reasons.    
+        
     """
     
-
-
     def __init__(self, XYData, revDist = 2, revWidth = None, revProminence = None,
                  setCycles = True, setArea = True, setSlope = True, **kwargs):
  
         CurveBase.__init__(self, XYData, **kwargs)
         self.setReversalPropreties(revDist, revWidth, revProminence)
         
-
         #TODO Create warning if cycles don't make sense.
         if setCycles == True:
             self.setReversalIndexes(revDist, revWidth, revProminence)
@@ -447,40 +575,73 @@ class Hysteresis(CurveBase):
         """ Sets the net area of the whole Hysteresis """
         self.NetArea = np.sum(self.area)
 
-    def plotCycle(self, Index, plotPeaks = False):
-        """ Plots a specific cycle."""
+    def plotCycle(self, Index, plotPeaks = False, **kwargs):
+        
+        """
+        Plots the xy values of a single cycle.
+        
+        Parameters
+        ----------
+        Index : int
+            The cycle to be plotted.
+        plotPeaks : bool
+            A switch that specifics if the detected peak values should be plotted.
+        kwargs : list, optional
+            Any additional keyword arguements will be passed to the matplotlib
+            plot function. This can be used to custize char appearance.            
+        """
+        
         Cycle = self.cycles[Index]
-        return Cycle.plot(plotPeaks = plotPeaks)
+        return Cycle.plot(plotPeaks = plotPeaks, **kwargs)
 
-    def plotCycles(self, Cycles = [], plotCycles = False, plotPeaks = False, 
-                    labelCycles = []):
-        """ Plots several cycles on the same figure """
+    def plotCycles(self, cycleIndexes = [], plotCycles = False, plotPeaks = False, 
+                    labelCycles = [], Cycles = [], **kwargs):
+        """
+        Plots the xy values of a several cycles on the same figure.
+        If no list is provided, every cycle will be plotted.
+        
+        Parameters
+        ----------
+        cycleIndexes : list of int
+            A list of the cycles to be plotted.
+        plotCycles : bool
+            A switch that specifics if cycle reversal points should be plotted.            
+        plotPeaks : bool
+            A switch that specifics if the detected peak values should be plotted.
+        kwargs : list, optional
+            Any additional keyword arguements will be passed to the matplotlib
+            plot function. This can be used to custize char appearance.            
+        """
+        if len(Cycles) !=0:
+            cycleIndexes = Cycles
+            print('Deprication warning: the "Cycles" key word arguement has been replaced by "cycleIndexes", and will return an error in future versions.')
+        
+        
         xyHys = self.xy
         Vectors = self.cycles
-        # fig, ax = initializeFig(xlim, ylim)
         
-        self.showCycles(self, xyHys[:,0], xyHys[:,1], plotCycles, plotPeaks, labelCycles, Cycles)
+        self.showCycles(self, xyHys[:,0], xyHys[:,1], plotCycles, plotPeaks, labelCycles, Cycles, **kwargs)
         
         colorDict = self.colorDict
         
+        lines = []
         # If the list is empty, plot everything
-        if len(Cycles) == 0:
+        if len(cycleIndexes) == 0:
             for ii, vector in enumerate(Vectors):
-                c = colorDict[int(np.floor((ii + 1)/2) % 3)]
+                # c = colorDict[int(np.floor((ii + 1)/2) % 3)]
                 c = colorDict[int(np.floor((ii + 1)/2) % 2)]
-                # c = colorDict[int( ii % 2)]
-                plt.plot(vector.xy[:,0], vector.xy[:,1], c=c)
+                line, = plt.plot(vector.xy[:,0], vector.xy[:,1], c=c)
                 # plt.plot(vector.xy[:,0], vector.xy[:,1])
+                lines.append(line)
 
         else:
             for ii, vector in enumerate(Vectors):
                 if ii in Cycles:
                     # c = colorDict[int(np.floor((ii + 1)/2) % 3)]
                     # plt.plot(vector.xy[:,0], vector.xy[:,1], c=c)
-                    plt.plot(vector.xy[:,0], vector.xy[:,1])
-            
-        # return fig, ax    
-    
+                    line = plt.plot(vector.xy[:,0], vector.xy[:,1])
+                    lines.append(line)
+
        
     def recalculateCycles(self, revDist = 2, revWidth = None, revProminence = None, **kwargs):
         """
@@ -628,17 +789,26 @@ class SimpleCycle(CurveBase):
         is the desired difference in height between peaks and their 
         neighbouring peaks. 
         The default is None, which results in no filtering.        
-        
+    findPeaks : Boolean, optional
+        Used to turn on or off setting the cycle peak points. 
+        Can be turned off for performance reasons.
+    setArea : Boolean, optional
+        Used to turn on or off setting the Area by default. 
+        Can be turned off for performance reasons.
+    setSlope : Boolean, optional
+        Used to turn on or off setting the slopeby default. 
+        Can be turned off for performance reasons.   
     
     
     """
     
     def __init__(self, XYData, findPeaks = False, setSlope = False, setArea = False,
-                 peakDist = 2, peakWidth = None, peakProminence = None):
-        CurveBase.__init__(self, XYData)
+                 peakDist = 2, peakWidth = None, peakProminence = None, **kwargs):
+        CurveBase.__init__(self, XYData, **kwargs)
         
         self._setDirection()
-            
+        
+        # indices = self.peakIndexes
         if setArea == True:
             self.setArea()       
         
@@ -664,11 +834,10 @@ class SimpleCycle(CurveBase):
                 
     def setSubCycles(self):
         """
+        Finds monotonic "sub-sycles" within each cycle.
         Peaks must be set before subcyles can be set.
 
         """
-        # TODO
-        # Try to set peaks, then try to set MonotonicCurves.
 
         xy = self.xy
         indices = self.peakIndexes
@@ -768,12 +937,12 @@ class SimpleCycle(CurveBase):
 class MonotonicCurve(CurveBase):
     """
     A curve that has no changes in it's x axis direction, as well as no changes
-    in it's y axis.
+    in it's y axis direction.
     """
     
     
-    def __init__(self, XYData):
-        CurveBase.__init__(self, XYData)
+    def __init__(self, XYData, **kwargs):
+        CurveBase.__init__(self, XYData, **kwargs)
         
         self._setDirection()
             
@@ -820,11 +989,4 @@ TODO:
     Add limitts to the style object?    
     Make the limits part of the hysteresis object, so they don't need
     to continually be passed to each funciton.
-"""
-
-
-
-"""
-TODO: Make Plot functions Lamda function, then specialize for slope, area, etc.
-
 """

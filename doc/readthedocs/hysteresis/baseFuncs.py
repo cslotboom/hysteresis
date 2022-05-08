@@ -109,6 +109,20 @@ def _RemoveNeg(x, y, direction):
     return xy
 
 def removeNegative(Curve):
+    """
+    Removed values where the curve moves
+
+    Parameters
+    ----------
+    Curve : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    Output : TYPE
+        DESCRIPTION.
+
+    """
     
     """
     Removes intermitent negative values in a simple curve.
