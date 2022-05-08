@@ -129,8 +129,6 @@ def defaultPlotFunction(self, x, y, plotCycles, plotPeaks, labelCycles = [], **k
         be plotted. The default is [], which plots all cycles.
     """
 
-
-    # fig, ax = initializeFig(xlim, ylim)
           
     line, = plt.plot(x, y, **kwargs)
        
