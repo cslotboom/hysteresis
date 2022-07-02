@@ -1,0 +1,3 @@
+- updated documentation of major plotting functions.
+- deperecated the "cycles" kwarg in the Hysteresis object "plotCycles" method. cycleIndexes is clearer, and will be used instead.
+- fixed some plot functions not returning line objects.
