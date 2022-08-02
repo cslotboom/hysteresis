@@ -46,7 +46,6 @@ def concatenateHys(*argv):
             tempxy = vector
             
         # for curves after the first curve, we skip the first value
-        # I think we want to do this for all curves?
         if ii >= 1:
             xyList[ii] = tempxy[1:,:]
         else:

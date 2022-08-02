@@ -67,6 +67,15 @@ class CurveBase:
     def __len__(self):
         return len(self.xy[:,0])
 
+    def __iter__(self):
+        return iter(self.xy)
+    
+    def __getitem__(self, ind):
+        return self.xy[ind]
+    
+    def __setitem__(self, ind, val):
+        self.xy[ind] = val
+
     def _getInstance(self):
         return type(self)
     

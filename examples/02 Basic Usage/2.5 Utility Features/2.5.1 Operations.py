@@ -18,7 +18,6 @@ xy = np.column_stack([x,y])
 dataHys = hys.Hysteresis(xy)
 
 
-
 """
 The it's possible to perform standard operations using scalars, numpy arrays 
 of equal size, and other hysteresis curves to each hysteresis.
@@ -36,7 +35,15 @@ for curve in examples:
     curve.plot(linewidth = 2)
 
 
+"""
+Hystersis objects also support iteration and object retreval!
+"""
 
+dataHys[4] = [0,0]
+print(dataHys[4])
+
+for xy in dataHys:
+    print(xy)
 
 
 

@@ -33,7 +33,6 @@ def resample(curve, Nsamples):
     # We recursively resample by calling the function again for sub-cycle objects
     # if the curve is a SimpleCycle
     if isinstance(curve, SimpleCycle):
-    
         x = curve.xy[:,0]
         y = curve.xy[:,1]
         Output = SimpleCycle(_linInterpolate(x,y, Nsamples))    
@@ -47,10 +46,8 @@ def resample(curve, Nsamples):
 
     # if the curve is a Monotonic Cycle
     elif isinstance(curve, MonotonicCurve):
-    
         x = curve.xy[:,0]
         y = curve.xy[:,1]
-        
         Output = MonotonicCurve(_linInterpolate(x,y, Nsamples))  
     
     # if it is a np array
