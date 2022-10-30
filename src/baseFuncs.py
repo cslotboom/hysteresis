@@ -67,9 +67,9 @@ def concatenateHys(curves):
 
     Parameters
     ----------
-    argv : SimpleCycle objects, or XY data
-        A number of monotonic cycle objects to be combined into a hysteresis.
-        These curves should be 
+    curves : a list of SimpleCycle objects, or XY data
+        A number of curve objects to be combined into a hysteresis.
+        These curves either be 2D list/arrays, or objects with a xy attribute.
 
     Returns
     -------
@@ -140,12 +140,12 @@ def _RemoveNeg(x, y, direction):
 
 def removeNegative(Curve):
     """
-    Removed values where the curve moves
+    Removed values where the curve moves "backwards".
 
     Parameters
     ----------
-    Curve : TYPE
-        DESCRIPTION.
+    Curve : Hystersis Curve or array
+        The input curve to remove negative values for.
 
     Returns
     -------
@@ -153,10 +153,7 @@ def removeNegative(Curve):
         DESCRIPTION.
 
     """
-    
-    """
-    Removes intermitent negative values in a simple curve.
-    """
+
     
     
     # Get sample parameters, then pass those to the new curve.
