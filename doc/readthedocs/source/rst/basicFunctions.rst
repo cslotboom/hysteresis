@@ -3,6 +3,7 @@ Basic Functions
 
 These functions analyze basic Hysteresis base objects.
 
+#. :doc:`basicFunctions-concatenate`
 #. :doc:`basicFunctions-concatenateHys`
 #. :doc:`basicFunctions-resample`
 #. :doc:`basicFunctions-resampleDx`
@@ -14,7 +15,8 @@ These functions analyze basic Hysteresis base objects.
 .. toctree::
    :maxdepth: 2
    :hidden:
-   
+
+   basicFunctions-concatenate.rst   
    basicFunctions-concatenateHys.rst
    basicFunctions-resample.rst
    basicFunctions-resampleDx.rst
