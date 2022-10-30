@@ -1,5 +1,6 @@
-- updated documentation of major plotting functions.
-- deperecated the "cycles" kwarg in the Hysteresis object "plotCycles" method. cycleIndexes is clearer, and will be used instead.
-- fixed some plot functions not returning line objects.
-- added iteration using __iter__
-- added object retreval using __getitem__ and setting using __setitem__
+Additions:
+- added concatenate, which can concatenate hysteresis objects to other classes, i.e. simplecycles.
+- updated concatenateHys to use concatenate by default
+- modified concatenateHys to take inputs in a list, instead of loose arguments.
+- added resampleRegion, which can be used to resample only part of a curve.
+- new tests for all above functions

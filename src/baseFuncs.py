@@ -10,16 +10,64 @@ from .baseClass import Hysteresis, SimpleCycle, MonotonicCurve
 # Todo:
     # make a concatenate to Cycle object.
 
+def concatenate(curves, outputClass = Hysteresis):
+    """
+    This function creates a new curve from the xy data of a series of 
+    curves, or xy arrays.
+    
+    The output object is new - if curves are used in the concatenation, 
+    propreties from those curves, i.e. peaks, revesral points, etc, will 
+    not be included in the output curve.
+    
+    If the last point of one curve is the first point of the next point, 
+    that point will be skipped.
 
-def concatenateHys(*argv):
+    Parameters
+    ----------
+    curves : list of curves
+        A number of curves, or numpy arrays. Curves must a have a xy attribute
+        numpy arrays must be 2D
+
+    Returns
+    -------
+    hysteresis : Hysteresis Object
+        The ouput hysteresis object which is a combination of all of the input
+        curves
+
+    """  
+    
+    
+    xyList = [None]*len(curves)   
+    for ii, vector in enumerate(curves):
+        # Try to read the xy data from a monotonic curve object
+        try:
+            tempxy = vector.xy
+        except:
+            tempxy = vector
+            
+        # for curves after the first curve, we skip the first value
+        if ii >= 1 and np.all(xyList[ii-1][-1] - vector[0] == 0):
+            xyList[ii] = tempxy[1:,:]
+        else:
+            xyList[ii] = tempxy
+    
+    # Create new hysteresis, then add objects to the list    
+    xy = np.concatenate(xyList)
+    output = outputClass(xy)
+    return output
+
+
+def concatenateHys(curves):
     """
     This function creates a new hysteresis from the xy data of a series of 
     monotonic curves, or xy curves.
-
     
+    If curves are used in the concatenation, propreties from those curves 
+    will be lost.
+
     Parameters
     ----------
-    *argv : SimpleCycle objects, or XY data
+    argv : SimpleCycle objects, or XY data
         A number of monotonic cycle objects to be combined into a hysteresis.
         These curves should be 
 
@@ -30,39 +78,14 @@ def concatenateHys(*argv):
         curves
 
     """
-    
-    # # TODO: enhance hysteresis functionality
-    # I would expect that the new curve has all the propreties of the old curves.
-    # Here that won't be the case, which is akward.   
-    
-    
-    xyList = [None]*len(argv)   
-           
-    for ii, vector in enumerate(argv):
-        # Try to read the xy data from a monotonic curve object
-        try:
-            tempxy = vector.xy
-        except:
-            tempxy = vector
-            
-        # for curves after the first curve, we skip the first value
-        if ii >= 1:
-            xyList[ii] = tempxy[1:,:]
-        else:
-            xyList[ii] = tempxy
-    
-    # Create new hysteresis, then add objects to the list    
-    xy = np.concatenate(xyList)
-    hysteresis = Hysteresis(xy)
-    
-    return hysteresis
+    return concatenate(curves)
 
 
 # =============================================================================
 # resample functions
 # =============================================================================
 
-def _linInterpolate(x,y, Nsamples):
+def _linInterp(x,y, Nsamples):
     """
     A linear interpolation function that takes a target input curve to a 
     target sample curve. The sample curve goes between x0 and xN with Nsamples.
@@ -75,6 +98,18 @@ def _linInterpolate(x,y, Nsamples):
     outputxy = np.column_stack((outputx, outputy))    
     return outputxy
 
+def _linInterpSample(x,y, xSamples):
+    """
+    A linear interpolation function that takes a target input curve to a 
+    target sample curve. Output of the curve are given at each sample point 
+    """
+    
+    f = interp1d(x, y)
+    
+    outputy = f(xSamples)
+    outputxy = np.column_stack((xSamples, outputy))    
+    return outputxy
+
 
 def _getNsamples(Targetdx, dxNet):
     if Targetdx >= abs(dxNet/2):
@@ -83,10 +118,6 @@ def _getNsamples(Targetdx, dxNet):
     else:
         Nsamples = int(round(abs(dxNet/Targetdx))) + 1
     return Nsamples
-
-
-
-
 
 
 

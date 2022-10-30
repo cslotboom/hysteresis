@@ -2,8 +2,31 @@ import numpy as np
 
 from .baseClass import SimpleCycle
 from .baseFuncs import concatenateHys
-    # We do all of the hysteresis cycles, but not necessarily all of the 
-    # load protocol cycles.
+
+
+
+
+
+# def getProtcol(loadProtcol,Nrepeats):
+#     pass
+
+
+# def getTimeseries(loadProtcol:list, dx:float, halfCycle=True, ):
+    
+    
+    
+    
+#     pass
+
+
+# def getTimeseries(loadProtcol:list, Nrepeat, halfCycle=True):
+    
+    
+    
+    
+#     pass
+
+
 
 
 def getReturnCycle(cycleStart, cycleReturn):
@@ -11,7 +34,6 @@ def getReturnCycle(cycleStart, cycleReturn):
     This function finds the return cycle that closes a hystresis Full cycle
 
     """
-    
     
     xy1 = cycleStart.xy
     # Get the and the max value
@@ -36,31 +58,29 @@ def exandHysTrace(hysteresis, loadProtocolNcycles, skipStart = 1,
                   skipEnd = 1):
     """
     
-    The first cycle is assumed to be in the right direction.
+    The first cycle is assumed to be going from left to right (->).
     
     
     This function expands the trace of a hysteresis, where the trace has only
     one cycle per displacement in the load protocol.
     For example, if for a cycle N = 2, we go from:
-       | . <-- .
-       | . -----> .
-       | . <----- .
-       |     .--> .
+        | . <-- .
+        | . -----> .
+        | . <----- .
+        |     .--> .
     To:
-       |     .<-- .
-       | . -----> .
-       | . <----- .
-       | . -----> .
-       | . <----- .
-       |     .--> .
+        |     .<-- .
+        | . -----> .
+        | . <----- .
+        | . -----> .
+        | . <----- .
+        |     .--> .
        
     We assume that the trace has a start cycle, and a end cycle. These start
     and end cycles are not expanded. The final/failure cycle can occur in the 
     expansion or return direction. To ensure they are not expanded, the user
     must skip the final cycles.
     
-    
-   
     Where cycles don't form a closed loop, the loop will be artificially closed
     by finding the closet point to the end of the cycle
    
@@ -82,7 +102,6 @@ def exandHysTrace(hysteresis, loadProtocolNcycles, skipStart = 1,
         Then this is set to true. The default is True.
 
 
-
     Returns
     -------
     Hysteresis
@@ -92,21 +111,15 @@ def exandHysTrace(hysteresis, loadProtocolNcycles, skipStart = 1,
     
     # !!!: the final cycle is added back if we skip failure!
 
-    # TODO: Consider making a copy, this may be unsafe.
     # Get the cycles to be expanded
     cycles = hysteresis.cycles
-    # NcyclesHys = len(cycles)
     
     # Skip the requested start and end cycles.
     toExpand = cycles[skipStart:]
     if skipEnd != 0 :
         toExpand = toExpand[:-skipEnd]
     
-    # # Skip the requested start and end cycles.
-    # loadProtocolNcycles = loadProtocolNcycles[skipStart:-skipEnd]
-    
     # Find the number of cycles that can be expanded
-    # NcyclesList = len(loadProtocolNcycles)
     NExpand = len(toExpand)
     NExpandIn = len(loadProtocolNcycles)
     
@@ -156,7 +169,7 @@ def exandHysTrace(hysteresis, loadProtocolNcycles, skipStart = 1,
     if skipEnd != 0 :
         xyList[-skipEnd:] = cycles[-skipEnd:]
 
-    return concatenateHys(*xyList)
+    return concatenateHys(xyList)
 
 def _checkNcycles(MonotonicProtocol, loadProtocolNcycles):
     
@@ -173,9 +186,10 @@ def _getCyclePoints(P1, P2, Nsteps):
     np.linspace(P1, P1)
 
 
-def createProtocol(MonotonicProtocol, loadProtocolNcycles):
+def createProtocol(MonotonicProtocol, loadProtocolNcycles, halfCycle = False):
     """
     Creates a reverse cyclic load protocol using a monotonic load protocol.
+    In this context, the protocol is just the peak
     
 
     Parameters
@@ -188,6 +202,10 @@ def createProtocol(MonotonicProtocol, loadProtocolNcycles):
         
         If it's a list, each monotonic cycle 'x' will be expanded by Nx
         [N1, N2, N3, ... , N4]
+        
+    halfCycle : bool
+        A toggle that changes where the cycle returns to. If set to True, the load protocol will 
+        return to 0 instead of the negative of the start value.
 
     Returns
     -------
@@ -209,20 +227,20 @@ def createProtocol(MonotonicProtocol, loadProtocolNcycles):
     
     if len(MonotonicProtocol) != len(loadProtocolNcycles):
         raise Exception("The number of cycles isn't specified for each cycle in the monotonic load Protocol.")
-    
-    # The total number of points is equal to the number of cycles
-    # Npoints = (Ncycle*2  + 1) * (Nsteps - 1)
-    
+        
     outputProtocol = np.zeros(Ncycle*2 + 1)
     nn = 1
+    negPeak = 0
     for ii in range(len(MonotonicProtocol)):
         posPeak = MonotonicProtocol[ii]
-        negPeak = -posPeak
+        if not halfCycle:
+            negPeak = -posPeak           
         
         for jj in range(loadProtocolNcycles[ii]):
             outputProtocol[nn] = posPeak
             outputProtocol[nn + 1] = negPeak
             nn += 2
-            
-        
+
     return outputProtocol
+
+

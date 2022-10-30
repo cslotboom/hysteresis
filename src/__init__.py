@@ -1,6 +1,6 @@
 from .baseClass import Hysteresis, SimpleCycle, MonotonicCurve
-from .baseFuncs import concatenateHys, removeNegative
-from .resample import resample, resampleDx
+from .baseFuncs import concatenateHys, concatenate, removeNegative
+from .resample import resample, resampleDx, resampleRegion
 
 from .compare import compareCycle, compareHys
 from .protocol import exandHysTrace, createProtocol
