@@ -1,8 +1,4 @@
 import numpy as np
-from numpy import trapz
-
-from scipy.interpolate import interp1d
-from scipy.signal import find_peaks
 from hysteresis import data
 import hysteresis.env as env
 import matplotlib.pyplot as plt
@@ -12,8 +8,6 @@ import matplotlib.pyplot as plt
 # =============================================================================
 # Curve objects
 # =============================================================================
-
-
 
 class CurveBase:
     
@@ -29,7 +23,6 @@ class CurveBase:
     
     def __init__(self, XYData, xunit = '', yunit = ''):
         """
-        
         Parameters
         ----------
         XYData : array
@@ -58,6 +51,16 @@ class CurveBase:
         
         self.xunit = xunit
         self.yunit = yunit
+        
+        self.peakIndexes = None
+    
+    @property
+    def y(self):
+        return self.xy[:,1]
+    
+    @property
+    def x(self):
+        return self.xy[:,0]    
     
     def _parseXY(self, xy):
         if isinstance(xy, list):
@@ -66,6 +69,15 @@ class CurveBase:
     
     def __len__(self):
         return len(self.xy[:,0])
+
+    def __iter__(self):
+        return iter(self.xy)
+    
+    def __getitem__(self, ind):
+        return self.xy[ind]
+    
+    def __setitem__(self, ind, val):
+        self.xy[ind] = val
 
     def _getInstance(self):
         return type(self)
@@ -114,7 +126,6 @@ class CurveBase:
         
         return Instance(np.column_stack([x,y]))
 
-
     def __truediv__(self, other):
         # Get the current instance of curve
         Instance = self._getInstance()
@@ -149,7 +160,6 @@ class CurveBase:
         """ Gets the total cumulative displacement between the start and start and end 
         indexes. By default the whole curve us used.
         """
-        x = self.xy[:,0]
         dx = np.append(0, np.diff(self.xy[:,0]))
         
         if endIndex == 0:
@@ -221,7 +231,15 @@ class CurveBase:
             self.maxIndexes = peakIndexes[1::2]
         else:
             self.minIndexes = peakIndexes[1::2]
-            self.maxIndexes = peakIndexes[0::2]    
+            self.maxIndexes = peakIndexes[0::2]
+            
+    def getPeakxy(self,):
+        
+        if self.peakIndexes is not None:
+            return self.xy[self.peakIndexes]
+        else:
+            raise Exception('No peaks have been set')
+        
     
     def plot(self, plotCycles = False, plotPeaks = False, labelCycles = [],
              **kwargs):
@@ -243,6 +261,12 @@ class CurveBase:
         kwargs : list, optional
             Any additional keyword arguements will be passed to the matplotlib
             plot function. This can be used to custize char appearance.            
+
+
+
+        Outputs
+        -------
+        Matplotlib Line
 
         """        
         x = self.xy[:,0]
@@ -412,7 +436,6 @@ class CurveBase:
         
         return self.initializeFig(xlims, ylims)
 
-
 def _getOperand(curve):
     """
     Gets the operand (what data the function acts on) for operation functions
@@ -433,12 +456,6 @@ def _getOperand(curve):
             raise Exception(f'{curve.shape[-1]}D curve give, only 1 or 2D supported')
     return operand
 
-# TODO:
-    # Make the Hysteresis object take in the optional arguements as well. This
-    # Curretnly will not work for non-basic funcitons.
-    
-    # This can potentially be fixed by having the user overwrite the default 
-    # function
 
 # =============================================================================
 # 
@@ -494,9 +511,12 @@ class Hysteresis(CurveBase):
                  setCycles = True, setArea = True, setSlope = True, **kwargs):
  
         CurveBase.__init__(self, XYData, **kwargs)
-        self.setReversalPropreties(revDist, revWidth, revProminence)
+        # self.setReversalPropreties(revDist, revWidth, revProminence)
+        self._setStatePropreties(revDist, revWidth, revProminence,
+                                 setCycles, setArea, setSlope)
         
         #TODO Create warning if cycles don't make sense.
+        self.cycles = None
         if setCycles == True:
             self.setReversalIndexes(revDist, revWidth, revProminence)
             self.setCycles()
@@ -515,6 +535,29 @@ class Hysteresis(CurveBase):
         self.revDist = revDist
         self.revWidth = revWidth
         self.revProminence = revProminence
+    
+    def _setStatePropreties(self, revDist, revWidth, revProminence,
+                                 setCycles, setArea, setSlope):
+        """
+        Sets the propreties that are used to caculate where reversal points occur.
+        These are used if we want to copy new classes using the same parameters.
+        """
+        self.revDist = revDist
+        self.revWidth = revWidth
+        self.revProminence = revProminence           
+        
+        self._setCycles = setCycles
+        self._setArea = setArea
+        self._setSlope = setSlope   
+        
+    def _getStatePropreties(self):
+        """
+        Sets the propreties that are used to caculate where reversal points occur.
+        These are used if we want to copy new classes using the same parameters.
+        """
+        
+        return [self.revDist, self.revWidth, self.revProminence,
+                self._setCycles, self._setArea, self._setSlope]
         
         
     def setReversalIndexes(self, revDist = 2, revWidth = None, 
@@ -695,8 +738,6 @@ class Hysteresis(CurveBase):
             
         sampleHysteresis : Hysteresis, optional
             The hysteresis to be be used when recalculating the cycle points.
-
-        
         
         Returns
         -------
@@ -799,7 +840,6 @@ class SimpleCycle(CurveBase):
         Used to turn on or off setting the slopeby default. 
         Can be turned off for performance reasons.   
     
-    
     """
     
     def __init__(self, XYData, findPeaks = False, setSlope = False, setArea = False,
@@ -807,19 +847,44 @@ class SimpleCycle(CurveBase):
         CurveBase.__init__(self, XYData, **kwargs)
         
         self._setDirection()
-        
-        # indices = self.peakIndexes
-        if setArea == True:
-            self.setArea()       
-        
+        self._setStatePropreties(findPeaks, setSlope, setArea, 
+                                 peakDist, peakWidth, peakProminence)
+               
+        self.subCycles = None
         if findPeaks == True:
             self.setPeaks(peakDist, peakWidth, peakProminence)
             self.setSubCycles()
     
         if setSlope == True:
             self.setSlope()
+        if setArea == True:
+            self.setArea()      
 
-       
+    
+    def _setStatePropreties(self, findPeaks, setSlope, setArea, 
+                                  peakDist, peakWidth, peakProminence):
+        """
+        Sets the varabiles that are used to caculate what propreties of the curve
+        are run. Used when copying the simple cycle object
+        """
+        self._findPeaks = findPeaks
+        self._setSlope = setSlope
+        self._setArea = setArea
+        
+        self.peakDist = peakDist
+        self.peakWidth = peakWidth
+        self.peakProminence = peakProminence        
+
+    def _getStatePropreties(self):
+        """
+        Sets the propreties that are used to caculate where reversal points occur.
+        These are used if we want to copy new classes using the same parameters.
+        """
+        return [self._findPeaks,self._setSlope,self._setArea,
+                self.peakDist, self.peakWidth, self.peakProminence]
+
+
+
     def _setDirection(self):
         """
          1 = left to right. -1 = to is right to left
@@ -875,12 +940,41 @@ class SimpleCycle(CurveBase):
         for SubCycle in SubCycles:
             SubCycle.setSlope()       
       
-    def getSubCycles(self, Indicies):
-        SubCycles = [self.subCycles[index] for index in Indicies]
+    def getSubCycles(self, indicies):
+        """
+        returns a list of subcycles with the input indicies.
+
+        Parameters
+        ----------
+        Index : list of int
+            The integer index of the sub-cycle you want to return.
+
+        Returns
+        -------
+        Subcycle
+            The output subcycle.
+
+        """        
+        
+        SubCycles = [self.subCycles[index] for index in indicies]
         return SubCycles      
     
-    def getSubCycle(self, Index):
-        return self.subCycles[Index]
+    def getSubCycle(self, index):
+        """
+        Gets the subcycle with a partcular index
+
+        Parameters
+        ----------
+        Index : int
+            The integer index of the sub-cycle you want to return.
+
+        Returns
+        -------
+        Subcycle
+            The output subcycle.
+
+        """
+        return self.subCycles[index]
      
     def plotSubCycles(self, SubCyclesIndicies = [], plotCycles = False, plotPeaks = False):
         
@@ -938,9 +1032,7 @@ class MonotonicCurve(CurveBase):
     """
     A curve that has no changes in it's x axis direction, as well as no changes
     in it's y axis direction.
-    """
-    
-    
+    """   
     def __init__(self, XYData, **kwargs):
         CurveBase.__init__(self, XYData, **kwargs)
         

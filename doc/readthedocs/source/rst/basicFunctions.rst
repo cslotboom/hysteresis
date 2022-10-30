@@ -6,6 +6,7 @@ These functions analyze basic Hysteresis base objects.
 #. :doc:`basicFunctions-concatenateHys`
 #. :doc:`basicFunctions-resample`
 #. :doc:`basicFunctions-resampleDx`
+#. :doc:`basicFunctions-resampleRegion`
 #. :doc:`basicFunctions-removeNegative`
 #. :doc:`basicFunctions-compareHys`
 #. :doc:`basicFunctions-compareCycle`
@@ -17,6 +18,7 @@ These functions analyze basic Hysteresis base objects.
    basicFunctions-concatenateHys.rst
    basicFunctions-resample.rst
    basicFunctions-resampleDx.rst
+   basicFunctions-resampleRegion.rst
    basicFunctions-removeNegative.rst
    basicFunctions-compareHys.rst
    basicFunctions-compareCycle.rst
