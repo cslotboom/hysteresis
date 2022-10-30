@@ -24,6 +24,13 @@ def test_expandHysTrace():
 
 
 
+
+# curve = makeCurveBase()
+# curve.plotVsIndex()
+# expand = hys.exandHysTrace(curve, [2])
+# expand.plotVsIndex()
+# test_expandHysTrace()
+
 # curve = makeCurveBase()
 # curve.plot()
 # curve.plotLoadProtocol()

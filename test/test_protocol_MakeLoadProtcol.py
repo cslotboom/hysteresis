@@ -38,3 +38,12 @@ def test_2():
     diff = np.sum(np.abs(protocol - answer))
     
     assert(np.all(diff < 10**-8) == True)
+
+
+def test_3():
+    loadProtocol = [1,2,3]
+    ncycle = 2
+    protocol = hys.createProtocol(loadProtocol, ncycle, True)
+    answer = np.array([0,1,0,1,0,2,0,2,0,3,0,3,0])
+    assert(np.all(protocol == answer) == True)
+    
