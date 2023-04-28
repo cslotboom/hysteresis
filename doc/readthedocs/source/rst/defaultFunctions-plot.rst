@@ -1,7 +1,7 @@
 Default Plot Functions
 ======================
 
-These ar the default functions use to plot the curve objects. They can be overwritten to get custom behaviour.
+These are the default functions use to plot the curve objects. They can be overwritten to get custom behaviour.
 
 #. :doc:`defaultFunctions-plot-initializeFig`
 #. :doc:`defaultFunctions-plot-defaultLabelFunction`
