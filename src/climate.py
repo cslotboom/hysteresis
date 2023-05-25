@@ -1,7 +1,7 @@
 import numpy as np
 
 
-from .baseClass import CurveBase
+from .baseClass import Curve
 
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
@@ -54,11 +54,7 @@ def defaultFitCurve(f, xy, **kwargs):
     return coef, correlation
 
 
-
-
-
-
-class SeasonalCurve(CurveBase):
+class SeasonalCurve(Curve):
     """
     The input XY data is assumed to be evenly spaced in time.
     
@@ -68,7 +64,7 @@ class SeasonalCurve(CurveBase):
     
     
     def __init__(self, xy, period = 1, n = 1, m = 1):
-        CurveBase.__init__(self, xy)
+        Curve.__init__(self, xy)
         
         self.time = np.arange(0, self.Npoints)/self.Npoints
         self.period = period

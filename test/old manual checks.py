@@ -88,9 +88,9 @@ Gets the area under a series of graphs
 # xy2 = np.column_stack([xdata, y2])
 # xy3 = np.column_stack([xdata, y3])
 
-# Curve1 = hys.CurveBase(xy1)
-# Curve2 = hys.CurveBase(xy2)
-# Curve3 = hys.CurveBase(xy3)
+# Curve1 = hys.Curve(xy1)
+# Curve2 = hys.Curve(xy2)
+# Curve3 = hys.Curve(xy3)
 
 # Curves = [Curve1, Curve2, Curve3]
 

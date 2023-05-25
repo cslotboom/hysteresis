@@ -5,242 +5,7 @@ import matplotlib.pyplot as plt
 
 
 
-# =============================================================================
-# Curve objects
-# =============================================================================
-
-class CurveBase:
-    
-    __array_ufunc__ = None
-    """
-    The curve base object represents a generic xy curve with no limitations.
-    
-    All other curves inherit from the CurveBase class. It has access to methods
-    all other curves should have access to. This uncludes plotting 
-    functionality, slope functions, area functions, and displacement functions.
-    
-    """
-    
-    def __init__(self, XYData, xunit = '', yunit = ''):
-        """
-        Parameters
-        ----------
-        XYData : array
-            The input array of XY date for the curve. A list [x,y] can also be 
-            passed into the function.
-        xunit : str, optional
-            The units on the x axis. The default is ''.
-        yunit : str, optional
-            The units on the y axis. The default is ''.
-
-        """
-        
-        self.xy = self._parseXY(XYData)
-        self.Npoints = len(self.xy[:,0])
-        
-        # The function to be used to calcualte area. These can be overwritten
-        self.areaFunction = env.environment.fArea
-        self.slopeFunction = env.environment.fslope
-        self.lengthFunction = env.environment.flength
-        self.plotFunction = env.environment.fplot
-        
-        self.initializeFig = env.environment.finit
-        self.showCycles = env.environment.fcycles
-        
-        self.colorDict = {0:'C0', 1:'C1', 2:'C3'}
-        
-        self.xunit = xunit
-        self.yunit = yunit
-        
-        self.peakIndexes = None
-    
-    @property
-    def y(self):
-        return self.xy[:,1]
-    
-    @property
-    def x(self):
-        return self.xy[:,0]    
-    
-    def _parseXY(self, xy):
-        if isinstance(xy, list):
-            xy = np.column_stack(xy)
-        return xy
-    
-    def __len__(self):
-        return len(self.xy[:,0])
-
-    def __iter__(self):
-        return iter(self.xy)
-    
-    def __getitem__(self, ind):
-        return self.xy[ind]
-    
-    def __setitem__(self, ind, val):
-        self.xy[ind] = val
-
-    def _getInstance(self):
-        return type(self)
-    
-    def _convertToCurve(self, other):
-        """
-        Converts non-hysteresis datatypes 
-        """
-        if isinstance(other, np.ndarray):
-            return CurveBase(other)
-
-    def __add__(self, other):
-        """ Enables addition of curve x values"""
-        Instance = self._getInstance()
-        operand = _getOperand(other)
-        x = self.xy[:,0]
-        y = self.xy[:,1]+operand        
-        
-        return Instance(np.column_stack([x,y]))
-    
-    def __sub__(self, other):
-        Instance = self._getInstance()
-        operand = _getOperand(other)
-        x = self.xy[:,0]
-        y = self.xy[:,1] - operand        
-        
-        return Instance(np.column_stack([x,y]))
-    
-    def __rsub__(self, other):
-        Instance = self._getInstance()
-        operand = _getOperand(other)
-        x = self.xy[:,0]
-        y = operand - self.xy[:,1]   
-        
-        return Instance(np.column_stack([x,y]))
-    
-    def __mul__(self, other):
-        """
-        It would be useful of having a hystresis base state, then copying that over.
-        """
-        # Get the current instance of curve
-        Instance = self._getInstance()
-        operand = _getOperand(other)
-        x = self.xy[:,0]
-        y = self.xy[:,1]*operand
-        
-        return Instance(np.column_stack([x,y]))
-
-    def __truediv__(self, other):
-        # Get the current instance of curve
-        Instance = self._getInstance()
-        operand = _getOperand(other)
-        x = self.xy[:,0]
-        y = self.xy[:,1] / operand
-        
-        return Instance(np.column_stack([x,y]))
-
-    def __rtruediv__(self, other):
-        # Get the current instance of curve
-        Instance = self._getInstance()
-        operand = _getOperand(other)    
-        x = self.xy[:,0]
-        y = operand / self.xy[:,1]
-        
-        return Instance(np.column_stack([x,y]))
-    
-    def setArea(self):
-        """ sets the area under each point of the curve using the area function"""
-        self.area = self.areaFunction(self.xy)
-        return self.area
-    
-    def getCumDisp(self):
-        """ 
-        Gets the absolute value of cumulative displacement of the curve at each data point.
-        """
-        dx = np.diff(self.xy[:,0])
-        return np.append(0, np.cumsum(np.abs(dx)))
-    
-    def getNetCumDisp(self, startIndex = 0, endIndex = 0):
-        """ Gets the total cumulative displacement between the start and start and end 
-        indexes. By default the whole curve us used.
-        """
-        dx = np.append(0, np.diff(self.xy[:,0]))
-        
-        if endIndex == 0:
-            endIndex = self.Npoints
-                   
-        return np.sum(np.abs(dx[startIndex:endIndex]))
-    
-    def getCumArea(self):
-        """ 
-        Gets the cumulative area under the curve for the entire curve.
-        """
-        Area = self.area
-        return np.cumsum(Area)
-    
-    def getNetArea(self, startIndex = 0, endIndex = 0):
-        """
-        Returns the net area between two indexes in the xy curve. The default 
-        setting is to return the area for the whole cuve.
-
-        """
-        Area = self.area
-
-        if endIndex == 0:
-            endIndex = self.Npoints
-                   
-        return np.sum(Area[startIndex:endIndex])
-           
-    def setSlope(self):
-        """
-        Calcuates the slope of the curve at each point.
-        The user can pass in a custom function that calculates the slope.
-        
-        By default, uses the basic slope funciton. Custom behaviour can be
-        specified by modifying the environment slope function.        
-        """
-        
-        # Calculate end point slope
-        xy = self.xy
-        self.slope  = self.slopeFunction(xy)
-
-    def setLength(self):
-        """
-        Calcuates the length of the curve, that is, the distance from each 
-        point to the next point. 
-        Starts at point 0, and ther are there are N-1 length values for the N 
-        data points.
-        
-        By default, uses the basic length funciton. Custom behaviour can be
-        specified by modifying the environment length function.
-
-        """
-        
-        # Calculate end point slope
-        xy = self.xy
-        self.length  = self.lengthFunction(xy)
-
-    def setPeaks(self, peakDist = 2, peakWidth = None, peakProminence = None):
-        """
-        Finds the indexes of max and min points, then stores them.
-        """
-        
-        y = self.xy[:,1]
-        peakIndexes = data.getCycleIndicies(y, peakDist, peakWidth, peakProminence)        
-        self.peakIndexes = peakIndexes
-        
-        xy = self.xy
-        if xy[peakIndexes[0],1] < xy[peakIndexes[1],1]:
-            self.minIndexes = peakIndexes[0::2]
-            self.maxIndexes = peakIndexes[1::2]
-        else:
-            self.minIndexes = peakIndexes[1::2]
-            self.maxIndexes = peakIndexes[0::2]
-            
-    def getPeakxy(self,):
-        
-        if self.peakIndexes is not None:
-            return self.xy[self.peakIndexes]
-        else:
-            raise Exception('No peaks have been set')
-        
-    
+class CurvePlotter:
     def plot(self, plotCycles = False, plotPeaks = False, labelCycles = [],
              **kwargs):
         """
@@ -261,8 +26,6 @@ class CurveBase:
         kwargs : list, optional
             Any additional keyword arguements will be passed to the matplotlib
             plot function. This can be used to custize char appearance.            
-
-
 
         Outputs
         -------
@@ -397,7 +160,8 @@ class CurveBase:
 
         return self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles, **kwargs)  
                         
-    def plotCumArea(self,  plotCycles = False, plotPeaks = False, labelCycles = [], **kwargs):
+    def plotCumArea(self,  plotCycles = False, plotPeaks = False, labelCycles = [], 
+                    cumulativeDisp = True, **kwargs):
         """
         Used the plot function to make a xy plot of cumulative area at each
         point of the curve. The cumulative area is a summation of the areas up
@@ -424,7 +188,10 @@ class CurveBase:
         """   
         
         # We get the cumulative displacement and area
-        x = self.getCumDisp()
+        if cumulativeDisp:
+            x = self.getCumDisp()
+        else:
+            x = self.xy[:,0]
         y = self.getCumArea()
 
         self.plotFunction(self, x ,y, plotCycles, plotPeaks, labelCycles, **kwargs)  
@@ -435,6 +202,248 @@ class CurveBase:
         """        
         
         return self.initializeFig(xlims, ylims)
+
+
+
+class CurveOperations:   
+    
+    @property
+    def y(self):
+        return self.xy[:,1]
+    
+    @property
+    def x(self):
+        return self.xy[:,0]    
+    
+    def _parseXY(self, xy):
+        if isinstance(xy, list):
+            xy = np.column_stack(xy)
+        return xy
+    
+    def __len__(self):
+        return len(self.xy[:,0])
+
+    def __iter__(self):
+        return iter(self.xy)
+    
+    def __getitem__(self, ind):
+        return self.xy[ind]
+    
+    def __setitem__(self, ind, val):
+        self.xy[ind] = val
+
+    def _getInstance(self):
+        return type(self)
+    
+    def _convertToCurve(self, other):
+        """
+        Converts non-hysteresis datatypes 
+        """
+        if isinstance(other, np.ndarray):
+            return Curve(other)
+
+    def __add__(self, other):
+        """ Enables addition of curve x values"""
+        Instance = self._getInstance()
+        operand = _getOperand(other)
+        x = self.xy[:,0]
+        y = self.xy[:,1]+operand        
+        
+        return Instance(np.column_stack([x,y]))
+    
+    def __sub__(self, other):
+        Instance = self._getInstance()
+        operand = _getOperand(other)
+        x = self.xy[:,0]
+        y = self.xy[:,1] - operand        
+        
+        return Instance(np.column_stack([x,y]))
+    
+    def __rsub__(self, other):
+        Instance = self._getInstance()
+        operand = _getOperand(other)
+        x = self.xy[:,0]
+        y = operand - self.xy[:,1]   
+        
+        return Instance(np.column_stack([x,y]))
+
+    def __neg__(self):
+        Instance = self._getInstance()
+        x =  self.xy[:,0]
+        y = -self.xy[:,1]           
+        return Instance(np.column_stack([x,y]))
+    
+    def __mul__(self, other):
+        """
+        It would be useful of having a hystresis base state, then copying that over.
+        """
+        # Get the current instance of curve
+        Instance = self._getInstance()
+        operand = _getOperand(other)
+        x = self.xy[:,0]
+        y = self.xy[:,1]*operand
+        
+        return Instance(np.column_stack([x,y]))
+
+    def __truediv__(self, other):
+        # Get the current instance of curve
+        Instance = self._getInstance()
+        operand = _getOperand(other)
+        x = self.xy[:,0]
+        y = self.xy[:,1] / operand
+        
+        return Instance(np.column_stack([x,y]))
+
+    def __rtruediv__(self, other):
+        # Get the current instance of curve
+        Instance = self._getInstance()
+        operand = _getOperand(other)    
+        x = self.xy[:,0]
+        y = operand / self.xy[:,1]
+        
+        return Instance(np.column_stack([x,y]))
+
+class Curve(CurveOperations, CurvePlotter):
+    
+    """
+    The curve base object represents a generic xy curve with no limitations.
+    
+    All other curves inherit from the CurveBase class. It has access to methods
+    all other curves should have access to. This uncludes plotting 
+    functionality, slope functions, area functions, and displacement functions.
+    
+    """
+    __array_ufunc__ = None
+    
+    colorCycles = ['C0', 'C0', 'C1', 'C1']
+    def __init__(self, XYData, xunit = '', yunit = ''):
+        """
+        Parameters
+        ----------
+        XYData : array
+            The input array of XY date for the curve. A list [x,y] can also be 
+            passed into the function.
+        xunit : str, optional
+            The units on the x axis. The default is ''.
+        yunit : str, optional
+            The units on the y axis. The default is ''.
+
+        """
+        
+        self.xy = self._parseXY(XYData)
+        self.Npoints = len(self.xy[:,0])
+        
+        # The function to be used to calcualte area. These can be overwritten
+        self.areaFunction = env.environment.fArea
+        self.slopeFunction = env.environment.fslope
+        self.lengthFunction = env.environment.flength
+        self.plotFunction = env.environment.fplot
+        
+        self.initializeFig = env.environment.finit
+        self.showCycles = env.environment.fcycles
+        
+        self.xunit = xunit
+        self.yunit = yunit
+        
+        self.peakIndexes = None
+        
+    def setArea(self):
+        """ sets the area under each point of the curve using the area function"""
+        self.area = self.areaFunction(self.xy)
+        return self.area
+    
+    def getCumDisp(self):
+        """ 
+        Gets the absolute value of cumulative displacement of the curve at each data point.
+        """
+        dx = np.diff(self.xy[:,0])
+        return np.append(0, np.cumsum(np.abs(dx)))
+    
+    def getNetCumDisp(self, startIndex = 0, endIndex = 0):
+        """ Gets the total cumulative displacement between the start and start and end 
+        indexes. By default the whole curve us used.
+        """
+        dx = np.append(0, np.diff(self.xy[:,0]))
+        
+        if endIndex == 0:
+            endIndex = self.Npoints
+                   
+        return np.sum(np.abs(dx[startIndex:endIndex]))
+    
+    def getCumArea(self):
+        """ 
+        Gets the cumulative area under the curve for the entire curve.
+        """
+        Area = self.area
+        return np.cumsum(Area)
+    
+    def getNetArea(self, startIndex = 0, endIndex = 0):
+        """
+        Returns the net area between two indexes in the xy curve. The default 
+        setting is to return the area for the whole cuve.
+
+        """
+        Area = self.area
+
+        if endIndex == 0:
+            endIndex = self.Npoints
+                   
+        return np.sum(Area[startIndex:endIndex])
+           
+    def setSlope(self):
+        """
+        Calcuates the slope of the curve at each point.
+        The user can pass in a custom function that calculates the slope.
+        
+        By default, uses the basic slope funciton. Custom behaviour can be
+        specified by modifying the environment slope function.        
+        """
+        
+        # Calculate end point slope
+        xy = self.xy
+        self.slope  = self.slopeFunction(xy)
+
+    def setLength(self):
+        """
+        Calcuates the length of the curve, that is, the distance from each 
+        point to the next point. 
+        Starts at point 0, and ther are there are N-1 length values for the N 
+        data points.
+        
+        By default, uses the basic length funciton. Custom behaviour can be
+        specified by modifying the environment length function.
+
+        """
+        
+        # Calculate end point slope
+        xy = self.xy
+        self.length  = self.lengthFunction(xy)
+
+    def setPeaks(self, peakDist = 2, peakWidth = None, peakProminence = None):
+        """
+        Finds the indexes of max and min points, then stores them.
+        """
+        
+        y = self.xy[:,1]
+        peakIndexes = data.getCycleIndicies(y, peakDist, peakWidth, peakProminence)        
+        self.peakIndexes = peakIndexes
+        
+        xy = self.xy
+        if xy[peakIndexes[0],1] < xy[peakIndexes[1],1]:
+            self.minIndexes = peakIndexes[0::2]
+            self.maxIndexes = peakIndexes[1::2]
+        else:
+            self.minIndexes = peakIndexes[1::2]
+            self.maxIndexes = peakIndexes[0::2]
+            
+    def getPeakxy(self,):
+        
+        if self.peakIndexes is not None:
+            return self.xy[self.peakIndexes]
+        else:
+            raise Exception('No peaks have been set')
+        
+    
 
 def _getOperand(curve):
     """
@@ -456,13 +465,7 @@ def _getOperand(curve):
             raise Exception(f'{curve.shape[-1]}D curve give, only 1 or 2D supported')
     return operand
 
-
-# =============================================================================
-# 
-# =============================================================================
-
-
-class Hysteresis(CurveBase):
+class Hysteresis(Curve):
     """
     Hysteresis objects are those that have at least one reversal point in 
     their data. Reversal points are those where the x axis changes direction.
@@ -510,13 +513,13 @@ class Hysteresis(CurveBase):
     def __init__(self, XYData, revDist = 2, revWidth = None, revProminence = None,
                  setCycles = True, setArea = True, setSlope = True, **kwargs):
  
-        CurveBase.__init__(self, XYData, **kwargs)
+        Curve.__init__(self, XYData, **kwargs)
         # self.setReversalPropreties(revDist, revWidth, revProminence)
         self._setStatePropreties(revDist, revWidth, revProminence,
                                  setCycles, setArea, setSlope)
         
         #TODO Create warning if cycles don't make sense.
-        self.cycles = None
+        self.cycles:list[SimpleCycle] = None
         if setCycles == True:
             self.setReversalIndexes(revDist, revWidth, revProminence)
             self.setCycles()
@@ -638,7 +641,7 @@ class Hysteresis(CurveBase):
         return Cycle.plot(plotPeaks = plotPeaks, **kwargs)
 
     def plotCycles(self, cycleIndexes = [], plotCycles = False, plotPeaks = False, 
-                    labelCycles = [], Cycles = [], **kwargs):
+                    labelCycles = [], colorCycles:list=None, **kwargs):
         """
         Plots the xy values of a several cycles on the same figure.
         If no list is provided, every cycle will be plotted.
@@ -654,38 +657,31 @@ class Hysteresis(CurveBase):
         kwargs : list, optional
             Any additional keyword arguements will be passed to the matplotlib
             plot function. This can be used to custize char appearance.            
-        """
-        if len(Cycles) !=0:
-            cycleIndexes = Cycles
-            print('Deprication warning: the "Cycles" key word arguement has been replaced by "cycleIndexes", and will return an error in future versions.')
-        
+        """        
         
         xyHys = self.xy
         Vectors = self.cycles
         
-        self.showCycles(self, xyHys[:,0], xyHys[:,1], plotCycles, plotPeaks, labelCycles, Cycles, **kwargs)
+        if not colorCycles:
+            colorCycles = self.colorCycles
+        Ncolor = len(colorCycles)
         
-        colorDict = self.colorDict
-        
+        self.showCycles(self, xyHys[:,0], xyHys[:,1], plotCycles, plotPeaks, labelCycles, cycleIndexes)
+                
         lines = []
         # If the list is empty, plot everything
         if len(cycleIndexes) == 0:
-            for ii, vector in enumerate(Vectors):
-                # c = colorDict[int(np.floor((ii + 1)/2) % 3)]
-                c = colorDict[int(np.floor((ii + 1)/2) % 2)]
-                line, = plt.plot(vector.xy[:,0], vector.xy[:,1], c=c)
-                # plt.plot(vector.xy[:,0], vector.xy[:,1])
-                lines.append(line)
-
+            Vectors = self.cycles
         else:
-            for ii, vector in enumerate(Vectors):
-                if ii in Cycles:
-                    # c = colorDict[int(np.floor((ii + 1)/2) % 3)]
-                    # plt.plot(vector.xy[:,0], vector.xy[:,1], c=c)
-                    line = plt.plot(vector.xy[:,0], vector.xy[:,1])
-                    lines.append(line)
+            Vectors = [self.cycles[ii] for ii in cycleIndexes]
+            # np.array(self.cycles, dtype=object)[cycleIndexes]
+        
+        for ii, vector in enumerate(Vectors):
+            c = colorCycles[int(ii % Ncolor)]
+            line, = plt.plot(vector.xy[:,0], vector.xy[:,1], c=c, **kwargs)
+            lines.append(line)
+        
 
-       
     def recalculateCycles(self, revDist = 2, revWidth = None, revProminence = None, **kwargs):
         """
         Calcualtes the cycles again, using the input parameters for distance 
@@ -802,10 +798,13 @@ class Hysteresis(CurveBase):
     def RemoveCycles():
         pass
 
-class SimpleCycle(CurveBase):
-    """ A curve that doesn't change direction on the X axis, but can change
-    Y direction. The data has a number of peaks, each of which is the largest
-    y value in relation to other points on the curve. This point canbe 
+# TODO: change name to CycleCurve?
+class SimpleCycle(Curve):
+    """ 
+    A simple cycle is a curve that doesn't change direction on the X axis, but 
+    can change direction in it's Y wzis. The data has a number of peaks, each 
+    of which is the largest y value in relation to other points on the curve. 
+    This point canbe 
     
     
     Parameters
@@ -844,7 +843,7 @@ class SimpleCycle(CurveBase):
     
     def __init__(self, XYData, findPeaks = False, setSlope = False, setArea = False,
                  peakDist = 2, peakWidth = None, peakProminence = None, **kwargs):
-        CurveBase.__init__(self, XYData, **kwargs)
+        Curve.__init__(self, XYData, **kwargs)
         
         self._setDirection()
         self._setStatePropreties(findPeaks, setSlope, setArea, 
@@ -852,7 +851,7 @@ class SimpleCycle(CurveBase):
                
         self.subCycles = None
         if findPeaks == True:
-            self.setPeaks(peakDist, peakWidth, peakProminence)
+            self.setPeaks()
             self.setSubCycles()
     
         if setSlope == True:
@@ -897,7 +896,7 @@ class SimpleCycle(CurveBase):
             self.direction = -1
            
                 
-    def setSubCycles(self):
+    def setSubCycles(self, peakDist = 2, peakWidth = None, peakProminence = None):
         """
         Finds monotonic "sub-sycles" within each cycle.
         Peaks must be set before subcyles can be set.
@@ -914,11 +913,10 @@ class SimpleCycle(CurveBase):
                        
         self.subCycles = SubCycles
         self.NsubCycles = len(SubCycles)
-        
-        
+                
     def setSubCyclesArea(self):
         """
-        Sets the net area for all SubCycles
+        Sets the net area for all SubCycles.
         """
         try:
             SubCycles = self.subCycles
@@ -930,7 +928,7 @@ class SimpleCycle(CurveBase):
 
     def setSubCyclesSlope(self):
         """
-        Sets the net area for all MonotonicCurves
+        Sets the net slope for all MonotonicCurves.
         """
         try:
             SubCycles = self.subCycles
@@ -961,7 +959,7 @@ class SimpleCycle(CurveBase):
     
     def getSubCycle(self, index):
         """
-        Gets the subcycle with a partcular index
+        Gets the subcycle with a partcular index.
 
         Parameters
         ----------
@@ -975,26 +973,30 @@ class SimpleCycle(CurveBase):
 
         """
         return self.subCycles[index]
-     
-    def plotSubCycles(self, SubCyclesIndicies = [], plotCycles = False, plotPeaks = False):
+    
+    # TODO: update this, change name from subcycle to Monotonic curve.
+    def plotSubCycles(self, SubCyclesIndicies = [], plotCycles = False, plotPeaks = False,
+                      colorCycles:list = None):
         
         xyMono = self.xy
         Vectors = self.subCycles
         
+        if not colorCycles:
+            colorCycles = self.colorCycles
+        Ncolor = len(colorCycles)        
+        
         self.showCycles(self, xyMono[:,0], xyMono[:,1], plotCycles, plotPeaks)
         
-        colorDict = self.colorDict
         if len(SubCyclesIndicies) == 0:
             for ii, vector in enumerate(Vectors):
-                c = colorDict[ii%2]
+                c = colorCycles[ii%Ncolor]
                 plt.plot(vector.xy[:,0], vector.xy[:,1], c = c)
 
         else:
             for ii, vector in enumerate(self.SimpleCycles):
                 if ii in SubCyclesIndicies:
-                    c = colorDict[ii%2]
+                    c = colorCycles[ii%Ncolor]
                     plt.plot(vector.xy[:,0], vector.xy[:,1], c = c)
-            
             
     def recalculatePeaks(self, peakDist = 2, peakWidth = None, peakProminence = None):
         """
@@ -1028,13 +1030,13 @@ class SimpleCycle(CurveBase):
         self.setSubCycles()
         self.setArea()  
 
-class MonotonicCurve(CurveBase):
+class MonotonicCurve(Curve):
     """
     A curve that has no changes in it's x axis direction, as well as no changes
     in it's y axis direction.
     """   
     def __init__(self, XYData, **kwargs):
-        CurveBase.__init__(self, XYData, **kwargs)
+        Curve.__init__(self, XYData, **kwargs)
         
         self._setDirection()
             
@@ -1048,7 +1050,6 @@ class MonotonicCurve(CurveBase):
         else:
             self.direction = -1
 
-
 # =============================================================================
 # Deprication warnings
 # =============================================================================
@@ -1061,24 +1062,4 @@ def findPeakKwargs(**kwargs):
     if 'peakProminence' in kwargs.keys():
         print('Use of "peakProminence" has been depricated. Instead use "revProminence".')    
     
-    # pass
 
-
-"""
-TODO:
-    For Monotonic curves:
-    Find and time between peaks is optional.
-    Find interesections
-    FInd area nearest to current peak
-"""
-
-
-"""
-TODO:
-    Allow for custom headings:
-    Perhaps a style object?
-
-    Add limitts to the style object?    
-    Make the limits part of the hysteresis object, so they don't need
-    to continually be passed to each funciton.
-"""

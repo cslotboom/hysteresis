@@ -358,11 +358,6 @@ def fitEEEP(backbone):
     backbone.setArea()    
     Anet = backbone.getNetArea()    
     
-    # Find the elastic intercept and slope.
-    # Pinter  = 0.4*Ppeak
-    # index   = np.argmin(xy[:,1] < Pinter)
-    # dUinter = _linInterpolateY(xy, Pinter, index)
-    # _getIntersection(xy, Ppeak, 0.4)
     Ke      = _getIntersection(xy, Ppeak, 0.4)
         
     radicand = dUult**2 - 2*Anet/Ke

@@ -1,6 +1,5 @@
 
 import hysteresis.env as env
-# from .defaultDataFuncs import defaultSampleFunction, defaultCombineDiff
 from .resample import resample
 
 

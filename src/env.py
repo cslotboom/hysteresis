@@ -31,10 +31,9 @@ class HYSTERESIS_ENVIRONMENT:
         self.fSample = defaultSampleFunction
         self.fCombineDiff = defaultCombineDiff
         
-        
     def restart(self):
         self.__init__()
 
 
 environment = HYSTERESIS_ENVIRONMENT()
-# environment.restart()
+
