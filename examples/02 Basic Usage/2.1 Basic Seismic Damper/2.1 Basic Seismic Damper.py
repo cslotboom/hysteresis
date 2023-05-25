@@ -67,7 +67,7 @@ ax.set_xlim(-3.5,3.5)
 ax.set_ylim(-6,6)
 plt.minorticks_on()
 ax.grid(which='major', color='grey', linewidth=0.5, alpha = 0.8)
-ax.grid(b=True, which='minor', linewidth=0.5, alpha = 0.4)
+ax.grid( which='minor', linewidth=0.5, alpha = 0.4)
 
 
 """ 
@@ -116,7 +116,7 @@ ax.set_xlabel('Cumulative Deformation (mm)')
 ax.set_ylabel('Energy (kNm)')
 plt.minorticks_on()
 ax.grid(which='major', color='grey', linewidth=0.5, alpha = 0.8)
-ax.grid(b=True, which='minor', linewidth=0.5, alpha = 0.4)
+ax.grid(which='minor', linewidth=0.5, alpha = 0.4)
 
 
 """

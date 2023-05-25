@@ -2,15 +2,18 @@
 """
 Created on Sat Aug 31 15:13:13 2019
 @author: Christian
+
+This example showcases fitting a model parameter (k) to a model using 
+the hysteresis library. An openSees analysis is run using the opensees 
+analysis file.
+
 """
 
 
-import numpy as np
 import matplotlib.pyplot as plt
 import hysteresis as hys
 
 from OpenSeesAnalysis import runAnalysis
-from scipy.interpolate import interp1d
 
 # Here we get our data from 
 # Run an opensees analysis using the runAnalysis Comand
@@ -34,7 +37,7 @@ backbone = hys.getBackboneCurve(myHys, lpSteps)
 
 # Check if the outputs make sense with a plot
 fig, ax = plt.subplots()
-myHys.plot()
+myHys.plot()    
 backbone.plot()
 
 

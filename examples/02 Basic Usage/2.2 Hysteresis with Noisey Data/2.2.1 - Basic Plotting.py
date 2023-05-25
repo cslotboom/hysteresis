@@ -77,7 +77,7 @@ ax.set_xlabel('Actuator Drift (m)')
 ax.set_ylabel('Actuator Force (kN)')
 plt.minorticks_on()
 ax.grid(which='major', color='grey', linewidth=0.5, alpha = 0.8)
-ax.grid(b=True, which='minor', linewidth=0.5, alpha = 0.4)
+ax.grid(which='minor', linewidth=0.5, alpha = 0.4)
 
 
 """
@@ -103,6 +103,6 @@ ax.set_xlabel('Cumulative Drift (m)')
 ax.set_ylabel('Energy (kNm)')
 plt.minorticks_on()
 ax.grid(which='major', color='grey', linewidth=0.5, alpha = 0.8)
-ax.grid(b=True, which='minor', linewidth=0.5, alpha = 0.4)
+ax.grid(which='minor', linewidth=0.5, alpha = 0.4)
 
 
