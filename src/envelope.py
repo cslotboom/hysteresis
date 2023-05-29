@@ -6,7 +6,7 @@ from scipy.interpolate import interp1d
 from hysteresis import data
 
 from .data import linearInterpolation
-from .baseClass import Hysteresis, SimpleCycle
+from .curve import Hysteresis, SimpleCurve
 from .defaultDataFuncs import defaultAreaFunction, defaultSlopeFunction
 from .defaultPlotFuncs import initializeFig, defaultPlotFunction, defaultShowCycles
 
@@ -164,7 +164,7 @@ def getBackboneCurve(hysteresis, LPsteps = [], returnPeaks = False,  returnEnd =
     _, indexes = np.unique(xPos,True)
     xyPos = xyPos[indexes]   
     
-    return SimpleCycle(xyPos, True)
+    return SimpleCurve(xyPos, True)
 
 
 def _averageBackbones(backBonePos,backBoneNeg):
@@ -183,7 +183,7 @@ def _averageBackbones(backBonePos,backBoneNeg):
     yavg = (ypos + yneg) / 2
     
     xy = np.column_stack([x, yavg])
-    backBoneAvg = SimpleCycle(xy, True)
+    backBoneAvg = SimpleCurve(xy, True)
     
     return backBoneAvg
 
@@ -299,7 +299,7 @@ def _get_ult_2(Plim, xy, xyFail):
     endIndex = np.where(xy[:,0] == dUult)[0][0] + 1
     
     # make a new curve that ends at the failure load. 
-    backbone = SimpleCycle(xy[:endIndex])
+    backbone = SimpleCurve(xy[:endIndex])
     
     return Pult, dUult, backbone
 
@@ -368,7 +368,7 @@ def fitEEEP(backbone):
         Py = 0.85*Ppeak
     
     curvexy = np.column_stack([[0, Py/Ke, dUult], [0,Py,Py]])
-    curve = SimpleCycle(curvexy)
+    curve = SimpleCurve(curvexy)
     curve.setArea()
     
     return curve

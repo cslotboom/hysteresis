@@ -1,5 +1,5 @@
 import numpy as np
-from .baseClass import Hysteresis, SimpleCycle, MonotonicCurve
+from .curve import Hysteresis, SimpleCurve, MonotonicCurve
 from .baseFuncs import (concatenateHys, concatenate, _linInterp, 
                         _linInterpSample, _getNsamples)
        
@@ -41,7 +41,7 @@ def resample(curve, Nsamples, **kwargs):
     # We recursively resample by calling the function again for sub-cycle objects
     
     # if the curve is a SimpleCycle
-    if isinstance(curve, SimpleCycle):
+    if isinstance(curve, SimpleCurve):
         x = curve.xy[:,0]
         y = curve.xy[:,1]
         
@@ -51,13 +51,13 @@ def resample(curve, Nsamples, **kwargs):
             for ii, subcycle in enumerate(curve.subCycles):
                 outputSubcycles[ii] = resample(subcycle, Nsamples)    
                 
-            tmpOut      =  concatenate(outputSubcycles, outputClass = SimpleCycle)
+            tmpOut      =  concatenate(outputSubcycles, outputClass = SimpleCurve)
             tmpProps    = curve._getStatePropreties()
-            Output      = SimpleCycle(tmpOut.xy, *tmpProps)
+            Output      = SimpleCurve(tmpOut.xy, *tmpProps)
                         
         # Otherwise, resample the curve directly
         else:
-            Output = SimpleCycle(_linInterp(x,y, Nsamples))    
+            Output = SimpleCurve(_linInterp(x,y, Nsamples))    
        
     # if the curve is a hysteresis, we recursively create a series of Cycles
     elif isinstance(curve, Hysteresis):
@@ -104,9 +104,9 @@ def resampleDx(curve, Targetdx):
     placed at 2.5, 4.5, 6.5, 7.5 
     
     Linear interpolation is used to find the y value of intermediate points.
-    In the case of a Hysteresis, every SimpleCycle curve will be resampled with
+    In the case of a Hysteresis, every SimpleCurve will be resampled with
     an amount of points equal to Nsamples.
-    In the case of a SimpleCycle, each monotonic curve will be resampled.
+    In the case of a SimpleCurve, each monotonicCurve will be resampled.
 
     Parameters
     ----------
@@ -126,17 +126,17 @@ def resampleDx(curve, Targetdx):
 
     # the logic in these functions is getting a little nasty, in the future
     # consider pulling these out into class methods.
-    if isinstance(curve, SimpleCycle):
+    if isinstance(curve, SimpleCurve):
                
         if curve.subCycles: # if subsycles are set, resample those
             outputSubcycles = [None]*curve.NsubCycles
             for ii, subcycle in enumerate(curve.subCycles):
                 outputSubcycles[ii] = resampleDx(subcycle, Targetdx)
-            # Output = concatenate(*outputSubcycles, outputClass = SimpleCycle)    # If curve        
+            # Output = concatenate(*outputSubcycles, outputClass = SimpleCurve)    # If curve        
         
-            tmpOut      =  concatenate(outputSubcycles, outputClass = SimpleCycle)
+            tmpOut      =  concatenate(outputSubcycles, outputClass = SimpleCurve)
             tmpProps    = curve._getStatePropreties()
-            Output      = SimpleCycle(tmpOut.xy, *tmpProps)        
+            Output      = SimpleCurve(tmpOut.xy, *tmpProps)        
         
         else: # if subsycles aren't set, resample those
             x = curve.xy[:,0]
@@ -261,23 +261,23 @@ def resampleRegion(curve, Nsamples, regions = [[0, 0.1], [0.9, 1]]):
     allRegions, isInside = _getOutsideRegions(regions) # these get left alone  
     
     
-    if isinstance(curve, SimpleCycle):
+    if isinstance(curve, SimpleCurve):
 
         if curve.subCycles: # if subsycles are set, resample those
             outputSubcycles = [None]*curve.NsubCycles
             for ii, subcycle in enumerate(curve.subCycles):
                 outputSubcycles[ii] = resampleRegion(subcycle, Nsamples, regions)
                 
-            tmpOut      =  concatenate(outputSubcycles, outputClass = SimpleCycle)
+            tmpOut      =  concatenate(outputSubcycles, outputClass = SimpleCurve)
             tmpProps    = curve._getStatePropreties()
-            output      = SimpleCycle(tmpOut.xy, *tmpProps)        
+            output      = SimpleCurve(tmpOut.xy, *tmpProps)        
         
         else: # if subsycles aren't set, resample at level of xy
         
             x = curve.xy[:,0]
             y = curve.xy[:,1]
             xy = np.column_stack([x, y])
-            output = SimpleCycle(resampleRegion(xy, Nsamples, regions))        
+            output = SimpleCurve(resampleRegion(xy, Nsamples, regions))        
     
     elif isinstance(curve, Hysteresis):
         outputCycles = [None]*curve.NCycles

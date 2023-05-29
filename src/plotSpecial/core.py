@@ -5,17 +5,11 @@ Created on Fri May  7 20:15:19 2021
 @author: Christian
 """
 
-import hysteresis as hys
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib.widgets import Button
 
-# from matplotlib.animation import FuncAnimation
 import numpy as np
-
-import openseespy.postprocessing.Get_Rendering
-
-
 
 # Add this function to somewhere else
 def init_Animation():

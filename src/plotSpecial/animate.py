@@ -262,8 +262,6 @@ class Animation(AnimationBase):
             skipEnd *= -1 
         return xyAni[skipStart:skipEnd, :]
 
-
-    
     def update(self, frame):
         """
         Updates the canvas at the given frame.

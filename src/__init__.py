@@ -1,4 +1,4 @@
-from .baseClass import Hysteresis, SimpleCycle, MonotonicCurve
+from .curve import Hysteresis, SimpleCurve, MonotonicCurve
 from .baseFuncs import concatenateHys, concatenate, removeNegative
 from .resample import resample, resampleDx, resampleRegion
 

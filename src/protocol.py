@@ -1,32 +1,7 @@
 import numpy as np
 
-from .baseClass import SimpleCycle
+from .curve import SimpleCurve
 from .baseFuncs import concatenateHys
-
-
-
-
-
-# def getProtcol(loadProtcol,Nrepeats):
-#     pass
-
-
-# def getTimeseries(loadProtcol:list, dx:float, halfCycle=True, ):
-    
-    
-    
-    
-#     pass
-
-
-# def getTimeseries(loadProtcol:list, Nrepeat, halfCycle=True):
-    
-    
-    
-    
-#     pass
-
-
 
 
 def getReturnCycle(cycleStart, cycleReturn):
@@ -49,7 +24,7 @@ def getReturnCycle(cycleStart, cycleReturn):
     xyOut[:TransitonIndex,:] = xy2[:TransitonIndex,:]
     xyOut[-1,:] = xy1[0,:]
     
-    return SimpleCycle(xyOut)
+    return SimpleCurve(xyOut)
 
 
 

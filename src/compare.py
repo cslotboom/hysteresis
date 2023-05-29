@@ -1,4 +1,4 @@
-
+from .curve import Curve, Hysteresis
 import hysteresis.env as env
 from .resample import resample
 
@@ -8,7 +8,7 @@ from .resample import resample
 # =============================================================================
 # TODO: consider storing the sample function within the class itself.
 
-def compareCycle(Curve1, Curve2, Nsample = 10):
+def compareCycle(Curve1:Curve, Curve2:Curve, Nsample = 10):
     """
     Compares two Curve objects by resampling them using linear interplation,
     then comparing the distance between both cycles in a comon domain.
@@ -48,7 +48,7 @@ def compareCycle(Curve1, Curve2, Nsample = 10):
 
     return diff
 
-def compareHys(Hys1, Hys2):
+def compareHys(Hys1:Hysteresis, Hys2:Hysteresis):
     """
     
 
