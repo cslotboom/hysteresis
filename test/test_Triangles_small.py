@@ -22,7 +22,7 @@ smallTriangles = hys.SimpleCycle(trianglexy, findPeaks = True)
 def test_plot_peaks(monkeypatch):
     monkeypatch.setattr(plt, 'show', lambda: None)
     smallTriangles.setPeaks()
-    smallTriangles.plot(plotPeaks = True)
+    smallTriangles.plot(showPeaks = True)
     plt.close()
     assert True == True
 

@@ -1,5 +1,5 @@
 import hysteresis.baseFuncs as hys
-from hysteresis.baseClass import Hysteresis, SimpleCycle
+from hysteresis.curve import Hysteresis, SimpleCycle
 import numpy as np
 
 

@@ -19,7 +19,7 @@ def test_DownSampled_Plotting(monkeypatch):
     DamperHys = hys.Hysteresis(testHys2)
     
     downsampledHys = hys.resample(DamperHys, 20)
-    downsampledHys.plot(plotCycles = True)
+    downsampledHys.plot(showReversals= True)
     plt.close()
     downsampledHys.plotCycles([2,3])
     plt.close()

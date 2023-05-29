@@ -1,5 +1,5 @@
 
-import hysteresis.baseClass as hys
+import hysteresis.curve as hys
 import numpy as np
 import pytest
 
