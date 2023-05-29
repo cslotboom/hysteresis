@@ -2,7 +2,6 @@
 An example of very basic usage of the hysteresis package.
 """
 
-
 import numpy as np
 import hysteresis as hys
 
@@ -11,7 +10,7 @@ x  = np.sin(t)
 y  = np.cos(t)*t
 xy = np.column_stack([x,y])
 
+
 myHys = hys.Hysteresis(xy)
 myHys.plot(showReversals = True)
-
 

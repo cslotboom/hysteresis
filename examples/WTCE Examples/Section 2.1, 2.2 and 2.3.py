@@ -48,7 +48,7 @@ finalCycle.setSubCycles()
 
 # A plot that shows roughly monotonic regions
 fig, ax = plt.subplots()
-finalCycle.plotSubCycles(plotPeaks=True, colorCycles=['C1', 'C0'])
+finalCycle.plotSubCycles(showPeaks=True, colorCycles=['C1', 'C0'])
 plt.minorticks_on()
 ax.grid(which='major', color='grey', linewidth=0.5, alpha = 0.8)
 ax.grid(visible=True, which='minor', linewidth=0.5, alpha = 0.4)

@@ -58,7 +58,7 @@ Let's add some labels to our chart!
 """
 
 fig, ax = DamperHys.initFig()
-DamperHys.plot(plotCycles=True)
+DamperHys.plot(showReversals=True)
 # DamperHys.plot()
 
 ax.set_xlabel('Actuator Displacement (mm)')
@@ -82,7 +82,7 @@ reversalIndexes = DamperHys.reversalIndexes
 fig, ax = DamperHys.initFig()
 Cycle = DamperHys.getCycle(1)
 Cycle.plot()
-DamperHys.plotCycles(plotCycles = True)
+DamperHys.plotCycles(showReversals= True)
 
 
 """
@@ -109,7 +109,7 @@ the total energy added to a system.
 
 """
 fig, ax = DamperHys.initFig()
-DamperHys.plotCumArea(True, labelCycles = [0, 5, 10, 15, 20])
+DamperHys.plotCumArea(True, labelReversals = [0, 5, 10, 15, 20])
 
 
 ax.set_xlabel('Cumulative Deformation (mm)')
@@ -126,5 +126,5 @@ We can also make a plot with labels!
 
 DamperHys = hys.Hysteresis(testHys2)
 fig, ax = DamperHys.initFig()
-DamperHys.plot(plotCycles = True, labelCycles = [17,18,19,23])
+DamperHys.plot(showReversals = True, labelReversals = [17,18,19,23])
 
