@@ -13,7 +13,7 @@ from scipy.interpolate import interp1d
 x = np.linspace(0, 1, 1000)*10
 triangleSmall = sawtooth(x*20,0.5)/7
 trianglexy = np.column_stack((x,triangleSmall))
-smallTriangles = hys.SimpleCycle(trianglexy, findPeaks = True)
+smallTriangles = hys.SimpleCurve(trianglexy, findPeaks = True)
 
 
 

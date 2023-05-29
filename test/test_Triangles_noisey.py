@@ -22,7 +22,7 @@ trianglexy = np.column_stack((x, Ynoise))
 
 
 def test_noisey_triangles():
-    noiseyTriangles = hys.SimpleCycle(trianglexy, findPeaks = True)
+    noiseyTriangles = hys.SimpleCurve(trianglexy, findPeaks = True)
     noiseyTriangles.recalculatePeaks(peakWidth = 100)
     peak2 = noiseyTriangles.peakIndexes
     noiseyTriangles.plot(showPeaks = True)
@@ -33,7 +33,7 @@ def test_noisey_triangles():
     
     
 def test_noisey_triangle_Area():
-    noiseyTriangles = hys.SimpleCycle(trianglexy, findPeaks = True)
+    noiseyTriangles = hys.SimpleCurve(trianglexy, findPeaks = True)
     noiseyTriangles.setArea()
     area = noiseyTriangles.getNetArea()
 

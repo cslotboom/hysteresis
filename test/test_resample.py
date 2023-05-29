@@ -12,11 +12,11 @@ tyReversed = np.column_stack([t[::-1] ,y[::-1]+y])
 myHys = hys.Hysteresis(xy)
 resampled = hys.resample(myHys, 10)
 
-cycles = hys.SimpleCycle(ty, findPeaks=True)
+cycles = hys.SimpleCurve(ty, findPeaks=True)
 resampledCycles = hys.resample(cycles, 5)
 
-cycle1 = hys.SimpleCycle(ty, findPeaks=True)
-cycle2 = hys.SimpleCycle(tyReversed, findPeaks=True)
+cycle1 = hys.SimpleCurve(ty, findPeaks=True)
+cycle2 = hys.SimpleCurve(tyReversed, findPeaks=True)
 curves = [cycle1, cycle2]
 
 hysWithReversals = hys.concatenate(curves)
@@ -25,8 +25,8 @@ def test_Hysteresis_lengths():
     """ Tests if a resampled hysteresis has the correct number of cycles. """
     assert len(resampled.cycles[0]) == 10 and len(resampled.cycles[2]) == 10
 
-def test_SimpleCycle_lengths():
-    """ Tests if a resampled SimpleCycle has the correct number of cycles. """
+def test_SimpleCurve_lengths():
+    """ Tests if a resampled SimpleCurve has the correct number of cycles. """
     assert len(resampledCycles.subCycles[0]) == 5 and len(resampledCycles.subCycles[2]) == 5
 
 

@@ -1,5 +1,5 @@
 import hysteresis.baseFuncs as hys
-from hysteresis.curve import Hysteresis, SimpleCycle
+from hysteresis.curve import Hysteresis, SimpleCurve
 import numpy as np
 
 
@@ -20,16 +20,16 @@ def test_concatenateHys():
     assert test1 and test2
 
 def test_concatenate():
-    out = hys.concatenate((xy1, xy2), outputClass=SimpleCycle)
+    out = hys.concatenate((xy1, xy2), outputClass=SimpleCurve)
     print(out.xy)
     test1 = np.sum(out.xy - outputCurve1) < 0.0001
-    test2 = isinstance(out, SimpleCycle)
+    test2 = isinstance(out, SimpleCurve)
     assert test1 and test2
     
 def test_concatenate_noSkip():
-    out = hys.concatenate((xy1, xy1), outputClass=SimpleCycle)
+    out = hys.concatenate((xy1, xy1), outputClass=SimpleCurve)
     test1 = np.sum(out.xy - outputCurve_noskip) < 0.0001
-    test2 = isinstance(out, SimpleCycle)
+    test2 = isinstance(out, SimpleCurve)
     assert test1 and test2    
     
 
