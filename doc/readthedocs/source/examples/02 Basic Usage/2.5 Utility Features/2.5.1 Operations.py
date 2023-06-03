@@ -5,7 +5,6 @@
 Curves in the hysteresis module are compatible with basic operations, i.e.
 addition, subtraction, multiplication, and 
 
-
 """
 
 import numpy as np
@@ -16,7 +15,6 @@ y = x**3 - 3*x**2 + 3
 
 xy = np.column_stack([x,y])
 dataHys = hys.Hysteresis(xy)
-
 
 
 """
@@ -36,7 +34,15 @@ for curve in examples:
     curve.plot(linewidth = 2)
 
 
+"""
+Hystersis objects also support iteration and object retreval!
+"""
 
+dataHys[4] = [0,0]
+print(dataHys[4])
+
+for xy in dataHys:
+    print(xy)
 
 
 

@@ -45,8 +45,8 @@ By default widgets have been turned on. You can use the nav-bar at the bottom
 to cycle through the animation. Clicking on the image will also stop/start the
 animation.
 """
-# basicAnimation = ani.Animation(sinCurve)
-# basicAnimation.animate()
+basicAnimation = ani.Animation(sinCurve)
+basicAnimation.animate()
 
 """
 It's possible to filter the input data being passed to the animation.
@@ -55,8 +55,8 @@ We could also remove points from the start or end of the animation.
 
 """
 
-# reducedAnimation = ani.Animation(sinCurve, skipFrames =2, skipStart = 10)
-# reducedAnimation.animate()
+reducedAnimation = ani.Animation(sinCurve, skipFrames =2, skipStart = 10)
+reducedAnimation.animate()
 
 
 """

@@ -50,20 +50,13 @@ cumulativex = FullHys.getCumDisp()
 netDisp = FullHys.getNetCumDisp()
 cumulativeArea = FullHys.getCumArea()
 
-
+# Create a nice plot
 fig, ax = FullHys.initFig()
 FullHys.plotCumArea(True)
 ax.set_xlabel('Cumulative Deformation (mm)')
 ax.set_ylabel('Energy (kNm)')
 plt.minorticks_on()
 ax.grid(which='major', color='grey', linewidth=0.5, alpha = 0.8)
-ax.grid(b=True, which='minor', linewidth=0.5, alpha = 0.4)
-
-# lines = fig.axes[0].lines
-# for line in lines:
-#     plt.setp(line, linestyle='--')
-
-
-
+ax.grid(which='minor', linewidth=0.5, alpha = 0.4)
 
 
