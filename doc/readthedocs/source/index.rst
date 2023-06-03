@@ -36,7 +36,7 @@ A simple script is shown below:
    :maxdepth: 3
    :numbered:
    
-   rst/baseClass
+   rst/curve
    rst/basicFunctions
    rst/defaultFunctions
    rst/protocol
