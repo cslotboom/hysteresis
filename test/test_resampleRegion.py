@@ -83,20 +83,20 @@ def test_resample_Monotonic():
 
     assert len(resampled) == 120    
     
-def test_resample_SimpleCycle_NoSubCycles():
+def test_resample_SimpleCurve_NoSubCycles():
     
-    curve = hys.SimpleCycle(tt)
+    curve = hys.SimpleCurve(tt)
     resampled = hys.resampleRegion(curve,20)
 
     assert len(resampled) == 120    
 
-def test_resample_SimpleCycle_SubCycles():
+def test_resample_SimpleCurve_SubCycles():
     """
     Confirms that the subcycle is resampled properly!
     """
     
-    myHys = hys.SimpleCycle(ty2,True)
-    # curve = hys.SimpleCycle(tt)
+    myHys = hys.SimpleCurve(ty2,True)
+    # curve = hys.SimpleCurve(tt)
     resampled = hys.resampleRegion(myHys,20)
        
     assert len(resampled.subCycles[0]) == 46    

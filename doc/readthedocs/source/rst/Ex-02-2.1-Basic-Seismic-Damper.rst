@@ -6,7 +6,7 @@ The following data is used in the example:
 
 #. Displacement data  :download:`here </examples/02 Basic Usage/2.1 Basic Seismic Damper/Disp.out>`.
 #. Reaction force data :download:`here </examples/02 Basic Usage/2.1 Basic Seismic Damper/RFrc.out>`.
-#. Backbone data for second hysteresis :download:`here </examples/02 Basic Usage/2.1 Basic Seismic Damper/BackboneData.csv>`.
+#. Backbone data for second hysteresis :download:`here </examples/02 Basic Usage/2.1 Basic Seismic Damper/xyTestData.csv>`.
 
 .. literalinclude:: /examples/02 Basic Usage/2.1 Basic Seismic Damper/2.1 Basic Seismic Damper.py
 

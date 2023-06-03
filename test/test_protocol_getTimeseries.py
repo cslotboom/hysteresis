@@ -30,7 +30,7 @@ Npoint = np.arange(Npoint)
     
 xy = np.column_stack((Npoint, protocol))
 
-hys.SimpleCycle(xy)
+hys.SimpleCurve(xy)
 
 # def _expandProtcol(protcol, halfCycle, Nrepeats):
     

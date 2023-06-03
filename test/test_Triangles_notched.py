@@ -16,7 +16,7 @@ triangleBig = scipy.signal.sawtooth(x*2,0.5)
 triangleSmall = scipy.signal.sawtooth(x*20,0.5)/7
 triangle = triangleBig + triangleSmall
 trianglexy = np.column_stack((x,triangle))
-notchedTriangles = hys.SimpleCycle(trianglexy, findPeaks = True)
+notchedTriangles = hys.SimpleCurve(trianglexy, findPeaks = True)
 
 def test_notchedTriangles_peaks():
     notchedTriangles.setPeaks()
@@ -44,7 +44,7 @@ def test_notchedTriangles_Area():
 
 def test_notchedTriangles_recalc_peaks():
     
-    notchedTriangles = hys.SimpleCycle(trianglexy, findPeaks = True)
+    notchedTriangles = hys.SimpleCurve(trianglexy, findPeaks = True)
     notchedTriangles.recalculatePeaks(peakProminence = 0.8)
     peaks2 = notchedTriangles.peakIndexes
 

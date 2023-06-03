@@ -83,6 +83,7 @@ interpolation to define 10 evenly spaced points along that curve.
 NsamplesPerCurve = 10
 AnalHysDx = hys.resample(AnalHys, NsamplesPerCurve)
 ExpHysDx = hys.resample(ExpHys, NsamplesPerCurve)
+ExpHysDx.recalculateCycles(revProminence = 0.005)
 
 fig, ax = plt.subplots()
 line1 = AnalHysDx.plot(True)
@@ -93,10 +94,13 @@ ax.set_xlabel('Drift (%)')
 ax.set_ylabel('Force (kN)')
 plt.minorticks_on()
 ax.grid(which='major', color='grey', linewidth=0.5, alpha = 0.8)
-ax.grid(b=True, which='minor', linewidth=0.5, alpha = 0.4)
-
-
+ax.grid(which='minor', linewidth=0.5, alpha = 0.4)
 plt.show()
+
+# AnalHysDx.plotLoadProtocol()
+# ExpHysDx.plotLoadProtocol()
+# AnalHysDx.plotVsIndex(True)
+# ExpHysDx.plotVsIndex(True)
 
 """
 The comparHys function can be used to guage how similar two hystereses are.
@@ -119,6 +123,6 @@ ax.set_xlabel('Cycle (#)')
 ax.set_ylabel('Avg. difference between Curves (unitless)')
 plt.minorticks_on()
 ax.grid(which='major', color='grey', linewidth=0.5, alpha = 0.8)
-ax.grid(b=True, which='minor', linewidth=0.5, alpha = 0.4)
+ax.grid( which='minor', linewidth=0.5, alpha = 0.4)
 
 

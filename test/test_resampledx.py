@@ -12,15 +12,15 @@ tyReversed = np.column_stack([t[::-1] ,y[::-1]+y])
 # resampled = hys.resampledx(myHys, 10)
 
 dx = 0.1
-cycle = hys.SimpleCycle(ty, findPeaks=True)
+cycle = hys.SimpleCurve(ty, findPeaks=True)
 resampledCycle = hys.resampleDx(cycle, dx)
 
 # resampledCycles.plot()
 # hys.resample(curve, Nsamples, kwargs)
 
 
-# cycle1 = hys.SimpleCycle(ty, findPeaks=True)
-# cycle2 = hys.SimpleCycle(tyReversed, findPeaks=True)
+# cycle1 = hys.SimpleCurve(ty, findPeaks=True)
+# cycle2 = hys.SimpleCurve(tyReversed, findPeaks=True)
 # curves = [cycle1, cycle2]
 
 # hysWithReversals = hys.concatenate(curves)

@@ -23,7 +23,7 @@ xy = np.column_stack([t,y])
 # myHys.re
 
 def test_recalc():
-    newHys = hys.SimpleCycle(xy)
+    newHys = hys.SimpleCurve(xy)
     newHys.setPeaks()
     newHys.recalculatePeaks(peakProminence=3)
     assert len(newHys.peakIndexes) == 2
@@ -31,7 +31,7 @@ def test_recalc():
 
 def test_recalc_dist():
     
-    newHys = hys.SimpleCycle(xy)
+    newHys = hys.SimpleCurve(xy)
     newHys.setPeaks()
     newHys.recalculatePeaks(peakProminence=3)
     assert len(newHys.peakIndexes) == 2

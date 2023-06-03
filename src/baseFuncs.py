@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.interpolate import interp1d
-from .baseClass import Hysteresis, SimpleCycle, MonotonicCurve
+from .curve import Hysteresis, SimpleCurve, MonotonicCurve
 
 
 
@@ -159,12 +159,12 @@ def removeNegative(Curve):
     # Get sample parameters, then pass those to the new curve.
     
     # if the curve is a SimpleCycle
-    if isinstance(Curve, SimpleCycle):
+    if isinstance(Curve, SimpleCurve):
     
         x = Curve.xy[:,0]
         y = Curve.xy[:,1]
         direction = Curve.direction
-        Output = SimpleCycle(_RemoveNeg(x, y, direction))    
+        Output = SimpleCurve(_RemoveNeg(x, y, direction))    
        
     # if the curve is a hysteresis, we recursively create a series of Cycles
     elif isinstance(Curve, Hysteresis):

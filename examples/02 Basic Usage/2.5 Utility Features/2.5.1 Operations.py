@@ -5,7 +5,6 @@
 Curves in the hysteresis module are compatible with basic operations, i.e.
 addition, subtraction, multiplication, and 
 
-
 """
 
 import numpy as np

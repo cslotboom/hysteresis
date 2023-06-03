@@ -26,7 +26,8 @@ def initializeFig(xlim = [], ylim= []):
                
     return fig, ax
 
-def defaultShowCycles(self, x, y, plotCycles, plotPeaks, labelCycles = [], Cycles = []):
+def defaultShowCycles(xy, showReversals, showPeaks, peakIndexes = None, 
+                      reversalIndexes=None,  labelCycles = None, cycleIndicies = None):
     """
     A function that plots the location of the reversal points and peaks for a
     curve object.
@@ -47,35 +48,43 @@ def defaultShowCycles(self, x, y, plotCycles, plotPeaks, labelCycles = [], Cycle
         The default is [], which labels no cycles
     Cycles : kist, optional
         A list of the cycles to be plotted. If not specified, all values will 
-        be plotted. The default is [], which plots all cycles.
+        be plotted. The default is NOne, which plots no labels cycles.
 
     """
     
+    x = xy[:,0]
+    y = xy[:,1]
     
+    if labelCycles is None:
+        labelCycles = []
+    
+    if cycleIndicies is None:
+        cycleIndicies = []    
+        
     # Plot cycles as x only
-    if plotPeaks == True:
-        try:
-            Indexes = self.peakIndexes
-        except:
+    if showPeaks == True:
+        
+        inds = peakIndexes
+        if peakIndexes is None:
             raise Exception('No peaks have been set')
-        PeakX = x[Indexes]
-        PeakY = y[Indexes]
+            
+        PeakX = x[inds]
+        PeakY = y[inds]
 
         line2  = plt.plot(PeakX, PeakY, "+")
         # plt.title('Peak Index y values')    # Plot cycles as x only
         
-    if plotCycles == True:
-        try:
-            reversalIndexes = self.reversalIndexes        
-        except:
-            raise Exception("Object has no Cycles to display. Try setting cycles.")
+    if showReversals == True:
+        
+        if reversalIndexes is None:
+            raise Exception('No peaks have been set')
         # TODO: update marker based on direction?
         
         # if only certain cycles have been asked for we remove all indexes other indexes
-        if Cycles != []:
-            markerIndexes = reversalIndexes[Cycles]
+        if cycleIndicies != []:
+            markerIndexes = reversalIndexes[cycleIndicies]
             # only label Cycles that are in the cycles asked for
-            labelCycles = np.array([label for label in labelCycles if label in Cycles])
+            labelCycles = np.array([label for label in labelCycles if label in cycleIndicies])
         else:
             # Otherwise we plot all
             markerIndexes = reversalIndexes
@@ -88,7 +97,6 @@ def defaultShowCycles(self, x, y, plotCycles, plotPeaks, labelCycles = [], Cycle
         line2  = plt.plot(markerX, markerY, "x")        
 
         # If the cycles need to be labeled,
-        # if labelCycles is 'all':
         if str(labelCycles) == 'all':
             # skip the first and last cycles
             labelIndexes = np.arange(0,len(markerIndexes))
@@ -102,18 +110,16 @@ def defaultShowCycles(self, x, y, plotCycles, plotPeaks, labelCycles = [], Cycle
             
         for ii in range(len(labelIndexes)):
             Annotate = plt.annotate(labelIndexes[ii], [labelX[ii],labelY[ii]], xytext=(-1, 5), textcoords = 'offset points')
-            
-            
-            # Annotate = plt.annotate(int(ii), xy=(ReversalX[ii], ReversalY[ii]),xytext=(-10, 10), arrowprops=dict(arrowstyle="->"))
-            # Annotate = plt.annotate(int(Cycle), xy=(ReversalX[ii], ReversalY[ii]), xytext=(-1, 5), textcoords = 'offset points', fontsize=12)
-            # Annotate = plt.annotate(int(ii), xy=(ReversalX[ii], ReversalY[ii]))
 
-def defaultPlotFunction(self, x, y, plotCycles, plotPeaks, labelCycles = [], **kwargs):
+
+def defaultPlotFunction(xy, showReversals, showPeaks, peakIndexes = None, 
+                      reversalIndexes=None, labelCycles = None, **kwargs):
     """
     Parameters
     ----------
-    x : array
-        The input x values as an numpy array.
+    xy : 2D array [Npoints, 2]
+        The input x/y values as an numpy array, in order x,y and shape [Npoints, 2].
+        e.g. x = xy[:,0]
     y : array
         The input y values as an numpy array.
     plotCycles : bool
@@ -128,11 +134,13 @@ def defaultPlotFunction(self, x, y, plotCycles, plotPeaks, labelCycles = [], **k
         A list of the cycles to be plotted. If not specified, all values will 
         be plotted. The default is [], which plots all cycles.
     """
-
+    
+    x = xy[:,0]
+    y = xy[:,1]
           
     line, = plt.plot(x, y, **kwargs)
        
-    defaultShowCycles(self, x, y, plotCycles, plotPeaks, labelCycles)
+    defaultShowCycles(xy, showReversals, showPeaks, peakIndexes, reversalIndexes, labelCycles)
     
     return line
     
