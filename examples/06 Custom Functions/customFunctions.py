@@ -34,6 +34,7 @@ ax.set_title('Default slope Function')
 
 
 # define a custom slope function - it makes the slope always 1. 
+# This obviously isn't useful
 def fslope(xy):
     slope = np.ones_like(xy[:,0])
     return slope 
@@ -42,12 +43,10 @@ def fslope(xy):
 hys.env.environment.fslope = fslope
 
 # Plot to show it's worked
-myHys = hys.Hysteresis(xy)
-fig, ax = myHys.initFig()
-myHys.plot()
-myHys.plotSlope()
-
+myHys2 = hys.Hysteresis(xy)
+fig, ax = myHys2.initFig()
+myHys2.plot()
+myHys2.plotSlope()
 
 # If we want the behaviour to return to normal, restart the environment.
 hys.env.environment.restart()
-

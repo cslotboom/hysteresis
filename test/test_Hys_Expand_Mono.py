@@ -19,8 +19,8 @@ def test_getReturnCycle():
     y2 = y1[-1] + t*4
     
     
-    TestCycle1 = hys.SimpleCycle(np.column_stack([x1,y1]))
-    TestCycle2 = hys.SimpleCycle(np.column_stack([x2,y2]))
+    TestCycle1 = hys.SimpleCurve(np.column_stack([x1,y1]))
+    TestCycle2 = hys.SimpleCurve(np.column_stack([x2,y2]))
     TestCycle3 = getReturnCycle(TestCycle1, TestCycle2)
     
     xySolution = np.zeros([76,2])

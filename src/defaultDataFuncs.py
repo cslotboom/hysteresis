@@ -1,12 +1,7 @@
 import numpy as np
-from numpy import trapz
 
 from scipy.interpolate import interp1d
 from hysteresis import data
-
-import matplotlib.pyplot as plt
-
-
 
 
 def defaultSlopeFunction(xy):

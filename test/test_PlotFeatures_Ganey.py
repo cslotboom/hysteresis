@@ -20,9 +20,9 @@ def test_plot_labels(monkeypatch):
     monkeypatch.setattr(plt, 'show', lambda: None)
     DamperHys = hys.Hysteresis(testHys2)
 
-    DamperHys.plot(plotCycles = True, labelCycles = [17,18,19,23])
+    DamperHys.plot(showReversals = True, labelReversals = [17,18,19,23])
     plt.close()
-    DamperHys.plot(plotCycles = True, labelCycles = 'all')
+    DamperHys.plot(showReversals = True, labelReversals = 'all')
     plt.close()
 
     assert True == True
@@ -34,9 +34,9 @@ def test_plot_Cycles(monkeypatch):
     monkeypatch.setattr(plt, 'show', lambda: None)
     DamperHys = hys.Hysteresis(testHys2)
 
-    DamperHys.plot(plotCycles = True, labelCycles = [17,18,19,23])
+    DamperHys.plot(showReversals = True, labelReversals = [17,18,19,23])
     plt.close()
-    DamperHys.plotCycles(plotCycles = True, labelCycles = [3,6,8])
+    DamperHys.plotCycles(showReversals = True, labelReversals = [3,6,8])
     plt.close()
     DamperHys.plotCycles([0,1])
     plt.close()

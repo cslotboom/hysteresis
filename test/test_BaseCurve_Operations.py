@@ -1,14 +1,14 @@
 
-import hysteresis.baseClass as hys
+import hysteresis.curve as hys
 import numpy as np
 import pytest
 
-def makeCurveBase(f):
+def makeCurve(f):
     "lamda function that creates all curves"
     xdata = np.linspace(0,4,1001)
     y = f(xdata)
     xy = np.column_stack([xdata, y])
-    Curve = hys.CurveBase(xy)   
+    Curve = hys.Curve(xy)   
     return Curve    
 
 def function1(x):
@@ -21,7 +21,7 @@ def function3(x):
     return 3 + (np.e)**x  
     
 def test_len():
-    curve = makeCurveBase(function2)
+    curve = makeCurve(function2)
     length = len(curve)
     assert length == 1001
 
@@ -54,17 +54,17 @@ def test_get_Operand_2D_array_failure():
 # =============================================================================
 
 def test_multiplication_scalar():
-    curve = makeCurveBase(function2)
+    curve = makeCurve(function2)
     newCurve = curve*8
     assert np.all(newCurve.xy[:,1] == curve.xy[:,1]*8)
 
 def test_multiplication_Array():
-    curve = makeCurveBase(function2)
+    curve = makeCurve(function2)
     newCurve = curve*curve.xy
     assert np.all(newCurve.xy[:,1] == curve.xy[:,1]**2)
 
 def test_multiplication_Curve():
-    curve = makeCurveBase(function3)
+    curve = makeCurve(function3)
     newCurve = curve*curve
     assert np.all(newCurve.xy[:,1] == curve.xy[:,1]**2)
 # =============================================================================
@@ -72,17 +72,17 @@ def test_multiplication_Curve():
 # =============================================================================
 
 def test_addition_scalar():
-    curve = makeCurveBase(function2)
+    curve = makeCurve(function2)
     newCurve = curve+8
     assert np.all(newCurve.xy[:,1] == curve.xy[:,1]+8)
 
 def test_addition_Array():
-    curve = makeCurveBase(function2)
+    curve = makeCurve(function2)
     newCurve = curve + curve.xy
     assert np.all(newCurve.xy[:,1] == curve.xy[:,1]*2)
 
 def test_addition_Curve():
-    curve = makeCurveBase(function3)
+    curve = makeCurve(function3)
     newCurve = curve+curve
     assert np.all(newCurve.xy[:,1] == curve.xy[:,1]*2)
 
@@ -91,29 +91,29 @@ def test_addition_Curve():
 # =============================================================================
 
 def test_subtraction_scalar_L():
-    curve = makeCurveBase(function2)
+    curve = makeCurve(function2)
     newCurve = curve-8
     assert np.all(newCurve.xy[:,1] == curve.xy[:,1]-8)
 
 def test_subtraction_scalar_R():
-    curve = makeCurveBase(function2)
+    curve = makeCurve(function2)
     newCurve = 8 - curve
     assert np.all(newCurve.xy[:,1] == 8 - curve.xy[:,1])
     
     
 def test_subtraction_Array_L():
-    curve = makeCurveBase(function2)
+    curve = makeCurve(function2)
     newCurve = curve - curve.xy
     assert np.all(newCurve.xy[:,1] == 0)
     
 def test_subtraction_Array_R():
-    curve = makeCurveBase(function2)
+    curve = makeCurve(function2)
     newCurve =  curve.xy - curve 
     assert np.all(newCurve.xy[:,1] == 0)
     
     
 def test_subtraction_Curve():
-    curve = makeCurveBase(function3)
+    curve = makeCurve(function3)
     newCurve = curve-curve
     assert np.all(newCurve.xy[:,1] == 0)
 
@@ -122,35 +122,35 @@ def test_subtraction_Curve():
 # =============================================================================
 
 def test_division_scalar_L():
-    curve = makeCurveBase(function2)
+    curve = makeCurve(function2)
     newCurve = curve/8
     assert np.all(newCurve.xy[:,1] == curve.xy[:,1]/8)
 
 def test_division_scalar_R():
-    curve = makeCurveBase(function2)
+    curve = makeCurve(function2)
     newCurve = 8 / curve
     assert np.all(newCurve.xy[:,1] == 8 / curve.xy[:,1])
     
     
 def test_division_Array_L():
-    curve = makeCurveBase(function2)
+    curve = makeCurve(function2)
     newCurve = curve / curve.xy
     assert np.all(newCurve.xy[:,1] == 1)
     
 def test_division_Array_R():
-    curve = makeCurveBase(function2)
+    curve = makeCurve(function2)
     newCurve =  curve.xy / curve 
     assert np.all(newCurve.xy[:,1] == 1)
     
     
 def test_division_Curve():
-    curve = makeCurveBase(function3)
+    curve = makeCurve(function3)
     newCurve = curve/curve
     assert np.all(newCurve.xy[:,1] == 1)
     
 
 
-# curve = makeCurveBase(function2)
+# curve = makeCurve(function2)
 # test = np.array(curve)
 
 

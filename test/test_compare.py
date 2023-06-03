@@ -12,7 +12,7 @@ def test_comapre_basic():
     
     
     myHys = hys.Hysteresis(xy)
-    myHys.plot(plotCycles = True)
+    myHys.plot(showReversals = True)
     smallHys = hys.resample(myHys, 10)
     # samllHys.plot()
     

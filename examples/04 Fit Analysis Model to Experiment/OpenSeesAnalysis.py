@@ -12,14 +12,13 @@ import openseespy.opensees as op
 
 # function to be omptimzied
 
-def runAnalysis(k):
+def runAnalysis(k, Ncycles = 1):
     """
     Tests and individual and returns the result of that test.
     
-    The user should consider if it's possible for the test not to work.
+    The user should consider if it's possible for the test not to work. 
     
     """
-    
     
     Fu = 21.1*10**3
     # k = 2.6*10**6
@@ -105,9 +104,9 @@ def runAnalysis(k):
     ok = 0
     # Define Analysis 
     for x in LoadProtocol:
-        for ii in range(0,2):
+        for ii in range(0,Ncycles):
             
-            # op.
+            # run the analyis up to the positive displacement point.
             op.integrator('DisplacementControl', ControlNode, ControlNodeDof, dx)
             while (op.nodeDisp(2,1) < x):
                 ok = op.analyze(1)
@@ -116,6 +115,7 @@ def runAnalysis(k):
                     op.wipe()
                     return np.array([0,0])
                 
+            # run the analyis up to the negative displacement point.
             op.integrator('DisplacementControl', ControlNode, ControlNodeDof, -dx)
             while (op.nodeDisp(2,1) > -x):
                 ok = op.analyze(1)

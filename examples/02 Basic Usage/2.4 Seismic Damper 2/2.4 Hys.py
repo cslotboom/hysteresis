@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Sep  4 22:19:58 2020
+An example where data from a siesmic damper is processed.
 
 @author: Christian
 """
@@ -40,7 +40,7 @@ FullHys.plotLoadProtocol()
 hysProt = FullHys.loadProtocol
 
 # Get cumulative displacement and area
-cumDisp = FullHys.getCumDisp() + 6
+cumDisp = FullHys.getCumDisp() +10
 cumArea = FullHys.getCumArea()/1000
 
 # Make a nice plot
@@ -51,7 +51,7 @@ ax.set_xlabel('Cumulative Deformation (mm)')
 ax.set_ylabel('Cumulative Energy (kJ)')
 plt.minorticks_on()
 ax.grid(which='major', color='grey', linewidth=0.5, alpha = 0.8)
-ax.grid(b=True, which='minor', linewidth=0.5, alpha = 0.4)
+ax.grid(which='minor', linewidth=0.5, alpha = 0.4)
 ax.legend()
 
 

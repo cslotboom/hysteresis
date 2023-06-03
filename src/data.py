@@ -57,7 +57,7 @@ def getCycleSubVector(VectorX, VectorY, Index1, Index2, Nsample):
     return xSample,ySample
 
 
-def getMaxIndicies(VectorX, peakDist = 2, peakWidth = None, 
+def getMaxIndexes(VectorX, peakDist = 2, peakWidth = None, 
                      peakProminence = None, **kwargs):
     MaxIndexes,_ = find_peaks(VectorX, height = (None, None), distance = peakDist, 
                             width = peakWidth, prominence = peakProminence, **kwargs)
@@ -92,7 +92,7 @@ def _findOrder(L1, L2, MinIndexes, MaxIndexes):
 
 
 
-def getCycleIndicies(VectorX, peakDist = 2, peakWidth = None, 
+def getCycleIndexes(VectorX, peakDist = 2, peakWidth = None, 
                      peakProminence = None, **kwargs):
     """
     This function finds the index where there is areversal in the XY data. 
@@ -236,8 +236,8 @@ def sampleData(ExperimentX, ExperimentY, AnalysisX, AnalysisY, Nsample = 10,
        
     # We get the indicies where the reversal happens.
     
-    ExperimentIndicies = getCycleIndicies(ExperimentX, Nsample, peakDist, peakwidth, ExperimentY)
-    AnalysisIndicies = getCycleIndicies(AnalysisX, Nsample, peakDist, peakwidth, AnalysisY)
+    ExperimentIndicies = getCycleIndexes(ExperimentX, Nsample, peakDist, peakwidth, ExperimentY)
+    AnalysisIndicies = getCycleIndexes(AnalysisX, Nsample, peakDist, peakwidth, AnalysisY)
     
     # We check that both curves have the same number of indicies
     NIndex = len(ExperimentIndicies) - 1

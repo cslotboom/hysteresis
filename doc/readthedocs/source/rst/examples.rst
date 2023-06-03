@@ -10,6 +10,7 @@ Examples are broken into the following categories
 #. :doc:`Ex-04-FitAnalysisModel`
 #. :doc:`Ex-05-SpecialPlots`
 #. :doc:`Ex-06-CustomFunction`
+#. :doc:`Ex-WCTE`
 
 .. toctree::
    :maxdepth: 2
@@ -21,6 +22,7 @@ Examples are broken into the following categories
    Ex-04-FitAnalysisModel.rst
    Ex-05-SpecialPlots.rst
    Ex-06-CustomFunction.rst
+   Ex-WCTE.rst
 
 
 

@@ -2,7 +2,7 @@ Hysteresis
 ==========
 
 
-.. autoclass:: hysteresis.baseClass.Hysteresis
+.. autoclass:: hysteresis.curve.Hysteresis
    :members:
    :undoc-members:
    :show-inheritance:

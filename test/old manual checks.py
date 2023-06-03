@@ -88,9 +88,9 @@ Gets the area under a series of graphs
 # xy2 = np.column_stack([xdata, y2])
 # xy3 = np.column_stack([xdata, y3])
 
-# Curve1 = hys.CurveBase(xy1)
-# Curve2 = hys.CurveBase(xy2)
-# Curve3 = hys.CurveBase(xy3)
+# Curve1 = hys.Curve(xy1)
+# Curve2 = hys.Curve(xy2)
+# Curve3 = hys.Curve(xy3)
 
 # Curves = [Curve1, Curve2, Curve3]
 
@@ -271,7 +271,7 @@ downsampledHys.plotArea()
 # trianglexy = np.column_stack((x,triangleSmall))
 
 
-# smallTriangles = hys.SimpleCycle(trianglexy, FindPeaks = True)
+# smallTriangles = hys.SimpleCurve(trianglexy, FindPeaks = True)
 # smallTriangles.setPeaks()
 # smallTriangles.plot(plotPeaks = True)
 # smallTriangles.plotSubCycles()
@@ -293,7 +293,7 @@ downsampledHys.plotArea()
 # trianglexy = np.column_stack((x,triangle))
 
 # # Standard plot
-# notchedTriangles = hys.SimpleCycle(trianglexy, FindPeaks = True)
+# notchedTriangles = hys.SimpleCurve(trianglexy, FindPeaks = True)
 # notchedTriangles.setPeaks()
 # peaks = notchedTriangles.peakIndexes
 # notchedTriangles.plot(plotPeaks = True)
@@ -309,7 +309,7 @@ downsampledHys.plotArea()
 
 
 # # fine absolute peaks
-# notchedTriangles = hys.SimpleCycle(trianglexy, FindPeaks = True)
+# notchedTriangles = hys.SimpleCurve(trianglexy, FindPeaks = True)
 # notchedTriangles.recalculatePeaks(peakProminence = 0.8)
 # peaks2 = notchedTriangles.peakIndexes
 # notchedTriangles.plot(plotPeaks = True)
@@ -339,7 +339,7 @@ downsampledHys.plotArea()
 # trianglexy = np.column_stack((x, Ynoise))
 
 # # Base Curve
-# noiseyTriangles = hys.SimpleCycle(trianglexy, FindPeaks = True)
+# noiseyTriangles = hys.SimpleCurve(trianglexy, FindPeaks = True)
 # peak1 = noiseyTriangles.peakIndexes
 # fig, ax = noiseyTriangles.plot(plotPeaks = True)
 # plt.title('Peaks unfiltered.')
@@ -402,7 +402,7 @@ downsampledHys.plotArea()
 # triangleSmall = scipy.signal.sawtooth(x*20,0.5)/7
 # trianglexy = np.column_stack((x,triangleSmall))
 
-# smallTriangles = hys.SimpleCycle(trianglexy, FindPeaks = True, setSlope=True)
+# smallTriangles = hys.SimpleCurve(trianglexy, FindPeaks = True, setSlope=True)
 # smallTriangles.plotSlope()
 # smallTriangles.plot(plotPeaks=True)
 
@@ -431,9 +431,9 @@ downsampledHys.plotArea()
 
 # xy = np.column_stack([x,Ynoise])
 
-# TestHys = hys.SimpleCycle(xy)
+# TestHys = hys.SimpleCurve(xy)
 
-# TestHys = hys.SimpleCycle(xy, FindPeaks = True)
+# TestHys = hys.SimpleCurve(xy, FindPeaks = True)
 # TestHys.plot(plotPeaks=True)
 
 # TestHys.recalculatePeaks(peakWidth = 50)

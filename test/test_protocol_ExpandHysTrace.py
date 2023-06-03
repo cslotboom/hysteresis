@@ -3,7 +3,7 @@ import hysteresis as hys
 import numpy as np
 import matplotlib.pyplot as plt
 
-def makeCurveBase():
+def makeCurve():
     "lamda function that creates all curves"
     t = np.linspace(0,4,1000)*np.pi
     x = np.cos(t)
@@ -16,7 +16,7 @@ def makeCurveBase():
 
 
 def test_expandHysTrace():
-    curve = makeCurveBase()
+    curve = makeCurve()
     expand = hys.exandHysTrace(curve, [2])
     
     assert len(expand.cycles) == 6
@@ -25,13 +25,13 @@ def test_expandHysTrace():
 
 
 
-# curve = makeCurveBase()
+# curve = makeCurve()
 # curve.plotVsIndex()
 # expand = hys.exandHysTrace(curve, [2])
 # expand.plotVsIndex()
 # test_expandHysTrace()
 
-# curve = makeCurveBase()
+# curve = makeCurve()
 # curve.plot()
 # curve.plotLoadProtocol()
 # fig, ax = curve.plotCycles()

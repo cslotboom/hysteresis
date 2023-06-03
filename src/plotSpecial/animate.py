@@ -4,17 +4,14 @@ Created on Fri May  7 20:15:19 2021
 
 @author: Christian
 
+Notes, currently an experimentla feature. In the future I'd like to
+    Add arrow key functionality
+    Add bliting to speed up rendering.
 
-TODO:
-    Add arrow key functionality?
-    Add bliting
-    Make ABC and make update an abstract method.
 """
 
-# import hysteresis as hys
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
-# from dataclasses import dataclass
 from matplotlib.widgets import Button, Slider
 import numpy as np
 
@@ -24,8 +21,6 @@ def init_Animation():
     
     return fig, ax
     
-
-
 def getAnixy(rawFrames, skipFrames):
     xyAni = rawFrames[::skipFrames,:]
     
@@ -33,24 +28,26 @@ def getAnixy(rawFrames, skipFrames):
 
 def getAniFrames(x:list, targetdx:float):
     """
-    given a input array of positive nu x, return a new array 
+    This function is used to get a set of animation frames from a input vector.
+    For the input vector x, a single frame will be pulled from every region
+    dx. Assumes that x is monotonically increasing.
     
-    Returns a frame every target dx. Can be useful for pre-processing data
-    if input data has a variable timestep.
+    This can be useful for pre-processing dataif input data has a variable timestep.
     
-    No linearl inerpolatin is used for intermediate frames.
+    No linear inerpolatin is used for intermediate frames.
     
     Parameters
     ----------
     x : list
-        DESCRIPTION.
+        the array of input values.
     targetdx : float
-        DESCRIPTION.
+        the dx for the output animation..
 
     Returns
     -------
-    TYPE
-        DESCRIPTION.
+    np.array
+        the output np array of points, with one frame every dx from the 
+        target dx.
 
     """
 
@@ -202,13 +199,14 @@ class AnimationBase:
                                  interval=self.interval, blit=False)
 
 
-# @dataclass
 class Animation(AnimationBase):
         
     def __init__(self, Curve, pointsPerFrame = 1, skipFrames = 1, 
                  skipStart = 0, skipEnd = 0, interval = 50, widgets = True):
         """
-        Creates a animation of the input curve object
+        Creates a animation of the input curve object.
+        This is still an experimental feature and may not work as intended 
+        for large datasets.
 
         Parameters
         ----------
@@ -216,7 +214,7 @@ class Animation(AnimationBase):
             The curve to animate.
         pointsPerFrame : int, optional
             The number of data points to draw per frame. The default is 1.
-        skipFrames : TYPE, optional
+        skipFrames : int, optional
             THe number of animation frames to skip per input. This reduces
             can be used to reduce the size of large data arrays. The default is
             1, which shows all frames.
@@ -262,8 +260,6 @@ class Animation(AnimationBase):
             skipEnd *= -1 
         return xyAni[skipStart:skipEnd, :]
 
-
-    
     def update(self, frame):
         """
         Updates the canvas at the given frame.
@@ -364,10 +360,7 @@ class JointAnimation(AnimationBase):
             self.lines.append(line)    # def initAnimation(self):        
             
     def update(self, frame):
-        
-        # print(frame)
         points = int(frame*self.pointsPerFrame)
-        # print(points)
         lines = [None]*self.Ncurves
         for ii in range(self.Ncurves):
 
@@ -380,11 +373,6 @@ class JointAnimation(AnimationBase):
             lines[ii] = line
         
         self.aniArtists = lines
-        # self.aniArtists
-            # lines[ii] = line
-        # lines = self.lines
-        
-        # return lines
         return self.aniArtists
     
     # def animate(self):

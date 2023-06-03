@@ -1,12 +1,12 @@
-import hysteresis.baseClass as hys
+import hysteresis.curve as hys
 import numpy as np
 
-def makeCurveBase(f):
+def makeCurve(f):
     "lamda function that creates all curves"
     xdata = np.linspace(0,4,1001)
     y = f(xdata)
     xy = np.column_stack([xdata, y])
-    Curve = hys.CurveBase(xy)   
+    Curve = hys.Curve(xy)   
     return Curve    
 
 def function1(x):
@@ -19,7 +19,7 @@ def function3(x):
     return 3 + (np.e)**x  
         
 def test_Curve1_Area():
-    Curve = makeCurveBase(function1)
+    Curve = makeCurve(function1)
     Curve.setSlope()
     slope = Curve.slope
     
@@ -30,7 +30,7 @@ def test_Curve1_Area():
     assert np.all([test1,test2,test3])
 
 def test_Curve2_Area():
-    Curve = makeCurveBase(function2)
+    Curve = makeCurve(function2)
     Curve.setSlope()
     slope = Curve.slope
     
@@ -41,7 +41,7 @@ def test_Curve2_Area():
     assert np.all([test1,test2,test3])
 
 def test_Curve3_Area():
-    Curve = makeCurveBase(function3)
+    Curve = makeCurve(function3)
     Curve.setSlope()
     slope = Curve.slope
 

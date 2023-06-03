@@ -1,8 +1,8 @@
-SimpleCycle
+SimpleCurve
 ===========
 
 
-.. autoclass:: hysteresis.baseClass.SimpleCycle
+.. autoclass:: hysteresis.curve.SimpleCurve
    :members:
    :undoc-members:
    :show-inheritance:

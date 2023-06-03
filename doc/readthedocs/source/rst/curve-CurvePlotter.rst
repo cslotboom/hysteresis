@@ -1,8 +1,8 @@
-CurveBase
+CurvePlotter
 ============
 
 
-.. autoclass:: hysteresis.baseClass.CurveBase
+.. autoclass:: hysteresis.curve.CurvePlotter
    :members:
    :undoc-members:
    :show-inheritance:
