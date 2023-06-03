@@ -12,15 +12,20 @@ The example requires two additionsl packages installed to work:
     - OpenseesPy (https://openseespydoc.readthedocs.io/en/latest/index.html)
     - naturalize (https://github.com/cslotboom/Naturalize) 
 
+The example will require about 1.25GB of hardrive space and take about thirty
+minutes to run.
+
 """
 
-import naturalize as nat
 import numpy as np
 import os
 import hysteresis as hys
 
 import matplotlib.pyplot as plt
+
+# These packages require installation to run the example.
 import openseespy.opensees as op
+import naturalize as nat
 
 def testIndividual(individual):
     """
@@ -231,6 +236,7 @@ algorithm = nat.GeneticAlgorithm(helper, Npop, Ncouples, Nsurvive, mutateThresol
 analysis = nat.Analysis(algorithm)
 solution = analysis.runAnalysis(Ngen)
 
+# an old solution, provided here for reference only.
 np.array([2.33023155e+04, 2.94258681e+06, 2.36158239e-03, 4.06597565e+00,
         5.68384723e-01, 1.49959762e-01])
 

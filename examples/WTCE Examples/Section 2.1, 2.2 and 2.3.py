@@ -28,21 +28,12 @@ xy = np.column_stack([x,y])
 # Make a hysteresis object
 myHys = hys.Hysteresis(xy)
 
-# Plot the object to see if the cycles are detected properly.
-# This data is really clean, good job Dr. Tannert!
-# fig, ax = plt.subplots()
-# myHys.plot(True)
-
-# fig, ax = plt.subplots()
-# myHys.plotVsIndex(True)
-
 # =============================================================================
 # Figure 1
 # =============================================================================
 
+# get the filan cycle
 finalCycle = myHys.cycles[-1]
-finalCycle.plotVsIndex()
-
 finalCycle.setPeaks(peakProminence=5)
 finalCycle.setSubCycles()
 
