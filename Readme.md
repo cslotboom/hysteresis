@@ -38,7 +38,7 @@ y = np.cos(t)*t
 xy = np.column_stack([x,y])
 
 myHys = hys.Hysteresis(xy)
-myHys.plot(plotCycles = True)
+myHys.plot(showReversals = True)
 ```
 
 
