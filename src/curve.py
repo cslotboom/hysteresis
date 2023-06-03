@@ -4,8 +4,14 @@ import hysteresis.env as env
 import matplotlib.pyplot as plt
 
 
-
 class CurvePlotter:
+    """
+    The Curve plotter class is used to define plotting behaviour that is common 
+    to all types of curves. It is generally ment to be inherited from and not
+    used directly. 
+    """
+    
+    
     def plot(self, showReversals = False, showPeaks = False, labelReversals = None,
              **kwargs):
         """
@@ -250,9 +256,13 @@ class CurvePlotter:
             lines.append(line)
         return lines     
 
-
-
-class CurveOperations:   
+class CurveOperations:
+    
+    """
+    The Curve operations class is used to define operations that all curves
+    will have. This includes features such iteration, mathematical operations
+    like addition or multiplaction, and setting/getting items.
+    """
     
     __array_ufunc__ = None
 
@@ -836,7 +846,6 @@ class Hysteresis(Curve):
         
         self.setCycles()
         self.setArea()           
-
 
 class SimpleCurve(Curve):
     """ 

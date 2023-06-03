@@ -43,8 +43,6 @@ def getAniFrames(x, targetdx):
 
     return np.array(NframesOut)
 
-
-
 class AnimationBase:    
     
     def __init__(self):
