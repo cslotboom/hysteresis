@@ -79,7 +79,7 @@ All Hysteresis objects come with built in plotting functionality, built off matp
 
 ```
 fig, ax = plt.subplots()
-line = myHys.plot(plotCycles=True)
+line = myHys.plot(showReversals=True)
 ax.set_xlabel('Actuator Displacement (mm)')
 ax.set_ylabel('Applied Force (kN)')
 ```
@@ -131,11 +131,27 @@ Youtube tutorials coming soon.
 ***
 ## Terminology
 
-Hysteresis objects are curves that change directions in both the x axis and y axis, i.e. the change from left-right to right left. They are made up of a number of "SimpleCycle" objects, which only go one direction.
+A **curve** is a sequence of xy points, i.e. [xy0, xy1, ..., xyN]
 
-The use of the term "Cycle" in this package is a little nebulus, as it implies that we return to where we started.
-In this package, a cycle is a curve that goes between two extreme values in the x axis and (roughly) does not change direction, i.e. they only go left-right or right-left. The SimpleCycle object is used to represent these curves. 
-Note that changes in direction left or right that are not detected as peaks are still allowed.
+Portions of a **curve** will have a **direction** in both **x** and **y**, depending on if values are increasing or decreasing.
+The **direction** of a **curve** section depends on the overall curve trends, and small imperfections in the data can be ignored.
+Points where the x values change direction are called **reversal points**.
+Points where the y values change direction are called **peaks**.
 
-MonotonicCurve is a "SimpleCycle" object that is, you guessed it, monotonic. Similar to  Small jitters up or down that are not considered peaks are still allowed.
+The Hysteresis package has a number of objects to represent curves with different properties
+
+The most basic type of curve is the **MonotonicCurve**.
+**onotonicCurves** do not change direction in x or y.
+They have two **revesal points**, and two **peaks** (the first and last point for both)
+
+
+Next are **SimpleCurves**. These are curves where x does not change direction, but y can.
+They will have two **reversal points** (the first and last point), and multiple **peaks**.
+Between peak points, they can be broken into a number of **"Subcycles"** represented by of **MonotonicCurves**.
+
+
+Finally, a **Hysteresis** is a **curve** where that changes direction in both the x and y.
+They can have any number of **reversal points** and **peaks**.
+The Hysteresis are broken into a number of **cycles** between reversal points. These **cycles** are represented by a **SimpleCurve**.
+
 
