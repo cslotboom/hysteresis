@@ -1,4 +1,4 @@
-<h1 align = "Left">Hysteresis: Tools for Non-functional Curves.</h1>
+<h1 align = "Left">Hysteresis: Analysis Tools for Non-functional Curves.</h1>
 
 Hysteresis is a Python library made for analyzing non-functional curves, with an emphasis on force-deformation hystereses.
 While functions only have one direction, non-functional curves change direction, and each 'x' can be is mapped to more than one 'y'. 
