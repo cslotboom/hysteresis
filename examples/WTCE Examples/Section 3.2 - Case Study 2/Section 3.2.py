@@ -232,8 +232,11 @@ Ncouples = 8
 Nsurvive = 2
 mutateThresold = 0.1
 
+
+recorder = nat.basicRecorder(1, 1)
+
 algorithm = nat.GeneticAlgorithm(helper, Npop, Ncouples, Nsurvive, mutateThresold)
-analysis = nat.Analysis(algorithm)
+analysis = nat.Analysis(algorithm, recorder)
 solution = analysis.runAnalysis(Ngen)
 
 # an old solution, provided here for reference only.
@@ -259,3 +262,47 @@ ax.set_xlabel('Actuator Displacement (m)')
 ax.set_ylabel('Actuator Force (N)')
 plt.show()
 
+
+
+
+import imageio
+
+data = analysis.getRecorderData()
+
+# nat.pickleData(data, outputData)
+# images = []
+
+ii = 0
+for genotype in data.bestGenotypes:
+    
+    solutionIndv = nat.Individual([genotype[0]])
+    solutionIndv.gen = 0
+    solutionIndv.name = 'optimal'
+    xy = testIndividual(solutionIndv)
+
+    solHys = hys.Hysteresis(xy)
+    
+    
+    
+    fig,ax = plt.subplots()
+    analysisEnvironment.hys2.plot()
+    solHys.plot()
+    ax.minorticks_on()
+    ax.grid(which='major', color='grey', linewidth=0.5, alpha = 0.8)
+    # ax.grid(b=True, which='minor', linewidth=0.5, alpha = 0.4)
+    # ax.legend(loc='lower right')
+    ax.set_xlabel('Actuator Displacement (m)')
+    ax.set_ylabel('Actuator Force (N)')
+    plt.savefig(str(ii) +'.png')
+    ii +=1
+    
+Ndata = len(data.bestGenotypes)
+    
+frames = []
+for ii in range(Ndata):
+    image = imageio.v2.imread(f'{ii}.png')
+    frames.append(image)    
+    
+imageio.mimsave('example.gif', # output gif
+                frames,          # array of input frames
+                fps = 24)         # optional: frames per second

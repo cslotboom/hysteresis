@@ -114,6 +114,12 @@ plt.minorticks_on()
 ax.grid(which='major', color='grey', linewidth=0.5, alpha = 0.8)
 ax.grid(which='minor', linewidth=0.5, alpha = 0.4)
 
+ax.lines[0].set_label('Experiment')
+# ax.lines[2].set_color('C1')
+ax.lines[1].set_label('Analysis')
+# ax.lines[3].set_color('C1')
+ax.legend()
+
 # =============================================================================
 # 13 Compare cycles directly  - This is a bad comparision, don't do this!
 # =============================================================================

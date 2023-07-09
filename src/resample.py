@@ -222,7 +222,80 @@ def _getOutsideRegions(regions):
     return outsideRegions, isInside
 
 
-def resampleRegion(curve, Nsamples, regions = [[0, 0.1], [0.9, 1]]):
+
+
+def _resampleRegionSimpleCurve(curve, Nsamples, regions):
+    if curve.subCycles: # if subsycles are set, resample those
+        outputSubcycles = [None]*curve.NsubCycles
+        for ii, subcycle in enumerate(curve.subCycles):
+            outputSubcycles[ii] = resampleRegion(subcycle, Nsamples, regions)
+            
+        tmpOut      =  concatenate(outputSubcycles, outputClass = SimpleCurve)
+        tmpProps    = curve._getStatePropreties()
+        return SimpleCurve(tmpOut.xy, *tmpProps)        
+    
+    else: # if subsycles aren't set, resample at level of xy
+    
+        x = curve.xy[:,0]
+        y = curve.xy[:,1]
+        xy = np.column_stack([x, y])
+        return SimpleCurve(resampleRegion(xy, Nsamples, regions))    
+
+
+def _resampleRegionHysteresis(curve, Nsamples, regions):
+    outputCycles = [None]*curve.NCycles
+    for ii, cycle in enumerate(curve.cycles):
+        outputCycles[ii] = resampleRegion(cycle, Nsamples, regions)
+    tmpOut = concatenateHys(outputCycles)
+    tmpProps = curve._getStatePropreties()
+    return Hysteresis(tmpOut.xy,*tmpProps)        
+
+def _resampleRegionMonotonicCurve(curve, Nsamples, regions):
+    x = curve.xy[:,0]
+    y = curve.xy[:,1]
+    xy = np.column_stack([x, y])
+    return  MonotonicCurve(resampleRegion(xy, Nsamples, regions))        
+
+
+
+def _resampleRegionArray(curve, Nsamples, regions):
+    
+    allRegions, isInside = _getOutsideRegions(regions) # these get left alone  
+    x = curve[:,0]
+    y = curve[:,1] 
+
+    xSamples = []
+    ySamples = []
+    
+    allRegions = np.array(allRegions)*(x[-1] - x[0]) + x[0]
+    
+    if x[0] <= x[-1]:
+        isLeftRight = True
+    else:
+        isLeftRight = False
+    
+    for ii, region in enumerate(allRegions):
+        if isInside[ii]:
+            xtmp = np.linspace(region[0], region[1], Nsamples)
+            ytmp = _linInterpSample(x, y, xtmp)[:,1]
+    
+        else:
+            if isLeftRight:
+                inds = np.where((region[0] < x) *  (x < region[1]))
+            else:
+                inds = np.where((x < region[0]) *  (region[1] < x))
+
+            xtmp = x[inds]
+            ytmp = y[inds]
+        
+        xSamples.append(xtmp)
+        ySamples.append(ytmp)
+        
+    xSamples = np.concatenate(xSamples)
+    ySamples = np.concatenate(ySamples)
+    return np.column_stack([xSamples, ySamples])
+
+def resampleRegion(curve, Nsamples, regions = None):
     """
     Resamples only parts of an input a curve. The part of the
     curve that is resampled is defined using the regions variable.
@@ -255,79 +328,22 @@ def resampleRegion(curve, Nsamples, regions = [[0, 0.1], [0.9, 1]]):
     None.
 
     """
-    
+    if not regions:
+        regions = [[0, 0.1], [0.9, 1]]
     
     regions = _parseRegions(regions) # these get interpolated
-    allRegions, isInside = _getOutsideRegions(regions) # these get left alone  
-    
-    
+        
     if isinstance(curve, SimpleCurve):
-
-        if curve.subCycles: # if subsycles are set, resample those
-            outputSubcycles = [None]*curve.NsubCycles
-            for ii, subcycle in enumerate(curve.subCycles):
-                outputSubcycles[ii] = resampleRegion(subcycle, Nsamples, regions)
-                
-            tmpOut      =  concatenate(outputSubcycles, outputClass = SimpleCurve)
-            tmpProps    = curve._getStatePropreties()
-            output      = SimpleCurve(tmpOut.xy, *tmpProps)        
-        
-        else: # if subsycles aren't set, resample at level of xy
-        
-            x = curve.xy[:,0]
-            y = curve.xy[:,1]
-            xy = np.column_stack([x, y])
-            output = SimpleCurve(resampleRegion(xy, Nsamples, regions))        
+        output = _resampleRegionSimpleCurve(curve, Nsamples,regions)
     
     elif isinstance(curve, Hysteresis):
-        outputCycles = [None]*curve.NCycles
-        for ii, cycle in enumerate(curve.cycles):
-            outputCycles[ii] = resampleRegion(cycle, Nsamples, regions)
-        tmpOut = concatenateHys(outputCycles)
-        tmpProps = curve._getStatePropreties()
-        output = Hysteresis(tmpOut.xy,*tmpProps)    
-    
+        output = _resampleRegionHysteresis(curve, Nsamples, regions)
     
     elif isinstance(curve, MonotonicCurve):
-        x = curve.xy[:,0]
-        y = curve.xy[:,1]
-        xy = np.column_stack([x, y])
-        output = MonotonicCurve(resampleRegion(xy, Nsamples, regions))  
+        output = _resampleRegionMonotonicCurve(curve, Nsamples, regions)
     
     # if it is a np array
     elif isinstance(curve, np.ndarray):
-        x = curve[:,0]
-        y = curve[:,1] 
-
-        xSamples = []
-        ySamples = []
-        
-        allRegions = np.array(allRegions)*(x[-1] - x[0]) + x[0]
-        
-        if x[0] <= x[-1]:
-            isLeftRight = True
-        else:
-            isLeftRight = False
-        
-        for ii, region in enumerate(allRegions):
-            if isInside[ii]:
-                xtmp = np.linspace(region[0], region[1], Nsamples)
-                ytmp = _linInterpSample(x, y, xtmp)[:,1]
-        
-            else:
-                if isLeftRight:
-                    inds = np.where((region[0] < x) *  (x < region[1]))
-                else:
-                    inds = np.where((x < region[0]) *  (region[1] < x))
-
-                xtmp = x[inds]
-                ytmp = y[inds]
-            
-            xSamples.append(xtmp)
-            ySamples.append(ytmp)
-            
-        xSamples = np.concatenate(xSamples)
-        ySamples = np.concatenate(ySamples)
-        output = np.column_stack([xSamples, ySamples])
+        output = _resampleRegionArray(curve, Nsamples, regions)
         
     return output
