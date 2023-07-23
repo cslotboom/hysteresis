@@ -18,8 +18,8 @@ xy = np.column_stack([x,y])
 
 """
 There are 2 repeats at each load protocol step, and 9 steps in total.
-You can either find this by knowing it - if you ran the experiment,
-hopefully you know your load protocol! You can also plot vs. index to find out.
+You can either find - if you ran the experiment, hopefully you know your load 
+protocol! You can also plot vs. index to find out the number of repeasts
 """
 lpSteps = [2]*9
 

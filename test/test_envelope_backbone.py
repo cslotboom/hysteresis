@@ -46,10 +46,10 @@ def test_inputParse():
 def test_backbone():
     # Function: get envelope curve
     analHys = hys.Hysteresis(xy)
-    # analHys.plotVsIndex(True)
     
     # Get the backbone
-    backbone = hys.getBackboneCurve(analHys, lp, 1)
+    hys.getBackboneCurve(analHys, lp, True)
+    hys.getBackboneCurve(analHys, lp, True,includeNegative=True)
 
     assert True == True
 
@@ -59,7 +59,7 @@ def test_backbone():
 
 def test_fit_avg():
     
-    avg, pos, neg = hys.getAvgBackbone(myHys, lp, 1, 1)   
+    avg, pos, neg = hys.getAvgBackbone(myHys, lp, True, True)   
     avg.setArea()
     A1 = avg.getNetArea()
     
@@ -71,4 +71,43 @@ def test_fit_avg():
     check2 = abs(A2 - 5775.33) < 0.01
     # check2 = (A1 - A2) < 10**-6
     assert np.all((check1, check2))
-# test_fit_avg()
+
+
+
+def test_negative_BB():
+    backbone = hys.getBackboneCurve(myHys, lp,1,1, includeNegative=True)
+    
+    xyReversal = myHys.getReversalxy()
+    
+    finalPos = xyReversal[-3]
+    finalNeg = xyReversal[-2]
+    
+    xy = backbone.xy
+    
+    posDiff = sum(np.abs(finalPos - xy[-1]))
+    negDiff = sum(np.abs(finalNeg - xy[0]))
+    
+    assert posDiff < 0.01 and negDiff < 0.01
+
+
+def ManualTest():
+    """
+    lets us visually inspect if anything seems wrong
+    """
+    avg, pos, neg = hys.getAvgBackbone(myHys, lp)   
+    backbone = hys.getBackboneCurve(myHys, lp,1,1, includeNegative=True)
+
+    
+    fig, ax = myHys.initFig()
+    myHys.plot()
+    backbone.plot()
+    # neg.plot()
+
+if __name__ == '__main__':
+    test_inputParse()
+    test_backbone()
+    test_fit_avg()
+    test_negative_BB()
+
+    ManualTest()
+

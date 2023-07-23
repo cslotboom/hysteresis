@@ -1,14 +1,9 @@
 import numpy as np
-from numpy import trapz
-# import matplotlib.pyplot as plt
-
 from scipy.interpolate import interp1d
 from hysteresis import data
-
 from .data import linearInterpolation
 from .curve import Hysteresis, SimpleCurve
-from .defaultDataFuncs import defaultAreaFunction, defaultSlopeFunction
-from .defaultPlotFuncs import initializeFig, defaultPlotFunction, defaultShowCycles
+from .baseFuncs import concatenate
 
 
 
@@ -23,7 +18,7 @@ def _LPparser(LPsteps):
     # if you get an interger use that for all cycles
     
     if len(LPsteps) ==0:
-        Indexes =  []
+        Indexes = []
     
     # if type(LPsteps) == int:
     else:
@@ -34,13 +29,13 @@ def _LPparser(LPsteps):
     return Indexes
 
 
-def _getBackbonePeaks(hystersis, xyPosInd):
+def _getBackbonePeaks(hysteresis, xyPosInd):
     
     Ncycle = len(xyPosInd)
     
     CycleIndx = xyPosInd[1:] - 1
     
-    cycles = hystersis.getCycles(CycleIndx)
+    cycles = hysteresis.getCycles(CycleIndx)
     peaks = np.zeros([Ncycle,2])
     for ii in range(Ncycle - 1):
         # Set the peak, then find the local index of the maximum point
@@ -73,14 +68,20 @@ def _skipCycles(xyPosInd, skipStart, skipEnd, Ncycle):
 TODO:
     Allow for getting the peaks, end point, or both.
 """
-def getBackboneCurve(hysteresis, LPsteps = [], returnPeaks = False,  returnEnd = True, 
-                     skipStart = 0, skipEnd =0):
+def getBackboneCurve(hysteresis, LPsteps = None, returnPeaks = False,  returnEnd = True, 
+                     skipStart = 0, skipEnd =0, includeNegative = False):
     """
     Returns the positve backbone curve of a hysteresis.
         
     By default all reversal points on the backbone curve are returned.
-    This will not be appropriate for some types of hysteresis where the load
-    drops between cycles.
+    The reversal points will be the **end** points of each cycle, but for some 
+    hystereses we will need to include peak points to capture the full backbone
+    To capture theses peak value, we can set the "returnPeaks" flag to be true.
+    
+    The function will only include the positive backbone by default, however,
+    the negative values can be returned using the 
+    
+    
     The user can output only the first cycle of each load step by specifying 
     the number of loading cycles there are at each load step.
     By default the final point (the right most point) is returned for each
@@ -113,6 +114,10 @@ def getBackboneCurve(hysteresis, LPsteps = [], returnPeaks = False,  returnEnd =
     skipEnd : int, optional
         The number of cycles to skip from the end of the the backbone 
         curve. The default is 0 which skips no cycles.
+    includeNegative : bool, optional
+        A boolean that will make the function return a negative backbone as 
+        well once toggled true.
+        
     Returns
     -------
     backbone : SimpleCycle
@@ -129,6 +134,7 @@ def getBackboneCurve(hysteresis, LPsteps = [], returnPeaks = False,  returnEnd =
     reversalIndexes = hysteresis.reversalIndexes
     xyPoints = hysteresis.xy[reversalIndexes]
     
+    # Seperate out positive cycles
     diff = np.diff(xyPoints[:,0])
     xyPosInd = np.where(0 <= diff)[0] + 1
     xyPosInd = np.concatenate([[0], xyPosInd])
@@ -139,7 +145,7 @@ def getBackboneCurve(hysteresis, LPsteps = [], returnPeaks = False,  returnEnd =
         xyPosInd = np.hstack((0,xyPosInd))
         
     # get the indexes of the final cycle
-    if len(LPsteps) != 0:
+    if LPsteps != None: # If no value is provided
         Indexes = _LPparser(LPsteps)
         xyPosInd = xyPosInd[Indexes]
         
@@ -158,6 +164,13 @@ def getBackboneCurve(hysteresis, LPsteps = [], returnPeaks = False,  returnEnd =
         xyPosPeak = _getBackbonePeaks(hysteresis, xyPosInd)
         xyPos = np.concatenate([xyPos, xyPosPeak])
     
+       
+    # Include the negative curve using some recursion magic
+    if includeNegative:
+        curve = getBackboneCurve(Hysteresis(-hysteresis.xy), LPsteps, returnPeaks,  
+                         returnEnd, skipStart, skipEnd, False)
+        xyNeg = -curve.xy[::-1]
+        xyPos = np.concatenate((xyNeg, xyPos)) 
         
     # Remove repeated points
     xPos = xyPos[:,0]
@@ -188,7 +201,7 @@ def _averageBackbones(backBonePos,backBoneNeg):
     return backBoneAvg
 
 
-def getAvgBackbone(hystersis, LPsteps = [], returnPeaks = False,  returnEnd = False,
+def getAvgBackbone(hysteresis, LPsteps = [], returnPeaks = False, returnEnd = True,
                    skipStart = 0, skipEnd =0):
     
     """
@@ -234,9 +247,9 @@ def getAvgBackbone(hystersis, LPsteps = [], returnPeaks = False,  returnEnd = Fa
     """
     
     
-    hysNeg = Hysteresis(-hystersis.xy)
-    hysNeg.recalculateCycles_like(hystersis)
-    backBonePos = getBackboneCurve(hystersis, LPsteps, returnPeaks, returnEnd, skipStart, skipEnd)
+    hysNeg = Hysteresis(-hysteresis.xy)
+    hysNeg.recalculateCycles_like(hysteresis)
+    backBonePos = getBackboneCurve(hysteresis, LPsteps, returnPeaks, returnEnd, skipStart, skipEnd)
     backBoneNeg = getBackboneCurve(hysNeg, LPsteps, returnPeaks, returnEnd, skipStart, skipEnd)
     
     backBoneAvg = _averageBackbones(backBonePos, backBoneNeg)

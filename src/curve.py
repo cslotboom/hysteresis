@@ -1052,17 +1052,6 @@ class SimpleCurve(Curve):
         
         self.showCycles(xyMono, showReversals, showPeaks, self.peakIndexes, 
                         self.reversalIndexes, None, subCyclesIndexes)
- 
-        # lines = []
-        # # If the list has content, get the cycles to plot, otherwise plot everything
-        # if subCyclesIndexes is not  None:
-        #     vectors = [self.subCycles[ii] for ii in subCyclesIndexes]
-        
-        # for ii, vector in enumerate(vectors):
-        #     c = colorCycles[int(ii % Ncolor)]
-        #     line, = plt.plot(vector.xy[:,0], vector.xy[:,1], c=c, **kwargs)
-        #     lines.append(line)        
-        # return lines
     
         return self._plot_curves(self.subCycles, subCyclesIndexes, colorCycles, **kwargs)
     
