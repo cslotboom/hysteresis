@@ -6,7 +6,47 @@ from .baseFuncs import (concatenateHys, concatenate, _linInterp,
 # =============================================================================
 # concatenate and resample
 # =============================================================================
-           
+
+def _resampleSimpleCurve(curve, Nsamples):
+    x = curve.xy[:,0]
+    y = curve.xy[:,1]
+    
+    # If the simple cycle has subcycles, resample at the level of those.
+    if curve.subCycles:
+        outputSubcycles = [None]*curve.NsubCycles
+        for ii, subcycle in enumerate(curve.subCycles):
+            outputSubcycles[ii] = resample(subcycle, Nsamples)    
+            
+        tmpOut      = concatenate(outputSubcycles, outputClass = SimpleCurve)
+        tmpProps    = curve._getStatePropreties()
+        return SimpleCurve(tmpOut.xy, *tmpProps)
+                    
+    # Otherwise, resample the curve directly
+    else:
+        return SimpleCurve(_linInterp(x,y, Nsamples))  
+
+
+def _resampleHysteresis(curve, Nsamples):
+    outputCycles = [None]*curve.NCycles
+    for ii, cycle in enumerate(curve.cycles):
+        outputCycles[ii] = resample(cycle, Nsamples)      
+    
+    tmpOut = concatenateHys(outputCycles)    # If curve
+    tmpProps = curve._getStatePropreties()
+    return Hysteresis(tmpOut.xy,*tmpProps)      
+
+def _resampleMonotonicCurve(curve, Nsamples):
+    x = curve.xy[:,0]
+    y = curve.xy[:,1]
+    return MonotonicCurve(_linInterp(x,y, Nsamples))     
+
+def _resampleArray(curve, Nsamples):
+    x = curve[:,0]
+    y = curve[:,1]
+    return _linInterp(x,y, Nsamples)  
+
+
+
 def resample(curve, Nsamples, **kwargs):
     """
     Creates a new curve object that has a different number of sample points 
@@ -42,54 +82,67 @@ def resample(curve, Nsamples, **kwargs):
     
     # if the curve is a SimpleCycle
     if isinstance(curve, SimpleCurve):
-        x = curve.xy[:,0]
-        y = curve.xy[:,1]
-        
-        # If the simple cycle has subcycles, resample at the level of those.
-        if curve.subCycles:
-            outputSubcycles = [None]*curve.NsubCycles
-            for ii, subcycle in enumerate(curve.subCycles):
-                outputSubcycles[ii] = resample(subcycle, Nsamples)    
-                
-            tmpOut      =  concatenate(outputSubcycles, outputClass = SimpleCurve)
-            tmpProps    = curve._getStatePropreties()
-            Output      = SimpleCurve(tmpOut.xy, *tmpProps)
-                        
-        # Otherwise, resample the curve directly
-        else:
-            Output = SimpleCurve(_linInterp(x,y, Nsamples))    
+        output = _resampleSimpleCurve(curve, Nsamples)
        
     # if the curve is a hysteresis, we recursively create a series of Cycles
     elif isinstance(curve, Hysteresis):
-        outputCycles = [None]*curve.NCycles
-        for ii, cycle in enumerate(curve.cycles):
-            outputCycles[ii] = resample(cycle, Nsamples)
-        Output = concatenateHys(outputCycles)    # If curve
-        
-        
-        tmpOut = concatenateHys(outputCycles)    # If curve
-        tmpProps = curve._getStatePropreties()
-        Output = Hysteresis(tmpOut.xy,*tmpProps)
-                
+        output = _resampleHysteresis(curve, Nsamples)
         
     # if the curve is a Monotonic Cycle
     elif isinstance(curve, MonotonicCurve):
-        x = curve.xy[:,0]
-        y = curve.xy[:,1]
-        Output = MonotonicCurve(_linInterp(x,y, Nsamples))  
+        output = _resampleMonotonicCurve(curve, Nsamples)
     
     # if it is a np array
     elif isinstance(curve, np.ndarray):
-        x = curve[:,0]
-        y = curve[:,1]
-        Output = _linInterp(x,y, Nsamples)  
+        output = _resampleArray(curve, Nsamples)
         
     else:
-        Output = None
+        output = None
         
-    return Output
-   
-def resampleDx(curve, Targetdx):
+    return output
+
+
+
+
+def _resampledxSimpleCurve(curve, targetdx):
+    if curve.subCycles: # if subsycles are set, resample those
+        outputSubcycles = [None]*curve.NsubCycles
+        for ii, subcycle in enumerate(curve.subCycles):
+            outputSubcycles[ii] = resampleDx(subcycle, targetdx)        
+        tmpOut      =  concatenate(outputSubcycles, outputClass = SimpleCurve)
+        tmpProps    = curve._getStatePropreties()
+        return SimpleCurve(tmpOut.xy, *tmpProps)        
+    
+    else: # if subsycles aren't set, resample those
+        x = curve.xy[:,0]
+        dxNet = x[-1] - x[0]
+        Nsamples = _getNsamples(targetdx, dxNet)
+        return resample(curve, Nsamples)     
+
+
+def _resampledxHysteresis(curve, targetdx):
+    outputCycles = [None]*curve.NCycles
+    for ii, cycle in enumerate(curve.cycles):
+        outputCycles[ii] = resampleDx(cycle, targetdx)       
+    tmpOut = concatenateHys(outputCycles)    # If curve
+    tmpProps = curve._getStatePropreties()
+    return Hysteresis(tmpOut.xy,*tmpProps)         
+
+def _resampledxMonotonicCurve(curve, targetdx):
+    x = curve.xy[:,0]
+    dxNet = x[-1] - x[0]
+    Nsamples = _getNsamples(targetdx, dxNet)
+    return resample(curve, Nsamples)      
+
+def _resampledxArray(curve, targetdx):
+    x = curve[:,0]
+    dxNet = x[-1] - x[0]
+    Nsamples = _getNsamples(targetdx, dxNet)        
+    return resample(curve, Nsamples)
+
+
+
+def resampleDx(curve, targetdx):
     """
     Creates a new curve object where the distance between sample points
     is approximately dx. The number of samples betweent the start and 
@@ -123,51 +176,23 @@ def resampleDx(curve, Targetdx):
 
     """  
 
-
     # the logic in these functions is getting a little nasty, in the future
     # consider pulling these out into class methods.
     if isinstance(curve, SimpleCurve):
-               
-        if curve.subCycles: # if subsycles are set, resample those
-            outputSubcycles = [None]*curve.NsubCycles
-            for ii, subcycle in enumerate(curve.subCycles):
-                outputSubcycles[ii] = resampleDx(subcycle, Targetdx)
-            # Output = concatenate(*outputSubcycles, outputClass = SimpleCurve)    # If curve        
-        
-            tmpOut      =  concatenate(outputSubcycles, outputClass = SimpleCurve)
-            tmpProps    = curve._getStatePropreties()
-            Output      = SimpleCurve(tmpOut.xy, *tmpProps)        
-        
-        else: # if subsycles aren't set, resample those
-            x = curve.xy[:,0]
-            dxNet = x[-1] - x[0]
-            Nsamples = _getNsamples(Targetdx, dxNet)
-            Output = resample(curve, Nsamples)    
-        
-        
+        output = _resampledxSimpleCurve(curve, targetdx) 
+                
     elif isinstance(curve, Hysteresis):
-        outputCycles = [None]*curve.NCycles
-        for ii, cycle in enumerate(curve.cycles):
-            outputCycles[ii] = resampleDx(cycle, Targetdx)       
-        tmpOut = concatenateHys(outputCycles)    # If curve
-        tmpProps = curve._getStatePropreties()
-        Output = Hysteresis(tmpOut.xy,*tmpProps)       
+        output = _resampledxHysteresis(curve, targetdx) 
        
     # if the curve is a MonotonicCurve Cycle
     elif isinstance(curve, MonotonicCurve):
-        x = curve.xy[:,0]
-        dxNet = x[-1] - x[0]
-        Nsamples = _getNsamples(Targetdx, dxNet)
-        Output = resample(curve, Nsamples)  
+        output = _resampledxMonotonicCurve(curve, targetdx) 
     
     # if it is a np array
     elif isinstance(curve, np.ndarray):
-        x = curve[:,0]
-        dxNet = x[-1] - x[0]
-        Nsamples = _getNsamples(Targetdx, dxNet)        
-        Output = resample(curve, Nsamples)
+        output = _resampledxArray(curve, targetdx) 
         
-    return Output
+    return output
 
 
 
