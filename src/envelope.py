@@ -16,15 +16,11 @@ def _LPparser(LPsteps):
     
     # InputParser - Decides what to do with the variable LoadProtcol
     # if you get an interger use that for all cycles
-    
-    if len(LPsteps) ==0:
-        Indexes = []
-    
-    # if type(LPsteps) == int:
+    if len(LPsteps) == 0:
+        Indexes = []    
     else:
-        # shift = LPsteps[0] - 1
         shift = 1
-        Indexes = np.concatenate([[0,1], np.cumsum(LPsteps,dtype=int) + shift])
+        Indexes = np.concatenate([[0,1], np.cumsum(LPsteps[:-1],dtype=int) + shift])
         
     return Indexes
 
@@ -163,7 +159,6 @@ def getBackboneCurve(hysteresis, LPsteps = None, returnPeaks = False,  returnEnd
     if returnPeaks == True:
         xyPosPeak = _getBackbonePeaks(hysteresis, xyPosInd)
         xyPos = np.concatenate([xyPos, xyPosPeak])
-    
        
     # Include the negative curve using some recursion magic
     if includeNegative:
@@ -215,7 +210,11 @@ def getAvgBackbone(hysteresis, LPsteps = [], returnPeaks = False, returnEnd = Tr
     By default the final point (the right most point) is returned for each
     cycle.
     The user can return the peak and final point by setting returnPeaks = True.
-
+    Note if the peak point of a later cycle occurs before an earlier cycle, it 
+    will not be detected properly. For example, if Cycle 4 has a peak that 
+    occurs at x= 20, and Cycle 5 has a peak that occurs at x=10, then the peak
+    at x=10 will not be detected.
+    
 
     Parameters
     ----------

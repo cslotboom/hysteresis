@@ -5,6 +5,7 @@ Created on Sat Aug 31 15:13:13 2019
 """
 import numpy as np
 import hysteresis as hys
+from hysteresis.envelope import _LPparser
 from scipy.signal import savgol_filter
 import pytest
 
@@ -17,14 +18,34 @@ x = data[:,0]
 x = savgol_filter(x,15,1)
 y = data[:,1]
 xy = np.column_stack([x,y])
-lp = [5,3,3,3,3,3,3,3]
+lp = [5,3,3,3,3,3,3,3,3]
 myHys = hys.Hysteresis(xy)
 
 
+Lp2 = [6,6,6,4,2,2,2,2,2]
 
 # =============================================================================
 # Find the backbone
 # =============================================================================
+
+def test_lpsteps_Nstep():
+    parse = _LPparser(lp)
+    solution = np.array([0,1,6,9,12,15,18,21,24,27])
+    
+    diff = np.sum(np.abs(solution- parse))
+    
+    assert len(parse) == (len(lp)+1)
+    assert diff < 10**-6
+
+
+def test_lpsteps_Nstep2():
+    parse = _LPparser(Lp2)
+    solution = np.array([0,1,7,13,19,23,25,27,29,31])
+    
+    diff = np.sum(np.abs(solution- parse))
+    
+    assert len(parse) == (len(Lp2)+1)
+    assert diff < 10**-6
 
 
 def test_inputParse():
@@ -61,6 +82,7 @@ def test_fit_avg():
     
     avg, pos, neg = hys.getAvgBackbone(myHys, lp, True, True)   
     avg.setArea()
+    avg.plot()
     A1 = avg.getNetArea()
     
     Curve = hys.fitEEEP(avg)
@@ -104,10 +126,13 @@ def ManualTest():
     # neg.plot()
 
 if __name__ == '__main__':
+    ManualTest()
+
+    test_lpsteps_Nstep()
+    test_lpsteps_Nstep2()
     test_inputParse()
     test_backbone()
     test_fit_avg()
     test_negative_BB()
 
-    ManualTest()
 
