@@ -104,33 +104,31 @@ class CycleViewer(GUIBase):
 
 
 class CycleViewer(GUIBase):
+    """
+    An interactive viewer for figure to be plotted.
+    
+    
+    Plots must use a qt backend for the GUI elements to work
+    correctly. %matplotlib qt
+    
 
+    Parameters
+    ----------
+    hysteresis : TYPE
+        The input hystesis.
+    plotMethod : TYPE, optional
+        A flag that toggles if single XY (0) and cumulative xy (1) is used. 
+        The default is 'single'.
+
+    Returns
+    -------
+    None.
+
+    """
     plotMethods = {}
     
     def __init__(self, hysteresis, plotMethod = 0, xlims=[],ylims = []):
-        """
-        An interactive  figures to be plotted 
-        
-        
-        Plots must use a qt backend for the GUI elements to work
-        correctly. %matplotlib qt
-        
 
-        Parameters
-        ----------
-        hysteresis : TYPE
-            DESCRIPTION.
-        plotMethod : TYPE, optional
-            DESCRIPTION. The default is 'single'.
-
-        Returns
-        -------
-        None.
-
-        """
-        
-        
-        
         super().__init__()
         self.setlims(xlims,ylims)
         
@@ -142,7 +140,7 @@ class CycleViewer(GUIBase):
         
         # Store the data.
         self.hysteresis = hysteresis
-        self.curves = np.array(hysteresis.cycles)
+        self.curves = np.array(hysteresis.cycles, dtype = object)
         # print(self.curves)
         
         # self.ind = np.array([0],dtype=int)

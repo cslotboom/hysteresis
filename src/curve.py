@@ -372,25 +372,26 @@ class Curve(CurveOperations, CurvePlotter):
     all other curves should have access to. This uncludes plotting 
     functionality, slope functions, area functions, and displacement functions.
     
+    Parameters
+    ----------
+    XYData : array
+        The input array of XY date for the curve. A list [x,y] can also be 
+        passed into the function.
+    xunit : str, optional
+        The units on the x axis. The default is ''.
+    yunit : str, optional
+        The units on the y axis. The default is ''.
+
     """
     
     colorCycles = ['C0', 'C0', 'C1', 'C1']
     reversalIndexes = np.array([0,-1])
+    interIndexesX = None
+    interIndexesY = None
     
     
     def __init__(self, XYData, xunit = '', yunit = ''):
-        """
-        Parameters
-        ----------
-        XYData : array
-            The input array of XY date for the curve. A list [x,y] can also be 
-            passed into the function.
-        xunit : str, optional
-            The units on the x axis. The default is ''.
-        yunit : str, optional
-            The units on the y axis. The default is ''.
 
-        """
         
         self.xy = self._parseXY(XYData)
         self.Npoints = len(self.xy[:,0])
@@ -504,7 +505,37 @@ class Curve(CurveOperations, CurvePlotter):
             return self.xy[self.peakIndexes]
         else:
             raise Exception('No peaks have been set')
+
+            
+    def setIntersectionInds(self):
+        """
+        Sets the intersection indicies in x and y.
+        """
+        self.interIndexesX =  data.getIntersections(self.x)
+        self.interIndexesY =  data.getIntersections(self.y)
+                    
+    def getXIntersections(self):
+        """
+        Returns the points closest to the x axis intersections, i.e. where
+        y = 0
+        """
+        if self.interIndexesY:
+            interInds = self.interIndexesY
+        else:
+            interInds = data.getIntersections(self.y)
+        return self.xy[interInds]
         
+            
+    # def getYIntersections(self):
+    #     """
+    #     Returns the points closest to the y axis intersections, i.e. where
+    #     x = 0
+    #     """
+    #     return data.getIntersections(self.y)
+        
+        
+    
+    
 def _getOperand(curve):
     """
     Gets the operand (what data the function acts on) for operation functions
@@ -625,7 +656,29 @@ class Hysteresis(Curve):
     def setReversalIndexes(self, revDist = 2, revWidth = None, 
                            revProminence = None, **kwargs):
         """ 
-        Finds the location of the reversal points
+        Finds the location of the reversal points and sets them in the 
+        'reversalIndexes'
+            
+        Parameters
+        ----------
+        
+        revDist : int, optional
+            Used to filter reversal points based on the minimal horizontal distance 
+            (>= 1) between neighbouring peaks in the x axis. Smaller peaks are 
+            removed first until the condition is fulfilled for all remaining peaks.
+            The default is 2.
+        revWidth : int, optional
+            Used to filter reversal points using the approximate width in number of 
+            samples of each peak at half it's prominence. Peaks that occur very 
+            abruptly have a small width, while those that occur gradually have 
+            a big width.
+            The default is None, which results in no filtering.  
+        revProminence : number, optional
+            Used to filter reversal points that aren't sufficently high. Prominence 
+            is the desired difference in height between peaks and their 
+            neighbouring peaks. 
+            The default is None, which results in no filtering.     
+        
         """
        
         self.setReversalPropreties(revDist, revWidth, revProminence)
@@ -636,7 +689,7 @@ class Hysteresis(Curve):
 
     def getReversalxy(self):
         """
-        Gets the reversal xy indexes
+        Gets the reversal xy points
         """
         return self.xy[self.reversalIndexes]
     

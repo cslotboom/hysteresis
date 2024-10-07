@@ -2,6 +2,8 @@
 """
 Created on Sat Aug 31 15:13:13 2019
 @author: Christian
+
+
 """
 import numpy as np
 import hysteresis as hys
@@ -18,7 +20,7 @@ x = data[:,0]
 x = savgol_filter(x,15,1)
 y = data[:,1]
 xy = np.column_stack([x,y])
-lp = [5,3,3,3,3,3,3,3,3]
+lp = [5,3,3,3,3,3,3,3, 1]
 myHys = hys.Hysteresis(xy)
 
 
@@ -29,12 +31,18 @@ Lp2 = [6,6,6,4,2,2,2,2,2]
 # =============================================================================
 
 def test_lpsteps_Nstep():
+    """
+    This test checsk if the load protocal adds indexieies as expected.
+    Results are only returned short of the final cycle in the experiment, which
+    ends short.
+    """
     parse = _LPparser(lp)
-    solution = np.array([0,1,6,9,12,15,18,21,24,27])
+    solution = np.array([0,1,6,9,12,15,18,21,24, 27])
     
-    diff = np.sum(np.abs(solution- parse))
+    diff = np.sum(np.abs(solution - parse))
     
-    assert len(parse) == (len(lp)+1)
+    # Add one because the first index is included
+    assert len(parse) == (len(lp) + 1) 
     assert diff < 10**-6
 
 

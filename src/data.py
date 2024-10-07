@@ -9,8 +9,33 @@ from scipy.signal import find_peaks
 from scipy.interpolate import interp1d
 
 
+def getIntersections(vectorY):
+    """
+    Returns the indicies where the intersection is close to zero
 
-def getCycleSubVector(VectorX, VectorY, Index1, Index2, Nsample):
+    Parameters
+    ----------
+
+    vectorY : TYPE
+        The inpout vector of points..
+
+    Returns
+    -------
+    TYPE
+        DESCRIPTION.
+    TYPE
+        DESCRIPTION.
+
+    """
+    signs = np.sign(vectorY)
+    zeroInds = signs == 0
+    signs[zeroInds] =  1
+    inds = np.argwhere(np.diff(signs)).flatten()
+    
+    return inds
+
+
+def getCycleSubVector(vectorX, vectorY, Index1, Index2, Nsample):
     """
       
     
@@ -43,12 +68,12 @@ def getCycleSubVector(VectorX, VectorY, Index1, Index2, Nsample):
     #TODO consider renaming to interpolate subvector! Right now this samples
     # the vector by default    
     
-    x1 = VectorX[Index1]
-    x2 = VectorX[Index2]
+    x1 = vectorX[Index1]
+    x2 = vectorX[Index2]
     
     
-    TempDataX = VectorX[Index1:(Index2+1)]
-    TempDataY = VectorY[Index1:(Index2+1)]
+    TempDataX = vectorX[Index1:(Index2+1)]
+    TempDataY = vectorY[Index1:(Index2+1)]
     xSample = np.linspace(x1,x2,Nsample)
     
     InterpFunction = interp1d(TempDataX, TempDataY)

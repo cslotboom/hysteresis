@@ -8,7 +8,7 @@ import hysteresis as hys
 import numpy as np
 import matplotlib.pyplot as plt
 from hysteresis.plotSpecial import CycleViewer
-
+# from pytest import MonkeyPatch
 
 disp = np.loadtxt('UFP_Disp.out',delimiter=' ')
 force = np.loadtxt('UFP_RFrc.out',delimiter=' ')
@@ -26,4 +26,6 @@ def test_CycleViewer(monkeypatch):
     assert True == True
 
 
-# test_CycleViewer()
+if __name__ == "__main__":
+    
+    test_CycleViewer()
