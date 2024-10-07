@@ -91,13 +91,13 @@ def test_BMD_Curve():
 
 
 if __name__ == "__main__":
-    # test_data_Curve1()
-    # test_Curve1()
+    test_data_Curve1()
+    test_Curve1()
     
-    # test_data_Curve2()
-    # test_Curve2()
+    test_data_Curve2()
+    test_Curve2()
     
-    # test_data_Curve3()
-    # test_Curve3()
+    test_data_Curve3()
+    test_Curve3()
     
     test_BMD_Curve()
