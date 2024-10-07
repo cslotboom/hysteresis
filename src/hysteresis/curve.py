@@ -519,7 +519,7 @@ class Curve(CurveOperations, CurvePlotter):
         Returns the points closest to the x axis intersections, i.e. where
         y = 0
         """
-        if self.interIndexesY:
+        if self.interIndexesY is None:
             interInds = self.interIndexesY
         else:
             interInds = data.getIntersections(self.y)
