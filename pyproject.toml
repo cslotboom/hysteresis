@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools >= 52.0.2", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hysteresis"
+version = "2.0.2"
+authors = [{name = "Christian Slotboom", email = "christian.slotboom@gmail.com"}]
+requires-python = ">=3.9"
+description = "Hysteresis data processing tools."
+readme = "README.md"
+license = {file = "LICENSE"}
+keywords = ["hysteresis", "data processing", "diagrams"] 
+dependencies = [
+  "numpy",
+  "matplotlib",
+  "scipy",
+]
+classifiers = [
+	'Development Status :: 5 - Production/Stable',
+    'Intended Audience :: Science/Research',
+    'Intended Audience :: Developers',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+    'Programming Language :: Python :: 3 :: Only',
+    'Topic :: Software Development',
+    'Topic :: Scientific/Engineering',
+    'Operating System :: Microsoft :: Windows',
+    'Operating System :: POSIX',
+    'Operating System :: Unix',
+    'Operating System :: MacOS',
+]
+
+[project.urls]
+Homepage = "https://github.com/cslotboom/Hysteresis"
+Documentation = "https://hysteresis.readthedocs.io/en/latest/"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
