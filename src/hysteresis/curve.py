@@ -514,15 +514,15 @@ class Curve(CurveOperations, CurvePlotter):
         self.interIndexesX =  data.getIntersections(self.x)
         self.interIndexesY =  data.getIntersections(self.y)
                     
-    def getXIntersections(self):
+    def getXIntersections(self, tol=1e-6):
         """
         Returns the points closest to the x axis intersections, i.e. where
         y = 0
         """
         if self.interIndexesY is None:
-            interInds = self.interIndexesY
+            interInds = data.getIntersections(self.y, tol)
         else:
-            interInds = data.getIntersections(self.y)
+            interInds = self.interIndexesY
         return self.xy[interInds]
         
             

@@ -7,7 +7,8 @@ import numpy as np
 from pytest import approx
 
 # out = test_Curve3_Area()
-    
+
+
 def makeCurve(f):
     "lamda function that creates all curves"
     xdata = np.linspace(0,4,1001)
@@ -74,12 +75,29 @@ def test_Curve3():
 
 
 
+def test_BMD_Curve():
+    xyBmd = np.loadtxt('bmd.csv', delimiter=',')
+    extraPoints = [[10,0],[10,0]]
+    
+    xyBmd = np.concatenate((xyBmd, extraPoints))
+    myHys = hys.Curve(xyBmd) 
+
+    xyinter = myHys.getXIntersections()
+    
+    # myHys.plot()
+    # import matplotlib.pyplot as plt
+    # plt.plot(xyinter[:,0], xyinter[:,1])
+    assert len(xyinter) == 3
+
+
 if __name__ == "__main__":
-    test_data_Curve1()
-    test_Curve1()
+    # test_data_Curve1()
+    # test_Curve1()
     
-    test_data_Curve2()
-    test_Curve2()
+    # test_data_Curve2()
+    # test_Curve2()
     
-    test_data_Curve3()
-    test_Curve3()
+    # test_data_Curve3()
+    # test_Curve3()
+    
+    test_BMD_Curve()

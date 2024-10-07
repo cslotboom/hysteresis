@@ -9,30 +9,70 @@ from scipy.signal import find_peaks
 from scipy.interpolate import interp1d
 
 
-def getIntersections(vectorY):
+def getIntersections(vectorY, tol = 1e-6):
     """
-    Returns the indicies where the intersection is close to zero
+    Returns the indicies where the the input vector is close to zero.
 
     Parameters
     ----------
 
-    vectorY : TYPE
-        The inpout vector of points..
-
+    vectorY : list | nd.array
+        The inpout vector of points. 
+    tol
+        The tolerance of how close a value is to zero to be considered. 
+        
     Returns
     -------
-    TYPE
-        DESCRIPTION.
-    TYPE
-        DESCRIPTION.
+    inds : list[int]
+        The list of points intersection points close to zero.
 
     """
-    signs = np.sign(vectorY)
-    zeroInds = signs == 0
-    signs[zeroInds] =  1
-    inds = np.argwhere(np.diff(signs)).flatten()
+        
+    # Get values that are within a tolerance of zero but don't pass it.
+    indsPosTol = vectorY < tol
+    indsNegTol = -tol < vectorY 
     
-    return inds
+    # Get values within the positive and negative range
+    indsTol = indsPosTol*indsNegTol
+    
+    # Set these noisey values equal to zero
+    vectorY[indsTol] = 0
+    
+    signs = np.sign(vectorY)
+
+    # Manually patch "bad" indexes
+    
+    zeroIndsToCheck = np.argwhere(indsTol == True).flatten()
+
+    if len(zeroIndsToCheck) != 0:
+        
+        # zeroIndsToCheck = zeroIndsToCheck[0]
+        # remove the start index
+        endInd = len(indsTol) - 1
+        if 0 == zeroIndsToCheck[0]:
+            zeroIndsToCheck = zeroIndsToCheck[1:]
+            
+        # remove the end index, if there are any more indexes to check.
+        if (len(zeroIndsToCheck) != 0) and endInd == zeroIndsToCheck[-1]:
+            zeroIndsToCheck = zeroIndsToCheck[:-1]
+        
+        for ind in zeroIndsToCheck:
+            
+            sleft  = signs[ind - 1]
+            sright = signs[ind + 1]
+            
+            if sleft != sright:                
+                # If the final two items are x,0,0, set them to x,x,0
+                # This generally looks better
+                if sright == 0:
+                    signs[ind] = sleft
+                else:
+                    signs[ind] = sright
+
+    diff  = np.diff(signs)
+    indsInter = np.argwhere(diff).flatten() 
+
+    return indsInter
 
 
 def getCycleSubVector(vectorX, vectorY, Index1, Index2, Nsample):
